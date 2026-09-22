@@ -1,6 +1,6 @@
 """
 Modelo da tabela `decisao` - Klyvolt (PostgreSQL)
-Gerado a partir do DER final do projeto.
+Gerado a partir do DER final do projeto (schema revisado).
 """
 
 import psycopg2.extras
@@ -8,19 +8,21 @@ from conexao import conectar
 
 
 class Decisao:
-    def __init__(self, id_decisao=None, nome_decisao=None, descricao_decisao=None, criterio_acionado=None, limite_referencia=None):
+    def __init__(self, id_decisao=None, nome_decisao=None, descricao_decisao=None, criterio_acionado=None, operador=None, limite_referencia=None, unidade_limite=None):
         self.id_decisao = id_decisao
         self.nome_decisao = nome_decisao
         self.descricao_decisao = descricao_decisao
         self.criterio_acionado = criterio_acionado
+        self.operador = operador
         self.limite_referencia = limite_referencia
+        self.unidade_limite = unidade_limite
 
     @staticmethod
-    def criar(nome_decisao, descricao_decisao, criterio_acionado, limite_referencia):
+    def criar(nome_decisao, descricao_decisao, criterio_acionado, operador, limite_referencia, unidade_limite):
         conexao = conectar()
         cursor = conexao.cursor()
-        sql = "INSERT INTO decisao (nome_decisao, descricao_decisao, criterio_acionado, limite_referencia) VALUES (%s, %s, %s, %s) RETURNING id_decisao"
-        cursor.execute(sql, (nome_decisao, descricao_decisao, criterio_acionado, limite_referencia))
+        sql = "INSERT INTO decisao (nome_decisao, descricao_decisao, criterio_acionado, operador, limite_referencia, unidade_limite) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id_decisao"
+        cursor.execute(sql, (nome_decisao, descricao_decisao, criterio_acionado, operador, limite_referencia, unidade_limite))
         novo_id = cursor.fetchone()[0]
         conexao.commit()
         cursor.close()
@@ -52,8 +54,8 @@ class Decisao:
     def atualizar(self):
         conexao = conectar()
         cursor = conexao.cursor()
-        sql = "UPDATE decisao SET nome_decisao = %s, descricao_decisao = %s, criterio_acionado = %s, limite_referencia = %s WHERE id_decisao = %s"
-        cursor.execute(sql, (self.nome_decisao, self.descricao_decisao, self.criterio_acionado, self.limite_referencia, self.id_decisao))
+        sql = "UPDATE decisao SET nome_decisao = %s, descricao_decisao = %s, criterio_acionado = %s, operador = %s, limite_referencia = %s, unidade_limite = %s WHERE id_decisao = %s"
+        cursor.execute(sql, (self.nome_decisao, self.descricao_decisao, self.criterio_acionado, self.operador, self.limite_referencia, self.unidade_limite, self.id_decisao))
         conexao.commit()
         cursor.close()
         conexao.close()
