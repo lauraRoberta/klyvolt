@@ -4,7 +4,8 @@ Gerado a partir do DER final do projeto (schema revisado).
 """
 
 import psycopg2.extras
-from conexao import conectar
+
+from src.database.conexao import conectar
 
 
 class Consumo:
