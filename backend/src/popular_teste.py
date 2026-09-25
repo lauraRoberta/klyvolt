@@ -7,6 +7,8 @@ Coloque este arquivo em: backend/src/popular_teste.py
 Rode com: python -m src.popular_teste
 """
 
+import random
+
 from src.database.conexao import conectar
 
 
@@ -14,13 +16,17 @@ def popular():
     conn = conectar()
     cur = conn.cursor()
 
+    # Sufixo aleatorio para nao colidir com dados de execucoes anteriores
+    sufixo = random.randint(1000, 9999)
+
     try:
         # 1. Empresa
         cur.execute("""
             INSERT INTO empresa (cnpj, nome_empresa, email_empresa, senha_empresa, telefone_empresa)
             VALUES (%s, %s, %s, %s, %s)
             RETURNING id_empresa
-        """, ('00.000.000/0001-00', 'Faccao Teste', 'teste@faccaoteste.com', 'senha_teste', '11999999999'))
+        """, (f'00.000.000/{sufixo:04d}-00', f'Faccao Teste {sufixo}',
+              f'teste{sufixo}@faccaoteste.com', 'senha_teste', '11999999999'))
         id_empresa = cur.fetchone()[0]
         print(f"Empresa criada: id_empresa={id_empresa}")
 
@@ -29,7 +35,7 @@ def popular():
             INSERT INTO usuario (nome_usuario, email_usuario, senha_usuario, tipo_usuario, id_empresa)
             VALUES (%s, %s, %s, %s, %s)
             RETURNING id_usuario
-        """, ('Usuario Teste', 'usuario@teste.com', 'senha_teste', 'Administrador', id_empresa))
+        """, (f'Usuario Teste {sufixo}', f'usuario{sufixo}@teste.com', 'senha_teste', 'Administrador', id_empresa))
         id_usuario = cur.fetchone()[0]
         print(f"Usuario criado: id_usuario={id_usuario}")
 
@@ -38,7 +44,7 @@ def popular():
             INSERT INTO setor (nome_setor, divisao_setor, id_usuario_responsavel)
             VALUES (%s, %s, %s)
             RETURNING id_setor
-        """, ('Costura', 'Producao', id_usuario))
+        """, (f'Costura {sufixo}', 'Producao', id_usuario))
         id_setor = cur.fetchone()[0]
         print(f"Setor criado: id_setor={id_setor}")
 
@@ -47,13 +53,11 @@ def popular():
             INSERT INTO maquina (nome_maquina, descricao_maquina, potencia_nominal, numero_serie, id_setor)
             VALUES (%s, %s, %s, %s, %s)
             RETURNING id_maquina
-        """, ('Maquina de Costura 01', 'Maquina reta industrial', 500, 'SN-0001', id_setor))
+        """, (f'Maquina de Costura {sufixo}', 'Maquina reta industrial', 500, f'SN-{sufixo}', id_setor))
         id_maquina = cur.fetchone()[0]
         print(f"Maquina criada: id_maquina={id_maquina}")
 
         # 5. Sensor
-        # ATENÇÃO: confira em simulador_sensores.py qual valor de 'status'
-        # ele espera para considerar o sensor ativo (ex: 'ativo', 'ATIVO'...)
         cur.execute("""
             INSERT INTO sensor (
                 numero_serie, fabricante, modelo, tipo_sensor, unidade_medida,
@@ -62,8 +66,8 @@ def popular():
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id_sensor
         """, (
-            'SENSOR-0001', 'Fabricante Teste', 'Modelo X', 'energia', 'kWh',
-            'MQTT', 'AA:BB:CC:DD:EE:01', 'online', 'ativo', id_maquina
+            f'SENSOR-{sufixo}', 'Fabricante Teste', 'Modelo X', 'energia', 'kWh',
+            'MQTT', f'AA:BB:CC:DD:{sufixo // 100:02X}:{sufixo % 100:02X}', 'online', 'ativo', id_maquina
         ))
         id_sensor = cur.fetchone()[0]
         print(f"Sensor criado: id_sensor={id_sensor}")
