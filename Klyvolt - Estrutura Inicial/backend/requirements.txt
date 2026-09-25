@@ -1,5 +1,0 @@
-fastapi
-uvicorn
-pandas
-matplotlib
-python-multipart

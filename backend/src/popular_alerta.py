@@ -14,21 +14,33 @@ from datetime import datetime
 
 from src.database.conexao import conectar
 
-ID_SETOR_ALVO = 2  # setor "Costura" já cadastrado
-LIMITE_KWH = 20.0  # a partir daqui é considerado "alto consumo"
+NOME_SETOR_ALVO = 'Costura'  # busca pelo nome, nao pelo id (evita quebrar se o id mudar)
+LIMITE_KWH = 20.0  # a partir daqui e considerado "alto consumo"
 
 
 def popular():
     conn = conectar()
     cur = conn.cursor()
 
+    # Sufixo aleatorio para nao colidir com dados de execucoes anteriores
+    sufixo = random.randint(1000, 9999)
+
     try:
+        # 0. Busca o id do setor pelo nome (mais robusto que um id fixo)
+        cur.execute("SELECT id_setor FROM setor WHERE nome_setor LIKE %s LIMIT 1", (f'{NOME_SETOR_ALVO}%',))
+        row = cur.fetchone()
+        if not row:
+            raise Exception(f"Nenhum setor encontrado com nome parecido com '{NOME_SETOR_ALVO}'. Rode o popular_teste.py primeiro.")
+        id_setor_alvo = row[0]
+        print(f"Setor encontrado: id_setor={id_setor_alvo}")
+
         # 1. Cadastra a máquina nova (separada da Galoneira)
         cur.execute("""
             INSERT INTO maquina (nome_maquina, descricao_maquina, potencia_nominal, numero_serie, id_setor)
             VALUES (%s, %s, %s, %s, %s)
             RETURNING id_maquina
-        """, ('Maquina de Costura Industrial', 'Maquina de costura reta industrial', 750, 'COST-IND-0001', ID_SETOR_ALVO))
+        """, (f'Maquina de Costura Industrial {sufixo}', 'Maquina de costura reta industrial',
+              750, f'COST-IND-{sufixo}', id_setor_alvo))
         id_maquina = cur.fetchone()[0]
         print(f"Maquina criada: id_maquina={id_maquina}")
 
@@ -41,8 +53,8 @@ def popular():
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id_sensor
         """, (
-            'SENSOR-0002', 'Fabricante Teste', 'Modelo Pico', 'energia', 'kWh',
-            'MQTT', 'AA:BB:CC:DD:EE:02', 'online', 'ativo', id_maquina
+            f'SENSOR-{sufixo}', 'Fabricante Teste', 'Modelo Pico', 'energia', 'kWh',
+            'MQTT', f'AA:BB:CC:DD:{sufixo // 100:02X}:{sufixo % 100:02X}', 'online', 'ativo', id_maquina
         ))
         id_sensor = cur.fetchone()[0]
         print(f"Sensor de pico criado: id_sensor={id_sensor}")
