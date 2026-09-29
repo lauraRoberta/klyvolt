@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Consumo</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Biblioteca de ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Formas geométricas de fundo -->
+    <div class="bg-shape shape-top"></div>
+    <div class="bg-shape shape-bottom"></div>
+
+    <main class="card-container">
+        
+        <header>
+            <h1>Registrar Consumo</h1>
+        </header>
+
+        <!-- Formulário -->
+        <form class="form-content">
+            
+            <!-- Campo ID Consumo -->
+            <div class="input-group">
+                <label for="id_consumo">ID Consumo</label>
+                <div class="input-wrapper center-text">
+                    <input type="text" id="id_consumo" value="AUTO-GERADO" readonly class="uppercase-text">
+                </div>
+            </div>
+
+            <!-- Campo Data Início -->
+            <div class="input-group">
+                <label for="data_inicio">Data Início</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-calendar icon"></i>
+                    <input type="text" id="data_inicio" placeholder="DD/MM/AAAA" onfocus="(this.type='date')" onblur="(this.type='text')">
+                </div>
+            </div>
+
+            <!-- Campo Data Fim -->
+            <div class="input-group">
+                <label for="data_fim">Data Fim</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-calendar icon"></i>
+                    <input type="text" id="data_fim" placeholder="DD/MM/AAAA" onfocus="(this.type='date')" onblur="(this.type='text')">
+                </div>
+            </div>
+
+            <!-- Campo Consumo -->
+            <div class="input-group">
+                <label for="consumo">Consumo [kWh]</label>
+                <div class="input-wrapper center-text">
+                    <input type="text" id="consumo" placeholder="0.00 kWh" class="center-text">
+                </div>
+            </div>
+
+            <!-- Campo Máquina (Select) -->
+            <div class="input-group">
+                <label for="maquina">Máquina</label>
+                <div class="input-wrapper select-wrapper">
+                    <select id="maquina">
+                        <option value="" disabled selected>Selecionar Maquina</option>
+                        <option value="maq1">Máquina 01</option>
+                        <option value="maq2">Máquina 02</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-primary">
+                    Cadastrar Consumo
+                </button>
+                
+                <button type="button" class="btn-primary">
+                    Salvar Alterações
+                </button>
+                
+                <button type="button" class="btn-secondary">
+                    VOLTAR
+                </button>
+            </div>
+
+        </form>
+    </main>
+
+</body>
+</html>

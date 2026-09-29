@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensores de Consumo Elétrico - Indústria Têxtil</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-pattern"></div>
+
+    <main class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-bolt"></i>
+                <i class="fa-solid fa-microchip small-icon"></i>
+            </div>
+            <h1>Sensores de Consumo Elétrico</h1>
+            <p class="subtitle">Monitoramento energético das máquinas têxteis</p>
+
+            <!-- Abas de Filtro por Status de Conexão -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todos')">Todos</button>
+                <button class="tab inactive" onclick="filterList('online')">Online</button>
+                <button class="tab inactive" onclick="filterList('offline')">Offline</button>
+                <button class="tab inactive" onclick="filterList('erro')">Erro</button>
+            </div>
+        </header>
+
+        <!-- Barra de Busca e Botão Novo -->
+        <div class="search-bar">
+            <div class="input-wrapper search-wrapper">
+                <i class="fa-solid fa-magnifying-glass icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por série, modelo ou IP..." onkeyup="searchSensor()">
+            </div>
+            <button class="btn-add" onclick="openModal('create')">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Lista de Sensores -->
+        <div class="decision-list" id="sensorList">
+
+            <!-- Sensor 1 -->
+            <div class="decision-card" data-status-conexao="online">
+                <div class="card-header">
+                    <span class="id-badge">#01</span>
+                    <span class="status-badge status-executada"><i class="fa-solid fa-circle"></i> Online</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-barcode"></i> SN-2024-001</p>
+                    <p><i class="fa-solid fa-microchip"></i> Consumo Elétrico (kWh)</p>
+                    <p><i class="fa-solid fa-industry"></i> Overloque #05</p>
+                    <p><i class="fa-solid fa-shield-halved"></i> Status: Ativo</p>
+                    <p class="ref-value">IP: 192.168.1.101 | MAC: A1:B2:C3:D4:E5:F6</p>
+
+                    <!-- Consumo medido -->
+                    <div class="consumo-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-bolt"></i> Consumo (últimas 6h)
+                        </div>
+                        <div class="consumo-value">12.45 <small>kWh</small></div>
+                        <div class="chart">
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 35%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                            <div class="bar" style="height: 55%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 1, serie: 'SN-2024-001', fabricante: 'Siemens', modelo: 'SITRANS F',
+                        tipo: 'Consumo Elétrico', unidade: 'kWh', protocolo: 'MQTT',
+                        mac: 'A1:B2:C3:D4:E5:F6', ip: '192.168.1.101', token: 'tk_abc123xyz',
+                        statusConexao: 'online', instalacao: '2024-01-15', calibracao: '2024-04-10',
+                        status: 'ativo', maquina: 'Overloque #05',
+                        consumoTotal: 1245.80, consumoHoje: 12.45, pico: 3.20
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Sensor 2 -->
+            <div class="decision-card" data-status-conexao="online">
+                <div class="card-header">
+                    <span class="id-badge">#02</span>
+                    <span class="status-badge status-executada"><i class="fa-solid fa-circle"></i> Online</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-barcode"></i> SN-2024-004</p>
+                    <p><i class="fa-solid fa-microchip"></i> Consumo Elétrico (kWh)</p>
+                    <p><i class="fa-solid fa-industry"></i> Galoneira #12</p>
+                    <p><i class="fa-solid fa-shield-halved"></i> Status: Ativo</p>
+                    <p class="ref-value">IP: 192.168.1.104 | MAC: D4:E5:F6:A1:B2:C3</p>
+
+                    <div class="consumo-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-bolt"></i> Consumo (últimas 6h)
+                        </div>
+                        <div class="consumo-value">8.90 <small>kWh</small></div>
+                        <div class="chart">
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 65%"></div>
+                            <div class="bar" style="height: 35%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 2, serie: 'SN-2024-004', fabricante: 'Schneider', modelo: 'PowerLogic PM8000',
+                        tipo: 'Consumo Elétrico', unidade: 'kWh', protocolo: 'Modbus RTU',
+                        mac: 'D4:E5:F6:A1:B2:C3', ip: '192.168.1.104', token: 'tk_ghi789rst',
+                        statusConexao: 'online', instalacao: '2024-01-10', calibracao: '2024-05-20',
+                        status: 'ativo', maquina: 'Galoneira #12',
+                        consumoTotal: 892.10, consumoHoje: 8.90, pico: 2.10
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Sensor 3 - Offline -->
+            <div class="decision-card" data-status-conexao="offline">
+                <div class="card-header">
+                    <span class="id-badge">#03</span>
+                    <span class="status-badge status-falha"><i class="fa-solid fa-circle"></i> Offline</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-barcode"></i> SN-2024-007</p>
+                    <p><i class="fa-solid fa-microchip"></i> Consumo Elétrico (kWh)</p>
+                    <p><i class="fa-solid fa-industry"></i> Costura Reta #08</p>
+                    <p><i class="fa-solid fa-shield-halved"></i> Status: Manutenção</p>
+                    <p class="ref-value">IP: 192.168.1.107 | MAC: E5:F6:A1:B2:C3:D4</p>
+
+                    <div class="consumo-box offline-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-plug-circle-xmark"></i> Sem leitura
+                        </div>
+                        <div class="consumo-value" style="color: #e74c3c;">-- <small>kWh</small></div>
+                        <p class="offline-msg">Sensor desconectado desde 14/05/2024</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 3, serie: 'SN-2024-007', fabricante: 'WEG', modelo: 'EMC-2000',
+                        tipo: 'Consumo Elétrico', unidade: 'kWh', protocolo: 'MQTT',
+                        mac: 'E5:F6:A1:B2:C3:D4', ip: '192.168.1.107', token: 'tk_jkl012mno',
+                        statusConexao: 'offline', instalacao: '2024-02-01', calibracao: '2024-03-10',
+                        status: 'manutencao', maquina: 'Costura Reta #08',
+                        consumoTotal: 456.30, consumoHoje: 0, pico: 0
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Sensor 4 - Erro -->
+            <div class="decision-card" data-status-conexao="erro">
+                <div class="card-header">
+                    <span class="id-badge">#04</span>
+                    <span class="status-badge status-pendente"><i class="fa-solid fa-triangle-exclamation"></i> Erro</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-barcode"></i> SN-2024-009</p>
+                    <p><i class="fa-solid fa-microchip"></i> Consumo Elétrico (kWh)</p>
+                    <p><i class="fa-solid fa-industry"></i> Bordadeira #03</p>
+                    <p><i class="fa-solid fa-shield-halved"></i> Status: Ativo</p>
+                    <p class="ref-value">IP: 192.168.1.109 | MAC: F6:A1:B2:C3:D4:E5</p>
+
+                    <div class="consumo-box erro-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Leitura anômala
+                        </div>
+                        <div class="consumo-value" style="color: #f1c40f;">999.99 <small>kWh</small></div>
+                        <p class="offline-msg">Valor fora do padrão detectado às 15:42</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 4, serie: 'SN-2024-009', fabricante: 'ABB', modelo: 'B21',
+                        tipo: 'Consumo Elétrico', unidade: 'kWh', protocolo: 'OPC UA',
+                        mac: 'F6:A1:B2:C3:D4:E5', ip: '192.168.1.109', token: 'tk_pqr345stu',
+                        statusConexao: 'erro', instalacao: '2024-03-12', calibracao: '2024-04-25',
+                        status: 'ativo', maquina: 'Bordadeira #03',
+                        consumoTotal: 156.70, consumoHoje: 999.99, pico: 999.99
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detalhes do Sensor</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Dados de consumo em destaque -->
+                <div class="consumo-summary" id="consumoSummary">
+                    <div class="summary-item">
+                        <span class="summary-label">Consumo Total</span>
+                        <span class="summary-value" id="sumTotal">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Consumo Hoje</span>
+                        <span class="summary-value" id="sumHoje">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Pico Registrado</span>
+                        <span class="summary-value" id="sumPico">-- kW</span>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Identificação -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-tag"></i> Identificação</h3>
+                    <div class="input-group">
+                        <label for="numeroSerie">Número de Série *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-barcode icon"></i>
+                            <input type="text" id="numeroSerie" placeholder="Ex: SN-2024-001" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="fabricante">Fabricante</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-industry icon"></i>
+                                <input type="text" id="fabricante" placeholder="Ex: Siemens">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="modelo">Modelo</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-cube icon"></i>
+                                <input type="text" id="modelo" placeholder="Ex: SITRANS F">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="tipoSensor">Tipo de Sensor *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-microchip icon"></i>
+                                <select id="tipoSensor">
+                                    <option value="Consumo Elétrico">Consumo Elétrico</option>
+                                    <option value="Consumo de Água">Consumo de Água</option>
+                                    <option value="Consumo de Gás">Consumo de Gás</option>
+                                    <option value="Temperatura">Temperatura</option>
+                                    <option value="Vibração">Vibração</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="unidadeMedida">Unidade *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-ruler icon"></i>
+                                <input type="text" id="unidadeMedida" placeholder="kWh" maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Comunicação -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-network-wired"></i> Comunicação</h3>
+                    <div class="input-group">
+                        <label for="protocolo">Protocolo *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-tower-broadcast icon"></i>
+                            <select id="protocolo">
+                                <option value="MQTT">MQTT</option>
+                                <option value="Modbus TCP">Modbus TCP</option>
+                                <option value="Modbus RTU">Modbus RTU</option>
+                                <option value="OPC UA">OPC UA</option>
+                                <option value="HTTP/REST">HTTP/REST</option>
+                                <option value="LoRaWAN">LoRaWAN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="macAddress">Endereço MAC * <small>(XX:XX:XX:XX:XX:XX)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-network-wired icon"></i>
+                            <input type="text" id="macAddress" placeholder="A1:B2:C3:D4:E5:F6" maxlength="17" oninput="formatMAC(this)">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="enderecoIp">Endereço IP <small>(opcional)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-globe icon"></i>
+                            <input type="text" id="enderecoIp" placeholder="192.168.1.101" maxlength="45">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="token">Token de Autenticação <small>(opcional)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-key icon"></i>
+                            <input type="text" id="token" placeholder="tk_xxxxxxxx" maxlength="255">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Status -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-signal"></i> Status</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="statusConexao">Conexão *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-wifi icon"></i>
+                                <select id="statusConexao">
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                    <option value="unknown">Desconhecido</option>
+                                    <option value="erro">Erro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="statusSensor">Operação *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-toggle-on icon"></i>
+                                <select id="statusSensor">
+                                    <option value="ativo">Ativo</option>
+                                    <option value="inativo">Inativo</option>
+                                    <option value="manutencao">Manutenção</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Datas e Vínculo -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-calendar-days"></i> Datas e Vínculo</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="dataInstalacao">Instalação</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-plus icon"></i>
+                                <input type="date" id="dataInstalacao">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="dataCalibracao">Última Calibração</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-check icon"></i>
+                                <input type="date" id="dataCalibracao">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="maquinaInfoGroup" style="display: none;">
+                        <label>Máquina Vinculada</label>
+                        <div class="input-wrapper info-readonly">
+                            <i class="fa-solid fa-industry icon"></i>
+                            <span id="maquinaNome"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" id="modalActions"></div>
+        </div>
+    </div>
+
+    <script>
+        // Formata o MAC automaticamente
+        function formatMAC(input) {
+            let value = input.value.replace(/[^0-9A-Fa-f]/g, '').toUpperCase();
+            let formatted = '';
+            for (let i = 0; i < value.length && i < 12; i++) {
+                if (i > 0 && i % 2 === 0) formatted += ':';
+                formatted += value[i];
+            }
+            input.value = formatted;
+        }
+
+        function filterList(statusConexao) {
+            const cards = document.querySelectorAll('.decision-card');
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => { t.classList.remove('active'); t.classList.add('inactive'); });
+            event.target.classList.remove('inactive');
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                card.style.display = (statusConexao === 'todos' || card.dataset.statusConexao === statusConexao) ? 'block' : 'none';
+            });
+        }
+
+        function searchSensor() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(input) ? 'block' : 'none';
+            });
+        }
+
+        function openModal(mode, data = {}) {
+            const title = document.getElementById('modalTitle');
+            const actions = document.getElementById('modalActions');
+            const maquinaInfoGroup = document.getElementById('maquinaInfoGroup');
+            const inputs = document.querySelectorAll('.modal-body input, .modal-body select');
+            const consumoSummary = document.getElementById('consumoSummary');
+
+            actions.innerHTML = '';
+            consumoSummary.style.display = 'none';
+
+            if (mode === 'create') {
+                title.innerText = 'Novo Sensor';
+                inputs.forEach(i => { i.value = ''; i.disabled = false; });
+                document.getElementById('tipoSensor').value = 'Consumo Elétrico';
+                document.getElementById('unidadeMedida').value = 'kWh';
+                document.getElementById('protocolo').value = 'MQTT';
+                document.getElementById('statusConexao').value = 'online';
+                document.getElementById('statusSensor').value = 'ativo';
+                maquinaInfoGroup.style.display = 'none';
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="saveSensor()">Salvar Sensor</button>
+                `;
+            }
+            else if (mode === 'view') {
+                title.innerText = 'Sensor #' + String(data.id).padStart(2, '0');
+                document.getElementById('numeroSerie').value = data.serie;
+                document.getElementById('fabricante').value = data.fabricante || '';
+                document.getElementById('modelo').value = data.modelo || '';
+                document.getElementById('tipoSensor').value = data.tipo;
+                document.getElementById('unidadeMedida').value = data.unidade;
+                document.getElementById('protocolo').value = data.protocolo;
+                document.getElementById('macAddress').value = data.mac;
+                document.getElementById('enderecoIp').value = data.ip || '';
+                document.getElementById('token').value = data.token || '';
+                document.getElementById('statusConexao').value = data.statusConexao;
+                document.getElementById('statusSensor').value = data.status;
+                document.getElementById('dataInstalacao').value = data.instalacao || '';
+                document.getElementById('dataCalibracao').value = data.calibracao || '';
+                document.getElementById('maquinaNome').innerText = data.maquina;
+                maquinaInfoGroup.style.display = 'block';
+
+                // Mostra resumo de consumo
+                consumoSummary.style.display = 'flex';
+                document.getElementById('sumTotal').innerText = data.consumoTotal.toFixed(2) + ' kWh';
+                document.getElementById('sumHoje').innerText = data.consumoHoje.toFixed(2) + ' kWh';
+                document.getElementById('sumPico').innerText = data.pico.toFixed(2) + ' kW';
+
+                inputs.forEach(i => i.disabled = true);
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="deleteSensor(${data.id})">Excluir</button>
+                    <button class="btn-modal btn-confirm" onclick='openModal("edit", ${JSON.stringify(data).replace(/'/g, "\\'")})'>Editar</button>
+                `;
+            }
+            else if (mode === 'edit') {
+                title.innerText = 'Editando Sensor #' + String(data.id).padStart(2, '0');
+                document.getElementById('numeroSerie').value = data.serie;
+                document.getElementById('fabricante').value = data.fabricante || '';
+                document.getElementById('modelo').value = data.modelo || '';
+                document.getElementById('tipoSensor').value = data.tipo;
+                document.getElementById('unidadeMedida').value = data.unidade;
+                document.getElementById('protocolo').value = data.protocolo;
+                document.getElementById('macAddress').value = data.mac;
+                document.getElementById('enderecoIp').value = data.ip || '';
+                document.getElementById('token').value = data.token || '';
+                document.getElementById('statusConexao').value = data.statusConexao;
+                document.getElementById('statusSensor').value = data.status;
+                document.getElementById('dataInstalacao').value = data.instalacao || '';
+                document.getElementById('dataCalibracao').value = data.calibracao || '';
+                document.getElementById('maquinaNome').innerText = data.maquina;
+                maquinaInfoGroup.style.display = 'block';
+
+                inputs.forEach(i => i.disabled = false);
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="saveSensor(${data.id})">Atualizar</button>
+                `;
+            }
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        function saveSensor(id = null) {
+            const serie = document.getElementById('numeroSerie').value.trim();
+            const tipo = document.getElementById('tipoSensor').value;
+            const unidade = document.getElementById('unidadeMedida').value.trim();
+            const protocolo = document.getElementById('protocolo').value;
+            const mac = document.getElementById('macAddress').value.trim();
+            const ip = document.getElementById('enderecoIp').value.trim();
+            const statusConexao = document.getElementById('statusConexao').value;
+            const statusSensor = document.getElementById('statusSensor').value;
+            const instalacao = document.getElementById('dataInstalacao').value;
+            const calibracao = document.getElementById('dataCalibracao').value;
+
+            if (!serie || !tipo || !unidade || !protocolo || !mac) {
+                alert('Preencha todos os campos obrigatórios (*).');
+                return;
+            }
+            if (!/^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/.test(mac)) {
+                alert('MAC inválido. Formato: XX:XX:XX:XX:XX:XX');
+                return;
+            }
+            if (ip) {
+                const ipv4 = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
+                const ipv6 = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/;
+                if (!ipv4.test(ip) && !ipv6.test(ip)) {
+                    alert('IP inválido.');
+                    return;
+                }
+            }
+            if (instalacao && calibracao && calibracao < instalacao) {
+                alert('A calibração não pode ser anterior à instalação.');
+                return;
+            }
+
+            const acao = id ? 'UPDATE' : 'INSERT INTO';
+            alert(`Comando SQL simulado:\n${acao} sensor (...) VALUES ('${serie}', '${tipo}', '${unidade}', '${protocolo}', '${mac}', '${ip}', '${statusConexao}', '${statusSensor}');`);
+            closeModal();
+        }
+
+        function deleteSensor(id) {
+            if (confirm(`Excluir o sensor #${id}?`)) {
+                alert(`Comando SQL: DELETE FROM sensor WHERE id_sensor = ${id};`);
+                closeModal();
+            }
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>

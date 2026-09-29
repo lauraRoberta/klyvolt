@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumo Elétrico - Indústria Têxtil</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-pattern"></div>
+
+    <main class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-bolt"></i>
+                <i class="fa-solid fa-chart-line small-icon"></i>
+            </div>
+            <h1>Consumo Elétrico</h1>
+            <p class="subtitle">Histórico agregado por máquina e período</p>
+
+            <!-- KPIs Resumo -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-label">Total no Mês</span>
+                    <span class="kpi-value" id="kpiTotal">2.894,20</span>
+                    <span class="kpi-unit">kWh</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Média Diária</span>
+                    <span class="kpi-value" id="kpiMedia">96,47</span>
+                    <span class="kpi-unit">kWh</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Pico</span>
+                    <span class="kpi-value" id="kpiPico">15,80</span>
+                    <span class="kpi-unit">kWh/h</span>
+                </div>
+            </div>
+
+            <!-- Abas de Filtro por Máquina -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todas')">Todas</button>
+                <button class="tab inactive" onclick="filterList('overloque')">Overloque</button>
+                <button class="tab inactive" onclick="filterList('galoneira')">Galoneira</button>
+                <button class="tab inactive" onclick="filterList('bordadeira')">Bordadeira</button>
+            </div>
+        </header>
+
+        <!-- Barra de Busca e Botão Novo -->
+        <div class="search-bar">
+            <div class="input-wrapper search-wrapper">
+                <i class="fa-solid fa-magnifying-glass icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por máquina ou data..." onkeyup="searchConsumo()">
+            </div>
+            <button class="btn-add" onclick="openModal('create')">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Lista de Consumos -->
+        <div class="decision-list" id="consumoList">
+
+            <!-- Registro 1 -->
+            <div class="decision-card" data-maquina="overloque">
+                <div class="card-header">
+                    <span class="id-badge">#01</span>
+                    <span class="status-badge status-executada">
+                        <i class="fa-solid fa-check"></i> Consolidado
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-industry"></i> Overloque #05</p>
+                    <p><i class="fa-solid fa-calendar-day"></i> 01/05/2024 00:00 → 01/05/2024 23:59</p>
+                    <p><i class="fa-solid fa-clock"></i> Duração: 24h</p>
+
+                    <!-- Consumo em destaque -->
+                    <div class="consumo-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-bolt"></i> Consumo Agregado
+                        </div>
+                        <div class="consumo-value">12,45 <small>kWh</small></div>
+                        <div class="chart">
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 55%"></div>
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 1, maquina: 'Overloque #05', grupo: 'overloque',
+                        inicio: '2024-05-01T00:00', fim: '2024-05-01T23:59',
+                        kwh: 12.45
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Registro 2 -->
+            <div class="decision-card" data-maquina="galoneira">
+                <div class="card-header">
+                    <span class="id-badge">#02</span>
+                    <span class="status-badge status-executada">
+                        <i class="fa-solid fa-check"></i> Consolidado
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-industry"></i> Galoneira #12</p>
+                    <p><i class="fa-solid fa-calendar-day"></i> 01/05/2024 00:00 → 01/05/2024 23:59</p>
+                    <p><i class="fa-solid fa-clock"></i> Duração: 24h</p>
+
+                    <div class="consumo-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-bolt"></i> Consumo Agregado
+                        </div>
+                        <div class="consumo-value">8,90 <small>kWh</small></div>
+                        <div class="chart">
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 35%"></div>
+                            <div class="bar" style="height: 65%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 2, maquina: 'Galoneira #12', grupo: 'galoneira',
+                        inicio: '2024-05-01T00:00', fim: '2024-05-01T23:59',
+                        kwh: 8.90
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Registro 3 -->
+            <div class="decision-card" data-maquina="bordadeira">
+                <div class="card-header">
+                    <span class="id-badge">#03</span>
+                    <span class="status-badge status-pendente">
+                        <i class="fa-solid fa-clock"></i> Em Andamento
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-industry"></i> Bordadeira #03</p>
+                    <p><i class="fa-solid fa-calendar-day"></i> 02/05/2024 00:00 → 02/05/2024 12:00</p>
+                    <p><i class="fa-solid fa-clock"></i> Duração parcial: 12h</p>
+
+                    <div class="consumo-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-bolt"></i> Consumo Parcial
+                        </div>
+                        <div class="consumo-value">5,30 <small>kWh</small></div>
+                        <div class="chart">
+                            <div class="bar" style="height: 20%"></div>
+                            <div class="bar" style="height: 35%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 30%"></div>
+                            <div class="bar" style="height: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 3, maquina: 'Bordadeira #03', grupo: 'bordadeira',
+                        inicio: '2024-05-02T00:00', fim: '2024-05-02T12:00',
+                        kwh: 5.30
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Registro 4 - Overloque -->
+            <div class="decision-card" data-maquina="overloque">
+                <div class="card-header">
+                    <span class="id-badge">#04</span>
+                    <span class="status-badge status-executada">
+                        <i class="fa-solid fa-check"></i> Consolidado
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-industry"></i> Overloque #05</p>
+                    <p><i class="fa-solid fa-calendar-day"></i> 02/05/2024 00:00 → 02/05/2024 23:59</p>
+                    <p><i class="fa-solid fa-clock"></i> Duração: 24h</p>
+
+                    <div class="consumo-box">
+                        <div class="consumo-header">
+                            <i class="fa-solid fa-bolt"></i> Consumo Agregado
+                        </div>
+                        <div class="consumo-value">14,20 <small>kWh</small></div>
+                        <div class="chart">
+                            <div class="bar" style="height: 55%"></div>
+                            <div class="bar" style="height: 65%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 4, maquina: 'Overloque #05', grupo: 'overloque',
+                        inicio: '2024-05-02T00:00', fim: '2024-05-02T23:59',
+                        kwh: 14.20
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detalhes do Consumo</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Destaque do consumo -->
+                <div class="consumo-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Consumo Total</span>
+                        <span class="summary-value" id="sumKwh">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Duração</span>
+                        <span class="summary-value" id="sumDuracao">-- h</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Média/h</span>
+                        <span class="summary-value" id="sumMedia">-- kWh</span>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Período -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-calendar-days"></i> Período</h3>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="dataInicio">Início *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-plus icon"></i>
+                                <input type="datetime-local" id="dataInicio">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="dataFim">Fim *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-check icon"></i>
+                                <input type="datetime-local" id="dataFim">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Consumo -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Consumo</h3>
+
+                    <div class="input-group">
+                        <label for="consumoKwh">Consumo (kWh) *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-gauge-high icon"></i>
+                            <input type="number" id="consumoKwh" placeholder="Ex: 12.45" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="idMaquina">ID da Máquina *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-industry icon"></i>
+                            <select id="idMaquina">
+                                <option value="1">Overloque #05</option>
+                                <option value="2">Galoneira #12</option>
+                                <option value="3">Bordadeira #03</option>
+                                <option value="4">Costura Reta #08</option>
+                                <option value="5">Lavanderia Industrial</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="maquinaInfoGroup" style="display: none;">
+                        <label>Máquina Registrada</label>
+                        <div class="input-wrapper info-readonly">
+                            <i class="fa-solid fa-industry icon"></i>
+                            <span id="maquinaNome"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" id="modalActions"></div>
+        </div>
+    </div>
+
+    <script>
+        function filterList(grupo) {
+            const cards = document.querySelectorAll('.decision-card');
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => { t.classList.remove('active'); t.classList.add('inactive'); });
+            event.target.classList.remove('inactive');
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                card.style.display = (grupo === 'todas' || card.dataset.maquina === grupo) ? 'block' : 'none';
+            });
+        }
+
+        function searchConsumo() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(input) ? 'block' : 'none';
+            });
+        }
+
+        // Calcula duração em horas
+        function calcDuracao(inicio, fim) {
+            const dt1 = new Date(inicio);
+            const dt2 = new Date(fim);
+            return ((dt2 - dt1) / 3600000).toFixed(1);
+        }
+
+        // Formata data-hora pt-BR
+        function formatDT(isoStr) {
+            const dt = new Date(isoStr);
+            const dia = String(dt.getDate()).padStart(2, '0');
+            const mes = String(dt.getMonth() + 1).padStart(2, '0');
+            const ano = dt.getFullYear();
+            const h = String(dt.getHours()).padStart(2, '0');
+            const m = String(dt.getMinutes()).padStart(2, '0');
+            return `${dia}/${mes}/${ano} ${h}:${m}`;
+        }
+
+        function openModal(mode, data = {}) {
+            const title = document.getElementById('modalTitle');
+            const actions = document.getElementById('modalActions');
+            const maquinaInfoGroup = document.getElementById('maquinaInfoGroup');
+            const inputs = document.querySelectorAll('.modal-body input, .modal-body select');
+
+            actions.innerHTML = '';
+
+            if (mode === 'create') {
+                title.innerText = 'Novo Registro de Consumo';
+                inputs.forEach(i => { i.value = ''; i.disabled = false; });
+                document.getElementById('idMaquina').value = '1';
+                maquinaInfoGroup.style.display = 'none';
+
+                document.getElementById('sumKwh').innerText = '-- kWh';
+                document.getElementById('sumDuracao').innerText = '-- h';
+                document.getElementById('sumMedia').innerText = '-- kWh';
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="saveConsumo()">Salvar Registro</button>
+                `;
+            }
+            else if (mode === 'view') {
+                title.innerText = 'Consumo #' + String(data.id).padStart(2, '0');
+                document.getElementById('dataInicio').value = data.inicio;
+                document.getElementById('dataFim').value = data.fim;
+                document.getElementById('consumoKwh').value = data.kwh;
+                document.getElementById('maquinaNome').innerText = data.maquina;
+                maquinaInfoGroup.style.display = 'block';
+
+                // Preenche os KPIs do modal
+                const duracao = calcDuracao(data.inicio, data.fim);
+                const media = (data.kwh / duracao).toFixed(2);
+                document.getElementById('sumKwh').innerText = data.kwh.toFixed(2) + ' kWh';
+                document.getElementById('sumDuracao').innerText = duracao + ' h';
+                document.getElementById('sumMedia').innerText = media + ' kWh';
+
+                inputs.forEach(i => i.disabled = true);
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="deleteConsumo(${data.id})">Excluir</button>
+                    <button class="btn-modal btn-confirm" onclick='openModal("edit", ${JSON.stringify(data).replace(/'/g, "\\'")})'>Editar</button>
+                `;
+            }
+            else if (mode === 'edit') {
+                title.innerText = 'Editando Consumo #' + String(data.id).padStart(2, '0');
+                document.getElementById('dataInicio').value = data.inicio;
+                document.getElementById('dataFim').value = data.fim;
+                document.getElementById('consumoKwh').value = data.kwh;
+                document.getElementById('maquinaNome').innerText = data.maquina;
+                maquinaInfoGroup.style.display = 'block';
+
+                const duracao = calcDuracao(data.inicio, data.fim);
+                const media = (data.kwh / duracao).toFixed(2);
+                document.getElementById('sumKwh').innerText = data.kwh.toFixed(2) + ' kWh';
+                document.getElementById('sumDuracao').innerText = duracao + ' h';
+                document.getElementById('sumMedia').innerText = media + ' kWh';
+
+                inputs.forEach(i => i.disabled = false);
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="saveConsumo(${data.id})">Atualizar</button>
+                `;
+            }
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        function saveConsumo(id = null) {
+            const inicio = document.getElementById('dataInicio').value;
+            const fim = document.getElementById('dataFim').value;
+            const kwh = parseFloat(document.getElementById('consumoKwh').value);
+            const idMaquina = document.getElementById('idMaquina').value;
+
+            if (!inicio || !fim || isNaN(kwh) || !idMaquina) {
+                alert('Preencha todos os campos obrigatórios (*).');
+                return;
+            }
+
+            // chk_periodo_consumo
+            if (new Date(fim) <= new Date(inicio)) {
+                alert('A data final deve ser posterior à data inicial.');
+                return;
+            }
+
+            // chk_consumo_positivo
+            if (kwh < 0) {
+                alert('O consumo não pode ser negativo.');
+                return;
+            }
+
+            // uq_consumo_periodo (simulação)
+            // Em um sistema real, aqui você checaria se já existe registro com mesmo id_maquina + período
+            if (id) {
+                alert('Comando SQL simulado:\n' +
+                      `UPDATE consumo SET data_inicio='${inicio}', data_fim='${fim}', consumo_kwh=${kwh} WHERE id_consumo=${id};`);
+            } else {
+                alert('Comando SQL simulado:\n' +
+                      `INSERT INTO consumo (data_inicio, data_fim, consumo_kwh, id_maquina) VALUES ('${inicio}', '${fim}', ${kwh}, ${idMaquina});`);
+            }
+            closeModal();
+        }
+
+        function deleteConsumo(id) {
+            if (confirm(`Excluir o registro de consumo #${id}?`)) {
+                alert(`Comando SQL: DELETE FROM consumo WHERE id_consumo = ${id};`);
+                closeModal();
+            }
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>

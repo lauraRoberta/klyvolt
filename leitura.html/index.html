@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leituras dos Sensores - Indústria Têxtil</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-pattern"></div>
+
+    <main class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-gauge-high"></i>
+                <i class="fa-solid fa-wave-square small-icon"></i>
+            </div>
+            <h1>Leituras dos Sensores</h1>
+            <p class="subtitle">Medições individuais de consumo elétrico</p>
+
+            <!-- KPIs Resumo -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-label">Leituras Hoje</span>
+                    <span class="kpi-value" id="kpiTotal">48</span>
+                    <span class="kpi-unit">medições</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Média/h</span>
+                    <span class="kpi-value" id="kpiMedia">1,42</span>
+                    <span class="kpi-unit">kWh</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Agregadas</span>
+                    <span class="kpi-value" id="kpiAgreg">36</span>
+                    <span class="kpi-unit">leituras</span>
+                </div>
+            </div>
+
+            <!-- Abas de Filtro por Status de Agregação -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todas')">Todas</button>
+                <button class="tab inactive" onclick="filterList('pendente')">Pendentes</button>
+                <button class="tab inactive" onclick="filterList('agregada')">Agregadas</button>
+            </div>
+        </header>
+
+        <!-- Barra de Busca e Botão Novo -->
+        <div class="search-bar">
+            <div class="input-wrapper search-wrapper">
+                <i class="fa-solid fa-magnifying-glass icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por sensor ou data..." onkeyup="searchLeitura()">
+            </div>
+            <button class="btn-add" onclick="openModal('create')">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Lista de Leituras -->
+        <div class="decision-list" id="leituraList">
+
+            <!-- Leitura 1 - Agregada -->
+            <div class="decision-card" data-status-agregacao="agregada">
+                <div class="card-header">
+                    <span class="id-badge">#1042</span>
+                    <span class="status-badge status-executada">
+                        <i class="fa-solid fa-link"></i> Agregada
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-bolt"></i> 12,45 kWh</p>
+                    <p><i class="fa-solid fa-barcode"></i> Sensor: SN-2024-001</p>
+                    <p><i class="fa-solid fa-industry"></i> Máquina: Overloque #05</p>
+                    <p><i class="fa-solid fa-calendar"></i> 01/05/2024 14:30</p>
+                    <p><i class="fa-solid fa-user"></i> Usuário: Carlos Silva (#102)</p>
+                    <p><i class="fa-solid fa-boxes-stacked"></i> Consumo: #C-001</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 1042, valor: 12.45, sensor: 'SN-2024-001', maquina: 'Overloque #05',
+                        data: '2024-05-01T14:30', usuario: 'Carlos Silva', idUsuario: 102,
+                        idConsumo: 1, consumoRef: '#C-001',
+                        obs: 'Leitura de rotina do turno da tarde.'
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Leitura 2 - Pendente -->
+            <div class="decision-card" data-status-agregacao="pendente">
+                <div class="card-header">
+                    <span class="id-badge">#1043</span>
+                    <span class="status-badge status-pendente">
+                        <i class="fa-solid fa-clock"></i> Pendente
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-bolt"></i> 9,80 kWh</p>
+                    <p><i class="fa-solid fa-barcode"></i> Sensor: SN-2024-004</p>
+                    <p><i class="fa-solid fa-industry"></i> Máquina: Galoneira #12</p>
+                    <p><i class="fa-solid fa-calendar"></i> 01/05/2024 18:15</p>
+                    <p><i class="fa-solid fa-user"></i> Usuário: Ana Souza (#105)</p>
+                    <p><i class="fa-solid fa-boxes-stacked"></i> Consumo: —</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 1043, valor: 9.80, sensor: 'SN-2024-004', maquina: 'Galoneira #12',
+                        data: '2024-05-01T18:15', usuario: 'Ana Souza', idUsuario: 105,
+                        idConsumo: null, consumoRef: null,
+                        obs: 'Aguardando fechamento do período para agregação.'
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Leitura 3 - Automática (sem usuário) -->
+            <div class="decision-card" data-status-agregacao="agregada">
+                <div class="card-header">
+                    <span class="id-badge">#1044</span>
+                    <span class="status-badge status-executada">
+                        <i class="fa-solid fa-robot"></i> Automática
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-bolt"></i> 14,20 kWh</p>
+                    <p><i class="fa-solid fa-barcode"></i> Sensor: SN-2024-007</p>
+                    <p><i class="fa-solid fa-industry"></i> Máquina: Bordadeira #03</p>
+                    <p><i class="fa-solid fa-calendar"></i> 02/05/2024 08:00</p>
+                    <p><i class="fa-solid fa-user"></i> Usuário: — (Coleta automática)</p>
+                    <p><i class="fa-solid fa-boxes-stacked"></i> Consumo: #C-004</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 1044, valor: 14.20, sensor: 'SN-2024-007', maquina: 'Bordadeira #03',
+                        data: '2024-05-02T08:00', usuario: null, idUsuario: null,
+                        idConsumo: 4, consumoRef: '#C-004',
+                        obs: null
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Leitura 4 - Pendente -->
+            <div class="decision-card" data-status-agregacao="pendente">
+                <div class="card-header">
+                    <span class="id-badge">#1045</span>
+                    <span class="status-badge status-pendente">
+                        <i class="fa-solid fa-clock"></i> Pendente
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-bolt"></i> 6,55 kWh</p>
+                    <p><i class="fa-solid fa-barcode"></i> Sensor: SN-2024-009</p>
+                    <p><i class="fa-solid fa-industry"></i> Máquina: Overloque #05</p>
+                    <p><i class="fa-solid fa-calendar"></i> 02/05/2024 16:45</p>
+                    <p><i class="fa-solid fa-user"></i> Usuário: Marcos Lima (#108)</p>
+                    <p><i class="fa-solid fa-boxes-stacked"></i> Consumo: —</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal('view', {
+                        id: 1045, valor: 6.55, sensor: 'SN-2024-009', maquina: 'Overloque #05',
+                        data: '2024-05-02T16:45', usuario: 'Marcos Lima', idUsuario: 108,
+                        idConsumo: null, consumoRef: null,
+                        obs: 'Leitura durante manutenção preventiva.'
+                    })">Detalhes</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detalhes da Leitura</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Destaque do valor medido -->
+                <div class="consumo-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Valor Medido</span>
+                        <span class="summary-value" id="sumValor">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Sensor</span>
+                        <span class="summary-value" id="sumSensor" style="font-size: 11px;">--</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Agregação</span>
+                        <span class="summary-value" id="sumAgreg" style="font-size: 11px;">--</span>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Leitura -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-gauge-high"></i> Dados da Leitura</h3>
+
+                    <div class="input-group">
+                        <label for="dataLeitura">Data/Hora da Leitura *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-calendar icon"></i>
+                            <input type="datetime-local" id="dataLeitura">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="valorMedido">Valor Medido (kWh) *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-bolt icon"></i>
+                            <input type="number" id="valorMedido" placeholder="Ex: 12.45" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="observacao">Observação</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-comment icon"></i>
+                            <input type="text" id="observacao" placeholder="Opcional...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Origem -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-link"></i> Origem e Agregação</h3>
+
+                    <div class="input-group">
+                        <label for="idSensor">Sensor *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-barcode icon"></i>
+                            <select id="idSensor">
+                                <option value="1">SN-2024-001 — Overloque #05</option>
+                                <option value="2">SN-2024-004 — Galoneira #12</option>
+                                <option value="3">SN-2024-007 — Bordadeira #03</option>
+                                <option value="4">SN-2024-009 — Overloque #05</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="idUsuario">Usuário Responsável <small>(opcional)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user icon"></i>
+                            <select id="idUsuario">
+                                <option value="">— Coleta automática —</option>
+                                <option value="102">Carlos Silva (#102)</option>
+                                <option value="105">Ana Souza (#105)</option>
+                                <option value="108">Marcos Lima (#108)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="consumoInfoGroup" style="display: none;">
+                        <label>Consumo Associado</label>
+                        <div class="input-wrapper info-readonly">
+                            <i class="fa-solid fa-boxes-stacked icon"></i>
+                            <span id="consumoRef">—</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" id="modalActions"></div>
+        </div>
+    </div>
+
+    <script>
+        // =============== FILTROS ===============
+        function filterList(statusAgregacao) {
+            const cards = document.querySelectorAll('.decision-card');
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => { t.classList.remove('active'); t.classList.add('inactive'); });
+            event.target.classList.remove('inactive');
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                card.style.display = (statusAgregacao === 'todas' || card.dataset.statusAgregacao === statusAgregacao)
+                    ? 'block' : 'none';
+            });
+        }
+
+        function searchLeitura() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(input) ? 'block' : 'none';
+            });
+        }
+
+        // =============== MODAL ===============
+        function openModal(mode, data = {}) {
+            const title = document.getElementById('modalTitle');
+            const actions = document.getElementById('modalActions');
+            const consumoInfoGroup = document.getElementById('consumoInfoGroup');
+            const inputs = document.querySelectorAll('.modal-body input, .modal-body select');
+
+            actions.innerHTML = '';
+            consumoInfoGroup.style.display = 'none';
+
+            if (mode === 'create') {
+                title.innerText = 'Nova Leitura';
+                inputs.forEach(i => { i.value = ''; i.disabled = false; });
+                document.getElementById('idSensor').value = '1';
+                document.getElementById('idUsuario').value = '';
+
+                // Zera KPIs
+                document.getElementById('sumValor').innerText = '-- kWh';
+                document.getElementById('sumSensor').innerText = '--';
+                document.getElementById('sumAgreg').innerText = '--';
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="saveLeitura()">Registrar Leitura</button>
+                `;
+            }
+            else if (mode === 'view') {
+                title.innerText = 'Leitura #' + data.id;
+                document.getElementById('dataLeitura').value = data.data;
+                document.getElementById('valorMedido').value = data.valor;
+                document.getElementById('observacao').value = data.obs || '';
+                document.getElementById('idSensor').value = '1';
+                document.getElementById('idUsuario').value = data.idUsuario || '';
+
+                // Preenche KPIs do modal
+                document.getElementById('sumValor').innerText = data.valor.toFixed(2) + ' kWh';
+                document.getElementById('sumSensor').innerText = data.sensor;
+                document.getElementById('sumAgreg').innerText = data.idConsumo ? 'Agregada' : 'Pendente';
+
+                // Mostra consumo associado se existir
+                if (data.idConsumo) {
+                    consumoInfoGroup.style.display = 'block';
+                    document.getElementById('consumoRef').innerText = data.consumoRef + ' (#' + data.idConsumo + ')';
+                }
+
+                inputs.forEach(i => i.disabled = true);
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="deleteLeitura(${data.id})">Excluir</button>
+                    <button class="btn-modal btn-confirm" onclick='openModal("edit", ${JSON.stringify(data).replace(/'/g, "\\'")})'>Editar</button>
+                `;
+            }
+            else if (mode === 'edit') {
+                title.innerText = 'Editando Leitura #' + data.id;
+                document.getElementById('dataLeitura').value = data.data;
+                document.getElementById('valorMedido').value = data.valor;
+                document.getElementById('observacao').value = data.obs || '';
+                document.getElementById('idSensor').value = '1';
+                document.getElementById('idUsuario').value = data.idUsuario || '';
+
+                document.getElementById('sumValor').innerText = data.valor.toFixed(2) + ' kWh';
+                document.getElementById('sumSensor').innerText = data.sensor;
+                document.getElementById('sumAgreg').innerText = data.idConsumo ? 'Agregada' : 'Pendente';
+
+                if (data.idConsumo) {
+                    consumoInfoGroup.style.display = 'block';
+                    document.getElementById('consumoRef').innerText = data.consumoRef + ' (#' + data.idConsumo + ')';
+                }
+
+                inputs.forEach(i => i.disabled = false);
+
+                actions.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="saveLeitura(${data.id})">Atualizar</button>
+                `;
+            }
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // =============== SALVAR ===============
+        function saveLeitura(id = null) {
+            const data = document.getElementById('dataLeitura').value;
+            const valor = parseFloat(document.getElementById('valorMedido').value);
+            const obs = document.getElementById('observacao').value.trim();
+            const idSensor = document.getElementById('idSensor').value;
+            const idUsuario = document.getElementById('idUsuario').value || null;
+
+            // Validações obrigatórias
+            if (!data || isNaN(valor) || !idSensor) {
+                alert('Preencha todos os campos obrigatórios (*).');
+                return;
+            }
+
+            // chk_valor_leitura_positivo
+            if (valor < 0) {
+                alert('O valor medido não pode ser negativo.');
+                return;
+            }
+
+            // UNIQUE (id_sensor, data_leitura) — simulação
+            // Em produção, o backend faria a checagem antes do INSERT/UPDATE
+            const mensagemUnica = `(Verificação UNIQUE: sensor #${idSensor} + data ${data})`;
+
+            const acao = id ? 'UPDATE' : 'INSERT INTO';
+            const usuarioTxt = idUsuario ? `'${idUsuario}'` : 'NULL';
+            const obsTxt = obs ? `'${obs}'` : 'NULL';
+
+            alert(
+                `Comando SQL simulado:\n` +
+                `${acao} leitura (data_leitura, valor_medido_kwh, observacao_leitura, id_sensor, id_usuario) ` +
+                `VALUES ('${data}', ${valor}, ${obsTxt}, ${idSensor}, ${usuarioTxt});\n\n` +
+                mensagemUnica
+            );
+            closeModal();
+        }
+
+        // =============== EXCLUIR ===============
+        function deleteLeitura(id) {
+            if (confirm(`Excluir a leitura #${id}?\n(ON DELETE CASCADE não se aplica a leitura)`)) {
+                alert(`Comando SQL: DELETE FROM leitura WHERE id_leitura = ${id};`);
+                closeModal();
+            }
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('modalOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
