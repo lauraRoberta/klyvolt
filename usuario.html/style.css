@@ -1,0 +1,241 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0b1626; /* Fundo escuro profundo */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: white;
+}
+
+/* Container Principal */
+.card-container {
+    background-color: #104068; /* Azul médio */
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    position: relative;
+    overflow: hidden; /* Garante que os padrões não saiam das bordas */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- CABEÇALHO --- */
+.header-top {
+    position: relative;
+    background-color: #0a2842; /* Azul mais escuro no topo */
+    padding-bottom: 20px;
+}
+
+/* Padrão de linhas laranjas no topo */
+.pattern-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    /* Simulação de linhas onduladas com gradientes repetidos */
+    background-image: repeating-radial-gradient(
+        circle at 10% 10%, 
+        transparent 0, 
+        transparent 15px,
+        #ff6f00 15px,
+        #ff6f00 17px,
+        transparent 17px,
+        transparent 30px
+    );
+    z-index: 0;
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding-top: 30px;
+}
+
+/* Ícone Redondo */
+.icon-circle {
+    background-color: #ff6f00;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    color: white;
+    border: 3px solid #0a2842; /* Borda para destacar do fundo */
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Abas */
+.tabs {
+    display: flex;
+    background-color: #c96a1e;
+    border-radius: 8px;
+    margin: 0 20px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    color: white;
+}
+
+.tab.active {
+    background-color: #ff6f00;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.tab.inactive {
+    background-color: #c96a1e;
+}
+
+.tab.inactive:hover {
+    background-color: #e67e22;
+}
+
+/* --- FORMULÁRIO --- */
+.form-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    text-align: left;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #dbe4ee;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #0d2d4d;
+    border-radius: 8px;
+    padding: 10px 12px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.input-wrapper .icon {
+    color: #bdc3c7;
+    font-size: 16px;
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+.input-wrapper input,
+.input-wrapper select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-size: 15px;
+    /* Remove a aparência padrão do select */
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.input-wrapper input::placeholder {
+    color: #6d8ba8;
+}
+
+/* Ícone do olho (mostrar/ocultar senha) */
+.icon-eye {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: #bdc3c7;
+    transition: color 0.2s;
+}
+.icon-eye:hover {
+    color: #ffffff;
+}
+
+/* Seta customizada para o Select */
+.select-wrapper::after {
+    content: '\f107'; /* Código FontAwesome para seta para baixo */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 15px;
+    color: white;
+    pointer-events: none; /* Permite clicar através da seta */
+}
+
+/* Botão Confirmar */
+.btn-confirm {
+    width: 100%;
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(255, 111, 0, 0.3);
+    transition: background 0.3s;
+}
+
+.btn-confirm:hover {
+    background-color: #e65100;
+}
+
+/* --- RODAPÉ (Padrão de linhas) --- */
+.pattern-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    z-index: 0;
+    opacity: 0.4;
+    pointer-events: none;
+    /* Simulação das ondas laranjas na parte inferior */
+    background-image: repeating-radial-gradient(
+        circle at 80% 150%, 
+        transparent 0, 
+        transparent 20px,
+        #ff6f00 20px,
+        #ff6f00 22px,
+        transparent 22px,
+        transparent 40px
+    );
+}
