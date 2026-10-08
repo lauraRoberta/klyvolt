@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Biblioteca de ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <main class="card-container">
+        
+        <!-- Cabeçalho com fundo de linhas -->
+        <header class="header-top">
+            <div class="pattern-top"></div>
+            
+            <div class="header-content">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h1>Cadastro do Usuário</h1>
+
+                <!-- Abas -->
+                <div class="tabs">
+                    <button type="button" id="btn-novo" class="tab active">Novo Usuário</button>
+                    <button type="button" id="btn-cadastrado" class="tab inactive">Já sou cadastrado</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Formulário -->
+        <form class="form-content">
+            
+            <!-- Campo Nome de Usuário -->
+            <div class="input-group">
+                <label for="nome">Nome de Usuário</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-user icon"></i>
+                    <input type="text" id="nome">
+                </div>
+            </div>
+
+            <!-- Campo E-mail -->
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-envelope icon"></i>
+                    <input type="email" id="email">
+                </div>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="input-group">
+                <label for="senha">Senha de Acesso</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock icon"></i>
+                    <input type="password" id="senha" placeholder="••••••">
+                    <i class="fa-regular fa-eye icon-eye" id="toggleSenha" title="Mostrar/Ocultar Senha"></i>
+                </div>
+            </div>
+
+            <!-- Campo Tipo de Usuário (Select) -->
+            <div class="input-group">
+                <label for="tipo">Tipo de Usuário</label>
+                <div class="input-wrapper select-wrapper">
+                    <select id="tipo">
+                        <option value="" disabled selected></option>
+                        <option value="admin">Administrador</option>
+                        <option value="comum">Usuário Comum</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Campo ID da Empresa -->
+            <div class="input-group">
+                <label for="id_empresa">ID da Empresa</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-building icon"></i>
+                    <input type="text" id="id_empresa" placeholder="00.000.000/0000-00">
+                </div>
+            </div>
+
+            <!-- Botão Confirmar -->
+            <button type="submit" class="btn-confirm">
+                Cadastrar Usuário
+            </button>
+
+        </form>
+
+        <!-- Fundo de linhas na parte inferior -->
+        <div class="pattern-bottom"></div>
+    </main>
+
+    <!-- Script para funcionalidades -->
+    <script>
+        // 1. Funcionalidade de Mostrar/Ocultar Senha
+        const toggleSenha = document.getElementById('toggleSenha');
+        const senhaInput = document.getElementById('senha');
+
+        toggleSenha.addEventListener('click', function () {
+            const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            senhaInput.setAttribute('type', type);
+            
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // 2. Funcionalidade das Abas
+        const btnNovo = document.getElementById('btn-novo');
+        const btnCadastrado = document.getElementById('btn-cadastrado');
+
+        btnNovo.addEventListener('click', () => {
+            btnNovo.classList.add('active');
+            btnNovo.classList.remove('inactive');
+            btnCadastrado.classList.add('inactive');
+            btnCadastrado.classList.remove('active');
+        });
+
+        btnCadastrado.addEventListener('click', () => {
+            btnCadastrado.classList.add('active');
+            btnCadastrado.classList.remove('inactive');
+            btnNovo.classList.add('inactive');
+            btnNovo.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

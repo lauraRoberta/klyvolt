@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomadas de Decisão - Sistema</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Biblioteca de ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-pattern"></div>
+
+    <main class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-microchip"></i>
+                <i class="fa-solid fa-check-double small-icon"></i>
+            </div>
+            <h1>Tomadas de Decisão</h1>
+            <p class="subtitle">Eventos gerados automaticamente pelo sistema</p>
+
+            <!-- Abas de Filtro -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todas')">Todas</button>
+                <button class="tab inactive" onclick="filterList('pendente')">Pendentes</button>
+                <button class="tab inactive" onclick="filterList('executada')">Executadas</button>
+            </div>
+        </header>
+
+        <!-- Lista de Decisões -->
+        <div class="decision-list" id="decisionList">
+            
+            <!-- Item 1: Pendente -->
+            <div class="decision-card" data-status="pendente">
+                <div class="card-header">
+                    <span class="id-badge">#1042</span>
+                    <span class="status-badge status-pendente"><i class="fa-solid fa-clock"></i> Pendente</span>
+                </div>
+                <div class="card-body">
+                    <p><i class="fa-regular fa-calendar"></i> 24/05/2024 14:30</p>
+                    <p><i class="fa-solid fa-tag"></i> Decisão: Reduzir Vazão</p>
+                    <p><i class="fa-solid fa-arrow-right-arrow-left"></i> Origem: Leitura #882</p>
+                    <p class="ref-value">Ref: R$ 1.250,00</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-exec" onclick="openModal(1042, 'Reduzir Vazão', 'R$ 1.250,00', 'pendente')">Gerenciar</button>
+                </div>
+            </div>
+
+            <!-- Item 2: Executada -->
+            <div class="decision-card" data-status="executada">
+                <div class="card-header">
+                    <span class="id-badge">#1041</span>
+                    <span class="status-badge status-executada"><i class="fa-solid fa-check"></i> Executada</span>
+                </div>
+                <div class="card-body">
+                    <p><i class="fa-regular fa-calendar"></i> 24/05/2024 12:15</p>
+                    <p><i class="fa-solid fa-tag"></i> Decisão: Ativar Bomba 02</p>
+                    <p><i class="fa-solid fa-arrow-right-arrow-left"></i> Origem: Consumo #450</p>
+                    <p class="ref-value">Ref: R$ 3.400,00</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal(1041, 'Ativar Bomba 02', 'R$ 3.400,00', 'executada')">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Item 3: Falha -->
+            <div class="decision-card" data-status="falha">
+                <div class="card-header">
+                    <span class="id-badge">#1040</span>
+                    <span class="status-badge status-falha"><i class="fa-solid fa-xmark"></i> Falha</span>
+                </div>
+                <div class="card-body">
+                    <p><i class="fa-regular fa-calendar"></i> 23/05/2024 18:45</p>
+                    <p><i class="fa-solid fa-tag"></i> Decisão: Fechar Válvula</p>
+                    <p><i class="fa-solid fa-arrow-right-arrow-left"></i> Origem: Leitura #880</p>
+                    <p class="ref-value">Ref: R$ 800,00</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal(1040, 'Fechar Válvula', 'R$ 800,00', 'falha')">Detalhes</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal de Ação (Oculto por padrão) -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerenciar Tomada de Decisão</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info">
+                    <p><strong>ID:</strong> <span id="modalId"></span></p>
+                    <p><strong>Decisão:</strong> <span id="modalDecisao"></span></p>
+                    <p><strong>Valor Referência:</strong> <span id="modalValor"></span></p>
+                    <p><strong>Status Atual:</strong> <span id="modalStatus"></span></p>
+                </div>
+                
+                <div class="input-group" id="obsGroup">
+                    <label for="observacao">Observação (Opcional)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-comment icon"></i>
+                        <input type="text" id="observacao" placeholder="Adicione uma observação...">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="modalActions">
+                <!-- Botões gerados dinamicamente via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para filtrar a lista
+        function filterList(status) {
+            const cards = document.querySelectorAll('.decision-card');
+            const tabs = document.querySelectorAll('.tab');
+            
+            // Atualiza visual das abas
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('inactive');
+            });
+            event.target.classList.remove('inactive');
+            event.target.classList.add('active');
+
+            // Filtra os cards
+            cards.forEach(card => {
+                if (status === 'todas' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Função para abrir o Modal
+        function openModal(id, decisao, valor, status) {
+            document.getElementById('modalId').innerText = '#' + id;
+            document.getElementById('modalDecisao').innerText = decisao;
+            document.getElementById('modalValor').innerText = valor;
+            document.getElementById('modalStatus').innerText = status.toUpperCase();
+            
+            const actionsContainer = document.getElementById('modalActions');
+            const obsGroup = document.getElementById('obsGroup');
+            actionsContainer.innerHTML = ''; // Limpa botões anteriores
+
+            if (status === 'pendente') {
+                obsGroup.style.display = 'block';
+                // Botões para status pendente
+                actionsContainer.innerHTML = `
+                    <button class="btn-modal btn-cancel" onclick="updateStatus('cancelada')">Cancelar</button>
+                    <button class="btn-modal btn-confirm" onclick="updateStatus('executada')">Confirmar Execução</button>
+                `;
+            } else {
+                obsGroup.style.display = 'none';
+                // Botão apenas para visualizar
+                actionsContainer.innerHTML = `
+                    <button class="btn-modal btn-close" onclick="closeModal()">Fechar</button>
+                `;
+            }
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        // Função para fechar o Modal
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // Simulação de atualização de status
+        function updateStatus(newStatus) {
+            alert(`Status atualizado para: ${newStatus.toUpperCase()}\n(Isso enviaria um UPDATE para o banco de dados)`);
+            closeModal();
+            // Aqui você faria a chamada real para o backend
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
