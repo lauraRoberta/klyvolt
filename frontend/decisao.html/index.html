@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Decisões - Sistema</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Biblioteca de ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-pattern"></div>
+
+    <main class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-book"></i>
+                <i class="fa-solid fa-scale-balanced small-icon"></i>
+            </div>
+            <h1>Catálogo de Decisões</h1>
+            <p class="subtitle">Regras e critérios do sistema automático</p>
+
+            <!-- Abas de Filtro por Operador -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todas')">Todas</button>
+                <button class="tab inactive" onclick="filterList('>')">Maior (&gt;)</button>
+                <button class="tab inactive" onclick="filterList('<')">Menor (&lt;)</button>
+                <button class="tab inactive" onclick="filterList('=')">Igual (=)</button>
+            </div>
+        </header>
+
+        <!-- Lista de Regras de Decisão -->
+        <div class="decision-list" id="decisionList">
+            
+            <!-- Item 1: Operador > -->
+            <div class="decision-card" data-operador=">">
+                <div class="card-header">
+                    <span class="id-badge">#01</span>
+                    <span class="status-badge status-executada"><i class="fa-solid fa-arrow-up"></i> &gt;</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-tag"></i> Reduzir Vazão</p>
+                    <p><i class="fa-solid fa-list-check"></i> Critério: Consumo Médio</p>
+                    <p><i class="fa-solid fa-calculator"></i> Limite: 1500.00 m³</p>
+                    <p class="ref-value">Ação: Se consumo &gt; 1500, reduzir</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal(1, 'Reduzir Vazão', 'Consumo Médio', '>', 1500.00, 'm³', 'Se o consumo médio ultrapassar 1500 m³, a vazão deve ser reduzida para evitar desperdício.')">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Item 2: Operador < -->
+            <div class="decision-card" data-operador="<">
+                <div class="card-header">
+                    <span class="id-badge">#02</span>
+                    <span class="status-badge status-pendente"><i class="fa-solid fa-arrow-down"></i> &lt;</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-tag"></i> Ativar Bomba Reserva</p>
+                    <p><i class="fa-solid fa-list-check"></i> Critério: Nível do Reservatório</p>
+                    <p><i class="fa-solid fa-calculator"></i> Limite: 20.00 %</p>
+                    <p class="ref-value">Ação: Se nível &lt; 20%, ativar</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal(2, 'Ativar Bomba Reserva', 'Nível do Reservatório', '<', 20.00, '%', 'Quando o nível do reservatório cair abaixo de 20%, a bomba reserva deve ser acionada.')">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Item 3: Operador >= -->
+            <div class="decision-card" data-operador=">=">
+                <div class="card-header">
+                    <span class="id-badge">#03</span>
+                    <span class="status-badge status-falha"><i class="fa-solid fa-equals"></i> &gt;=</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-tag"></i> Alerta de Pressão</p>
+                    <p><i class="fa-solid fa-list-check"></i> Critério: Pressão da Linha</p>
+                    <p><i class="fa-solid fa-calculator"></i> Limite: 8.50 bar</p>
+                    <p class="ref-value">Ação: Se pressão &gt;= 8.5, alertar</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal(3, 'Alerta de Pressão', 'Pressão da Linha', '>=', 8.50, 'bar', 'Emitir alerta crítico se a pressão atingir ou superar 8.5 bar.')">Detalhes</button>
+                </div>
+            </div>
+
+            <!-- Item 4: Operador = -->
+            <div class="decision-card" data-operador="=">
+                <div class="card-header">
+                    <span class="id-badge">#04</span>
+                    <span class="status-badge status-executada"><i class="fa-solid fa-equals"></i> =</span>
+                </div>
+                <div class="card-body">
+                    <p class="rule-name"><i class="fa-solid fa-tag"></i> Reset de Sistema</p>
+                    <p><i class="fa-solid fa-list-check"></i> Critério: Modo Operação</p>
+                    <p><i class="fa-solid fa-calculator"></i> Limite: 0.00 un</p>
+                    <p class="ref-value">Ação: Se modo = 0, resetar</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action btn-view" onclick="openModal(4, 'Reset de Sistema', 'Modo Operação', '=', 0.00, 'un', 'Reiniciar o sistema quando o modo de operação for igual a 0.')">Detalhes</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal de Detalhes -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalhes da Regra de Decisão</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info">
+                    <p><strong>ID:</strong> <span id="modalId"></span></p>
+                    <p><strong>Nome:</strong> <span id="modalNome"></span></p>
+                    <p><strong>Critério:</strong> <span id="modalCriterio"></span></p>
+                    <p><strong>Condição:</strong> <span id="modalCondicao"></span></p>
+                    <p><strong>Limite:</strong> <span id="modalLimite"></span></p>
+                </div>
+                
+                <div class="input-group" id="descGroup">
+                    <label>Descrição da Regra</label>
+                    <div class="input-wrapper" style="align-items: flex-start; padding-top: 10px;">
+                        <i class="fa-regular fa-file-lines icon" style="margin-top: 2px;"></i>
+                        <span id="modalDescricao" style="font-size: 13px; color: #dbe4ee; line-height: 1.4;"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="modalActions">
+                <!-- Botões gerados dinamicamente via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para filtrar a lista pelo operador
+        function filterList(operador) {
+            const cards = document.querySelectorAll('.decision-card');
+            const tabs = document.querySelectorAll('.tab');
+            
+            // Atualiza visual das abas
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('inactive');
+            });
+            event.target.classList.remove('inactive');
+            event.target.classList.add('active');
+
+            // Filtra os cards
+            cards.forEach(card => {
+                if (operador === 'todas' || card.dataset.operador === operador) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Função para abrir o Modal
+        function openModal(id, nome, criterio, operador, limite, unidade, descricao) {
+            document.getElementById('modalId').innerText = '#' + String(id).padStart(2, '0');
+            document.getElementById('modalNome').innerText = nome;
+            document.getElementById('modalCriterio').innerText = criterio;
+            document.getElementById('modalCondicao').innerText = `${criterio} ${operador} ${limite.toFixed(2)} ${unidade}`;
+            document.getElementById('modalLimite').innerText = `${limite.toFixed(2)} ${unidade}`;
+            document.getElementById('modalDescricao').innerText = descricao;
+            
+            const actionsContainer = document.getElementById('modalActions');
+            actionsContainer.innerHTML = ''; // Limpa botões anteriores
+
+            // Como é um catálogo, as ações são de edição/exclusão
+            actionsContainer.innerHTML = `
+                <button class="btn-modal btn-cancel" onclick="deleteRule(${id})">Excluir</button>
+                <button class="btn-modal btn-confirm" onclick="editRule(${id})">Editar</button>
+            `;
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        // Função para fechar o Modal
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // Simulação de exclusão
+        function deleteRule(id) {
+            if (confirm(`Tem certeza que deseja excluir a regra #${id}?`)) {
+                alert(`Regra #${id} excluída.\n(Isso enviaria um DELETE para o banco de dados)`);
+                closeModal();
+            }
+        }
+
+        // Simulação de edição
+        function editRule(id) {
+            alert(`Abrindo formulário de edição para a regra #${id}...\n(Isso redirecionaria para uma tela de edição)`);
+            closeModal();
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
