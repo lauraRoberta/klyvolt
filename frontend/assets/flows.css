@@ -1,0 +1,56 @@
+/* KLYVOLT — ONLY NEW access and machine UI. Inherits existing semantic tokens.
+   No original components, colors, typography or background animations are rewritten. */
+.kv-public-home .kv-nav-links[hidden]{display:none!important}
+.kv-login-trigger{font:inherit}
+body.kv-modal-open{overflow:hidden}
+.kv-auth-backdrop{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,14,26,.58);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .36s var(--ease-ui),visibility .36s}
+.kv-auth-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.kv-auth-dialog{width:min(100%,530px);max-height:min(91svh,850px);overflow-y:auto;border:1px solid var(--border-strong);border-radius:24px;padding:clamp(20px,3vw,34px);background:var(--panel);box-shadow:var(--shadow-xl);color:var(--text);transform:translate3d(0,18px,0) scale(.975);opacity:.72;transition:transform .52s var(--ease),opacity .52s var(--ease);outline:none;scrollbar-width:thin}
+.kv-auth-backdrop.is-open .kv-auth-dialog{transform:translate3d(0,0,0) scale(1);opacity:1}
+.kv-auth-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin:0 0 24px}
+.kv-auth-head h2{font:700 clamp(24px,3vw,33px)/1.18 var(--display);letter-spacing:-.05em;margin:11px 0 0}
+.kv-auth-close,.kv-logout{display:grid;place-items:center;width:39px;height:39px;flex:none;border-radius:12px;border:1px solid var(--border-strong);background:var(--panel-alt);color:var(--text-sub);transition:background .3s var(--ease-ui),transform .3s var(--ease),color .3s}
+.kv-auth-close:hover,.kv-logout:hover{background:var(--tint);transform:translateY(-2px);color:var(--accent)}
+.kv-auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;background:var(--panel-soft);border:1px solid var(--border);margin-bottom:24px}
+.kv-auth-tabs button{border:0;background:transparent;color:var(--text-sub);border-radius:10px;padding:12px 9px;font-size:12px;font-weight:700;transition:background .35s var(--ease-ui),color .35s var(--ease-ui),box-shadow .35s var(--ease-ui)}
+.kv-auth-tabs button.is-active{background:var(--panel-solid);color:var(--accent);box-shadow:var(--shadow-card)}
+.kv-auth-stage{display:grid;overflow:clip}
+.kv-auth-panel{grid-area:1/1;min-width:0;opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(12px,0,0);transition:opacity .31s var(--ease-ui),transform .4s var(--ease),visibility .31s}
+.kv-auth-panel.is-active{opacity:1;visibility:visible;pointer-events:auto;transform:translate3d(0,0,0)}
+.kv-auth-description{color:var(--text-sub);font-size:13px;line-height:1.7;margin:0 0 19px}
+.kv-auth-panel .input-group{margin:0 0 15px}
+.kv-auth-panel label{display:block;margin-bottom:8px;font-size:11px;letter-spacing:.045em;font-weight:700;color:var(--text-sub)}
+.kv-auth-panel .input-wrapper{display:flex;gap:12px;align-items:center;min-height:46px;padding:0 14px;background:var(--panel-alt);border:1px solid var(--border-strong);border-radius:11px;transition:border-color .25s,box-shadow .25s}
+.kv-auth-panel .input-wrapper:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.kv-auth-panel .input-wrapper .icon{color:var(--accent);font-size:13px}
+.kv-auth-panel input{width:100%;min-width:0;height:43px;border:0;outline:0;background:transparent!important;color:var(--text);font-size:13px}
+.kv-auth-panel input::placeholder{color:var(--text-faint);opacity:.8}
+.kv-auth-submit{width:100%;margin:8px 0 0}
+.kv-auth-switch{margin:21px 0 0;font-size:12px;color:var(--text-sub);text-align:center}
+.kv-auth-switch button{border:0;padding:5px;background:transparent;color:var(--accent);font-weight:700}
+.kv-auth-switch button:hover{text-decoration:underline}
+.kv-auth-status{color:var(--energy-text);font-size:12px;line-height:1.5;margin:0;min-height:0}
+.kv-auth-status:not(:empty){padding:10px 0}
+body.app-page .modal-overlay.kv-open{display:flex!important;animation:kv-flow-fade .34s var(--ease-ui) both}
+body.app-page .modal-overlay.kv-open .modal-content{animation:kv-flow-rise .42s var(--ease) both}
+@keyframes kv-flow-fade{from{opacity:0}to{opacity:1}}
+@keyframes kv-flow-rise{from{opacity:.68;transform:translate3d(0,18px,0) scale(.98)}to{opacity:1;transform:none}}
+.kv-add-machine{white-space:nowrap}
+.kv-machine-delete{margin-left:8px}
+.kv-nav-right .kv-logout{width:38px;height:38px}
+body.app-page #machineList .decision-card{transition:transform .36s var(--ease),border-color .36s var(--ease),box-shadow .36s var(--ease)}
+@media(max-width:1430px) and (min-width:1101px){.kv-nav-links{gap:10px}.kv-nav-links a{font-size:11px}.kv-nav{gap:12px;padding-inline:3%}.kv-action{padding:11px 12px}}
+@media(max-width:800px){.kv-add-machine span{display:none}.kv-add-machine{padding:0!important;width:43px;height:43px;min-height:43px}.kv-nav-right .kv-logout{width:38px;height:38px}}
+@media(max-width:500px){.kv-auth-backdrop{padding:10px}.kv-auth-dialog{border-radius:18px;padding:20px 17px}.kv-auth-head h2{font-size:26px}.kv-nav-right{gap:5px}.kv-add-machine{width:39px;height:39px}.kv-nav-right .kv-logout{width:34px;height:39px}}
+@media(prefers-reduced-motion:reduce){.kv-auth-backdrop,.kv-auth-dialog,.kv-auth-panel,.kv-auth-close,.kv-auth-tabs button,body.app-page .modal-overlay.kv-open,body.app-page .modal-overlay.kv-open .modal-content{animation:none!important;transition:none!important;transform:none!important}}
+/* Inactive form never reserves space; both states still animate their opacity/translation. */
+.kv-auth-stage{position:relative;display:block}
+.kv-auth-panel{position:absolute;inset:0}
+.kv-auth-panel.is-active{position:relative;inset:auto}
+@media(max-width:640px){
+ .kv-public-home .kv-nav{gap:7px;padding-left:16px;padding-right:16px}
+ .kv-public-home .kv-brand{font-size:16px!important;letter-spacing:-.055em}
+ .kv-public-home .kv-nav-right .kv-login-trigger{padding:10px 11px;font-size:11px;white-space:nowrap;gap:7px}
+}
+@media(max-width:380px){.kv-public-home .kv-nav-right .kv-login-trigger{font-size:10px;padding:9px 8px}.kv-public-home .kv-nav{padding-inline:12px}}
+@media(max-width:640px){html{overflow-x:clip}}

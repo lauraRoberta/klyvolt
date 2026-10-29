@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script id="kv-theme-bootstrap">(function(){var d=document.documentElement;var saved;try{saved=localStorage.getItem('klyvolt.theme')}catch(e){}var theme=(saved==='light'||saved==='dark')?saved:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=theme;d.style.colorScheme=theme;d.style.setProperty('--field-phase',(-((Date.now()/1000)%60912))+'s');})();</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquinas — KLYVOLT</title>
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="../setores/style.css">
+    <!-- Biblioteca de ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/design.css"><link rel="stylesheet" href="../../assets/flows.css">
+<script id="kv-access-guard">(function(){var development=(location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.hostname==='[::1]'||location.protocol==='file:');var ok=false;try{ok=sessionStorage.getItem('klyvolt.dev-access.v1')==='enabled'}catch(e){}if(!development||!ok){document.documentElement.style.visibility='hidden';location.replace('../../index.html');}})();</script></head>
+<body class="app-page" data-module="maquinas"><div class="kv-atmosphere" aria-hidden="true"><span class="kv-field kv-field-a"></span><span class="kv-field kv-field-b"></span><span class="kv-field kv-field-c"></span><span class="kv-atmosphere-grid"></span></div>
+<nav class="kv-nav" aria-label="Navegação principal">
+  <button type="button" class="kv-theme-toggle" aria-label="Alternar para o modo claro" title="Alternar tema"><span class="kv-theme-toggle-track"><svg class="kv-theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.2A8.3 8.3 0 0 1 9.8 3.8a8.6 8.6 0 1 0 10.4 10.4Z"/></svg><svg class="kv-theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></span></button>
+  <a class="kv-brand" href="../../painel.html" aria-label="Klyvolt: página inicial">
+ <span class="kv-brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13.4 2.8 5.8 13.2h6.1l-1.3 8 8-11.5h-6.1l.9-6.9Z" fill="currentColor"/></svg></span>
+ KLYVOLT <span class="kv-brand-sub">Energy intelligence</span></a>
+  <div class="kv-nav-links" id="navLinks"><a href="../../painel.html">Visão geral</a><a href="../../pages/maquinas/index.html" class="is-active" aria-current="page">Máquinas</a><a href="../../pages/consumos/index.html">Consumos</a><a href="../../pages/sensores/index.html">Sensores</a><a href="../../pages/leituras/index.html">Leituras</a><a href="../../pages/setores/index.html">Setores</a><a href="../../pages/decisoes/index.html">Decisões</a><a href="../../pages/empresa/index.html">Empresa</a></div>
+  <div class="kv-nav-right"><a class="kv-action" href="../../pages/registrar-consumo/index.html"><svg class="kv-nav-plus" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg> Novo registro</a>
+  <a class="kv-action kv-add-machine" href="../../pages/maquinas/index.html?adicionar=1"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>Adicionar máquina</span></a>
+  <button type="button" class="kv-logout" aria-label="Sair da plataforma" title="Sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i></button>
+  <button class="kv-mobile-toggle" type="button" aria-label="Abrir menu" aria-controls="navLinks" aria-expanded="false"><svg class="kv-nav-menu" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+ </nav>
+<section class="kv-page-intro" aria-label="Introdução da página"><div><span class="kv-eyebrow">Equipamentos / KLYVOLT</span><h2>Suas máquinas. Seu controle.</h2><p>Cadastre equipamentos para acompanhar seus registros de consumo.</p></div><div class="kv-intro-right" aria-hidden="true">Portal de operação <span> / 02</span></div></section><main id="kv-content" class="card-container dashboard-container">
+<header><div class="icon-circle"><i class="fa-solid fa-gears"></i><i class="fa-solid fa-bolt small-icon"></i></div><h1>Máquinas</h1><p class="subtitle">Equipamentos cadastrados na sua operação</p></header>
+<div class="search-bar"><div class="input-wrapper search-wrapper"><i class="fa-solid fa-magnifying-glass icon"></i><input type="search" id="machineSearch" placeholder="Buscar máquinas cadastradas..." aria-label="Buscar máquinas"></div><button class="btn-add" type="button" id="kvMachineAdd" aria-label="Adicionar máquina" title="Adicionar máquina"><i class="fa-solid fa-plus"></i></button></div>
+<div class="decision-list" id="machineList"><p class="kv-empty-state" role="status">Nenhuma máquina cadastrada.</p></div></main>
+<div class="modal-overlay" id="machineModal"><div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="machineModalTitle" tabindex="-1"><div class="modal-header"><h2 id="machineModalTitle">Adicionar máquina</h2><button class="close-btn" type="button" id="closeMachineModal" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div><form id="machineForm"><div class="modal-body">
+<div class="form-section"><h3 class="section-title"><i class="fa-solid fa-industry"></i> Identificação</h3>
+<div class="input-row"><div class="input-group"><label for="machineName">Nome da máquina *</label><div class="input-wrapper"><i class="fa-solid fa-gears icon"></i><input id="machineName" name="nome" required maxlength="120" placeholder="Nome do equipamento"></div></div>
+<div class="input-group"><label for="machineCode">Código / Identificação *</label><div class="input-wrapper"><i class="fa-solid fa-hashtag icon"></i><input id="machineCode" name="codigo" required maxlength="60" placeholder="Identificação única"></div></div></div>
+<div class="input-row">
+<div class="input-group"><label for="machinePower">Potência nominal (W)</label><div class="input-wrapper"><i class="fa-solid fa-bolt icon"></i><input id="machinePower" name="potencia" type="number" min="0" step="any" placeholder="Potência em watts"></div></div></div>
+<div class="input-row"><div class="input-group"><label for="machineSector">Setor</label><div class="input-wrapper select-wrapper"><select id="machineSector" name="idSetor"><option value="">Não vinculado</option></select></div></div>
+<div class="input-group"><label for="machineLocation">Localização</label><div class="input-wrapper"><i class="fa-solid fa-location-dot icon"></i><input id="machineLocation" name="localizacao" maxlength="120" placeholder="Localização (opcional)"></div></div></div></div>
+</div><div class="modal-footer" id="machineModalActions"><button type="button" class="btn-modal btn-cancel" id="cancelMachineModal">Cancelar</button><button type="submit" class="btn-modal btn-confirm">Salvar máquina</button></div></form></div></div><footer class="kv-footer"><p>© KLYVOLT · Gestão energética com clareza.</p><span>Design system / 2026</span></footer>
+<script src="../../assets/api.js" defer></script><script src="../../assets/site.js" defer></script><script src="../../assets/auth.js" defer></script>
+<script src="../../assets/maquinas.js" defer></script></body>
+</html>

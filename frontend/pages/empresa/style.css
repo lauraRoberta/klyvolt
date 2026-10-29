@@ -1,0 +1,197 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0b1626; /* Fundo escuro profundo */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+/* Padrão de fundo (ondas laranjas) - Simulação via CSS */
+.background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.3;
+    background-image: repeating-radial-gradient(
+        circle at 0 0, 
+        transparent 0, 
+        #0b1626 10px
+    ),
+    repeating-linear-gradient(
+        #ff6f00,
+        #ff6f00 2px,
+        transparent 2px,
+        transparent 20px
+    );
+    /* Nota: Um SVG seria mais preciso, mas isso cria o efeito visual similar */
+}
+
+/* Container Principal (Cartão Azul) */
+.card-container {
+    background-color: #104068; /* Azul médio */
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    /* Borda sutil para destacar */
+    border: 1px solid #1a5276;
+}
+
+/* Ícone do Topo */
+.icon-circle {
+    background-color: #ff6f00;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 32px;
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 111, 0, 0.4);
+}
+
+/* Detalhe do ícone de pessoa no prédio */
+.small-icon {
+    position: absolute;
+    font-size: 18px;
+    right: 18px;
+    top: 26px;
+    color: #104068; /* Cor de fundo para simular recorte */
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* Sistema de Abas */
+.tabs {
+    display: flex;
+    background-color: #c96a1e; /* Fundo laranja escuro */
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 25px;
+    border: 1px solid #e67e22;
+}
+
+.tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.tab.active {
+    background-color: #ff6f00; /* Laranja vibrante */
+    border-radius: 8px; /* Levemente arredondado */
+    margin: 2px; /* Espaço para parecer um botão dentro */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.tab.inactive {
+    background-color: transparent;
+    opacity: 0.8;
+}
+
+/* Área do Formulário */
+.form-content {
+    text-align: left;
+    padding: 0 5px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #dbe4ee;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #0d2d4d; /* Azul escuro dos inputs */
+    border-radius: 8px;
+    padding: 10px 12px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.input-wrapper .icon {
+    color: #bdc3c7;
+    font-size: 16px;
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.input-wrapper input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-size: 15px;
+}
+
+.input-wrapper input::placeholder {
+    color: #6d8ba8;
+}
+
+/* Botão de Confirmação */
+.btn-confirm {
+    width: 100%;
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(255, 111, 0, 0.3);
+    transition: background 0.3s;
+}
+
+.btn-confirm:hover {
+    background-color: #e65100;
+}
+
+.btn-confirm i {
+    font-size: 18px;
+}
