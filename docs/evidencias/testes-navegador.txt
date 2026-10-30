@@ -1,0 +1,45 @@
+✔ 01 Página inicial pública: menu com Painel e Máquinas, botão "Entrar" para visitantes Visão geral · Painel · Consumos · Sensores · Leituras · Setores · Máquinas · Decisões · Empresa | ação: Entrar
+✔ 02 Página interna sem login redireciona para Entrar /pages/entrar.html?entrar=1&voltar=consumos
+✔ 03 Cadastro: validação de CNPJ no navegador CNPJ inválido. Confira os 14 dígitos.
+✔ 04 Cadastro da empresa pela API (POST /empresas) → sessão → volta à página pedida 11.222.333/0001-81 | Confecções QA | Administrador
+✔ 05 Consumos sem registros: estado vazio, KPIs ocultos Nenhum consumo registrado.
+✔ 06 Setores: cadastrar (responsável vem de GET /usuarios) Setor cadastrado. | cards: 1
+✔ 07 Setores: nome repetido → 409 com mensagem clara Já existe um setor com esse nome na sua empresa.
+✔ 08 Setores: editar (PUT), filtrar e buscar sem quebrar o layout corte=0 costura=1 busca=0 display=flex
+✔ 09 Setores: segundo setor 2 setores
+✔ 10 Máquinas: cadastrar (POST /maquinas) Máquina cadastrada.
+✔ 11 Máquinas: validação de potência e segunda máquina A potência nominal deve ser maior que zero. | sem sensor=2
+✔ 12 Sensores: cadastro com máquina e token (token nunca volta da API) Sensor cadastrado.
+✔ 13 Sensores: IP inválido recusado IP inválido.
+✔ 14 Decisões: cadastrar regras de leitura e de consumo 2 regras; filtro ">" = 2
+✔ 15 Leituras: leitura acima do limite → aviso do motor de decisão Regra de decisão acionada: Leitura alta.
+✔ 16 Leituras: segunda leitura e KPIs calculados LEITURAS HOJE 2 medições MÉDIA/H 0,69 kWh AGREGADAS 0 leituras
+✔ 17 Leituras: mesmo sensor e horário → 409 Já existe uma leitura deste sensor nesse mesmo horário.
+✔ 18 Consumos: cálculo pelas leituras (GET /consumos/calcular) e registro 16.50 kWh
+✔ 19 Consumos: KPIs reais e aviso de tarifa não definida TOTAL NO MÊS 16,50 kWh MÉDIA DIÁRIA 0,57 kWh PICO 0,69 kWh/h
+✔ 20 Leituras agregadas automaticamente pelo banco Agregada, Agregada
+✔ 21 Empresa: dados e tarifa (PUT /empresas/{id}) Dados da empresa atualizados.
+✔ 22 Consumos: custo com a tarifa (16,50 × 0,90 = R$ 14,85) CUSTO NO MÊS 14,85 R$ MÊS ANTERIOR 0,00 kWh · sem base de comparação TARIFA 0,90 R$/kWh
+✔ 23 Máquinas: consumo e custo por máquina ok
+✔ 24 Novo registro: cadastrar e salvar alterações Consumo #02 cadastrado. Leituras do período foram agregadas. | Consumo #02 atualizado.
+✔ 25 Decisões: acionamentos reais e registro do resultado (PUT /tomadas-decisao) 29/10/2026, 20:38 · 12,50 kWh · PendenteMarcar executadaCancelar
+✔ 26 Decisões: regra com histórico não é excluída Esta regra possui 1 acionamento(s) no histórico e não pode ser excluída. Para interromper a avaliação, edite-a e marque como "Inativa".
+✔ 27 Leituras: excluir leitura (confirmação no design) mantém o histórico Leitura excluída. | histórico preservado
+✔ 28 Painel: indicadores, setores, máquinas, alertas e exportação CSV CONSUMO NO PERÍODO 42,50 kWh CUSTO ESTIMADO 38,25 R$ · tarifa 0,90 R$/kWh MÉDIA DIÁRIA 1,47 kWh/dia | CSV klyvolt-relatorio-2026-10-01-a-2026-10-29.csv | mês anterior: 0,00 kWh
+✔ 29 Persistência: dados permanecem ao recarregar e em nova aba (sessão mantida) 2 setores na nova aba, sem novo login
+✔ 30 Empresa B: cadastro independente /pages/painel.html
+✔ 31 Empresa B não vê nada da Empresa A (todas as páginas) setores=0 maquinas=0 sensores=0 leituras=0 consumos=0 decisoes=0
+✔ 32 Empresa B: ataques diretos à API com o próprio token são bloqueados {"get":404,"put":404,"post":403,"del":404}
+✔ 33 Equipe: administrador cadastra uma Visualizadora pela página Empresa Usuário cadastrado. Ele já pode entrar com o e-mail e a senha inicial.
+✔ 34 Perfil Visualizador: consulta, mas não grava (bloqueio na API) vê 2 setores | botão: "Somente administradores cadastram setores." | API: 403
+✔ 35 Logout pela página Empresa e bloqueio das páginas internas /pages/entrar.html?entrar=1&voltar=setores
+✔ 36 Senha incorreta → mensagem clara (401) E-mail ou senha incorretos.
+✔ 37 Login correto retorna à página protegida /pages/setores.html
+✔ 38 Token expirado é renovado automaticamente (POST /auth/refresh) sessão renovada sem novo login
+✔ 39 Recuperação de senha completa (link do e-mail → nova senha → painel) Se ana@confeccoesqa.com.br estiver cadastrado, você receberá um link para criar uma nova senha. | redirect: http://127.0.0.1:5500/pages/entrar.html
+✔ 40 Confirmação de e-mail ativa no Supabase Empresa cadastrada! Enviamos um link de confirmação para car… | Confirme seu e-mail pelo link enviado antes de entrar.
+✔ 41 Supabase fora do ar → API responde 503 → mensagem na página Não foi possível acessar o Supabase. Verifique a conexão com a internet.
+✔ 42 API fora do ar → mensagem sobre backend/CORS (sem travar) Não foi possível acessar a API. Confira se o backend está rodando e a configuração de CORS.
+✔ 43 Responsivo (390 px): nenhuma página com rolagem horizontal painel=390 consumos=390 maquinas=390 sensores=390 leituras=390 setores=390 decisoes=390 empresa=390 registrar-consumo=390 inicio=390
+✔ 44 Tema claro nas páginas integradas ok
+44/44 passaram. Erros de console: 0

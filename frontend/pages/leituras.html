@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script id="kv-theme-bootstrap">(function(){var d=document.documentElement;var saved;try{saved=localStorage.getItem('klyvolt.theme')}catch(e){}var theme=(saved==='light'||saved==='dark')?saved:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=theme;d.style.colorScheme=theme;d.style.setProperty('--field-phase',(-((Date.now()/1000)%60912))+'s');})();</script>
+<script>document.documentElement.classList.add('kv-auth-pending')</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leituras dos Sensores - Indústria Têxtil</title>
+    <link rel="stylesheet" href="../static/paginas/leituras.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="app-page" data-module="leituras"><div class="kv-atmosphere" aria-hidden="true"><span class="kv-field kv-field-a"></span><span class="kv-field kv-field-b"></span><span class="kv-field kv-field-c"></span><span class="kv-atmosphere-grid"></span></div>
+<nav class="kv-nav" aria-label="Navegação principal">
+  <button type="button" class="kv-theme-toggle" aria-label="Alternar para o modo claro" title="Alternar tema"><span class="kv-theme-toggle-track"><svg class="kv-theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.2A8.3 8.3 0 0 1 9.8 3.8a8.6 8.6 0 1 0 10.4 10.4Z"/></svg><svg class="kv-theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></span></button>
+  <a class="kv-brand" href="../index.html" aria-label="Klyvolt: página inicial">
+ <span class="kv-brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13.4 2.8 5.8 13.2h6.1l-1.3 8 8-11.5h-6.1l.9-6.9Z" fill="currentColor"/></svg></span>
+ KLYVOLT <span class="kv-brand-sub">Energy intelligence</span></a>
+  <div class="kv-nav-links" id="navLinks"><a href="../index.html">Visão geral</a><a href="painel.html">Painel</a><a href="consumos.html">Consumos</a><a href="sensores.html">Sensores</a><a href="leituras.html" class="is-active" aria-current="page">Leituras</a><a href="setores.html">Setores</a><a href="maquinas.html">Máquinas</a><a href="decisoes.html">Decisões</a><a href="empresa.html">Empresa</a></div>
+  <div class="kv-nav-right"><a class="kv-action" href="registrar-consumo.html"><svg class="kv-nav-plus" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg> Novo registro</a>
+  <button class="kv-mobile-toggle" type="button" aria-label="Abrir menu" aria-controls="navLinks" aria-expanded="false"><svg class="kv-nav-menu" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+ </nav>
+<section class="kv-page-intro" aria-label="Introdução da página"><div>
+ <span class="kv-eyebrow">Dados que orientam / KLYVOLT</span>
+ <h2>Da leitura à clareza.</h2>
+ <p>Acompanhe registros individuais e o status de agregação.</p></div><div class="kv-intro-right" aria-hidden="true">Portal de operação <span> / 05</span></div></section>
+
+    
+
+    <main id="kv-content" class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-gauge-high"></i>
+                <i class="fa-solid fa-wave-square small-icon"></i>
+            </div>
+            <h1>Leituras dos Sensores</h1>
+            <p class="subtitle">Medições individuais de consumo elétrico</p>
+
+            <!-- KPIs Resumo -->
+            <div class="kpi-grid" hidden>
+                <div class="kpi-card">
+                    <span class="kpi-label">Leituras Hoje</span>
+                    <span class="kpi-value" id="kpiTotal">—</span>
+                    <span class="kpi-unit">medições</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Média/h</span>
+                    <span class="kpi-value" id="kpiMedia">—</span>
+                    <span class="kpi-unit">kWh</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Agregadas</span>
+                    <span class="kpi-value" id="kpiAgreg">—</span>
+                    <span class="kpi-unit">leituras</span>
+                </div>
+            </div>
+
+            <!-- Abas de Filtro por Status de Agregação -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todas')">Todas</button>
+                <button class="tab inactive" onclick="filterList('pendente')">Pendentes</button>
+                <button class="tab inactive" onclick="filterList('agregada')">Agregadas</button>
+            </div>
+        </header>
+
+        <!-- Barra de Busca e Botão Novo -->
+        <div class="search-bar">
+            <div class="input-wrapper search-wrapper">
+                <i class="fa-solid fa-magnifying-glass icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por sensor ou data..." onkeyup="searchLeitura()">
+            </div>
+            <button class="btn-add" onclick="openModal('create')">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Lista de Leituras -->
+        <div class="decision-list" id="leituraList">
+            <p class="kv-empty-state" role="status">Nenhuma leitura registrada.</p>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detalhes da Leitura</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Destaque do valor medido -->
+                <div class="consumo-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Valor Medido</span>
+                        <span class="summary-value" id="sumValor">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Sensor</span>
+                        <span class="summary-value" id="sumSensor" style="font-size: 11px;">--</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Agregação</span>
+                        <span class="summary-value" id="sumAgreg" style="font-size: 11px;">--</span>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Leitura -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-gauge-high"></i> Dados da Leitura</h3>
+
+                    <div class="input-group">
+                        <label for="dataLeitura">Data/Hora da Leitura *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-calendar icon"></i>
+                            <input type="datetime-local" id="dataLeitura">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="valorMedido">Valor Medido (kWh) *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-bolt icon"></i>
+                            <input type="number" id="valorMedido" placeholder="Ex: 12.45" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="observacao">Observação</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-comment icon"></i>
+                            <input type="text" id="observacao" placeholder="Opcional...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Origem -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-link"></i> Origem e Agregação</h3>
+
+                    <div class="input-group">
+                        <label for="idSensor">Sensor *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-barcode icon"></i>
+                            <select id="idSensor">
+                            <option value="" selected disabled>Selecione um sensor cadastrado</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="idUsuario">Usuário Responsável <small>(opcional)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user icon"></i>
+                            <select id="idUsuario">
+                            <option value="">— Coleta automática —</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="consumoInfoGroup" style="display: none;">
+                        <label>Consumo Associado</label>
+                        <div class="input-wrapper info-readonly">
+                            <i class="fa-solid fa-boxes-stacked icon"></i>
+                            <span id="consumoRef">—</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" id="modalActions"></div>
+        </div>
+    </div>
+
+<footer class="kv-footer"><p>© KLYVOLT · Gestão energética com clareza.</p><span>Design system / 2026</span></footer>
+<script src="../js/main.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/leituras.js" defer></script>
+</body>
+</html>

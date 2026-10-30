@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script id="kv-theme-bootstrap">(function(){var d=document.documentElement;var saved;try{saved=localStorage.getItem('klyvolt.theme')}catch(e){}var theme=(saved==='light'||saved==='dark')?saved:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=theme;d.style.colorScheme=theme;d.style.setProperty('--field-phase',(-((Date.now()/1000)%60912))+'s');})();</script>
+<script>document.documentElement.classList.add('kv-auth-pending')</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensores de Consumo Elétrico - Indústria Têxtil</title>
+    <link rel="stylesheet" href="../static/paginas/sensores.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="app-page" data-module="sensores"><div class="kv-atmosphere" aria-hidden="true"><span class="kv-field kv-field-a"></span><span class="kv-field kv-field-b"></span><span class="kv-field kv-field-c"></span><span class="kv-atmosphere-grid"></span></div>
+<nav class="kv-nav" aria-label="Navegação principal">
+  <button type="button" class="kv-theme-toggle" aria-label="Alternar para o modo claro" title="Alternar tema"><span class="kv-theme-toggle-track"><svg class="kv-theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.2A8.3 8.3 0 0 1 9.8 3.8a8.6 8.6 0 1 0 10.4 10.4Z"/></svg><svg class="kv-theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></span></button>
+  <a class="kv-brand" href="../index.html" aria-label="Klyvolt: página inicial">
+ <span class="kv-brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13.4 2.8 5.8 13.2h6.1l-1.3 8 8-11.5h-6.1l.9-6.9Z" fill="currentColor"/></svg></span>
+ KLYVOLT <span class="kv-brand-sub">Energy intelligence</span></a>
+  <div class="kv-nav-links" id="navLinks"><a href="../index.html">Visão geral</a><a href="painel.html">Painel</a><a href="consumos.html">Consumos</a><a href="sensores.html" class="is-active" aria-current="page">Sensores</a><a href="leituras.html">Leituras</a><a href="setores.html">Setores</a><a href="maquinas.html">Máquinas</a><a href="decisoes.html">Decisões</a><a href="empresa.html">Empresa</a></div>
+  <div class="kv-nav-right"><a class="kv-action" href="registrar-consumo.html"><svg class="kv-nav-plus" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg> Novo registro</a>
+  <button class="kv-mobile-toggle" type="button" aria-label="Abrir menu" aria-controls="navLinks" aria-expanded="false"><svg class="kv-nav-menu" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+ </nav>
+<section class="kv-page-intro" aria-label="Introdução da página"><div>
+ <span class="kv-eyebrow">Dispositivos e conexões / KLYVOLT</span>
+ <h2>Sua operação em perspectiva.</h2>
+ <p>Consulte os dispositivos, seus vínculos e estados de conexão.</p></div><div class="kv-intro-right" aria-hidden="true">Portal de operação <span> / 06</span></div></section>
+
+    
+
+    <main id="kv-content" class="card-container dashboard-container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="icon-circle">
+                <i class="fa-solid fa-bolt"></i>
+                <i class="fa-solid fa-microchip small-icon"></i>
+            </div>
+            <h1>Sensores de Consumo Elétrico</h1>
+            <p class="subtitle">Monitoramento energético das máquinas têxteis</p>
+
+            <!-- Abas de Filtro por Status de Conexão -->
+            <div class="tabs">
+                <button class="tab active" onclick="filterList('todos')">Todos</button>
+                <button class="tab inactive" onclick="filterList('online')">Online</button>
+                <button class="tab inactive" onclick="filterList('offline')">Offline</button>
+                <button class="tab inactive" onclick="filterList('erro')">Erro</button>
+            </div>
+        </header>
+
+        <!-- Barra de Busca e Botão Novo -->
+        <div class="search-bar">
+            <div class="input-wrapper search-wrapper">
+                <i class="fa-solid fa-magnifying-glass icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por série, modelo ou IP..." onkeyup="searchSensor()">
+            </div>
+            <button class="btn-add" onclick="openModal('create')">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Lista de Sensores -->
+        <div class="decision-list" id="sensorList">
+            <p class="kv-empty-state" role="status">Nenhum sensor cadastrado.</p>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detalhes do Sensor</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Dados de consumo em destaque -->
+                <div class="consumo-summary" id="consumoSummary">
+                    <div class="summary-item">
+                        <span class="summary-label">Consumo Total</span>
+                        <span class="summary-value" id="sumTotal">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Consumo Hoje</span>
+                        <span class="summary-value" id="sumHoje">-- kWh</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Pico Registrado</span>
+                        <span class="summary-value" id="sumPico">-- kW</span>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Identificação -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-tag"></i> Identificação</h3>
+                    <div class="input-group">
+                        <label for="numeroSerie">Número de Série *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-barcode icon"></i>
+                            <input type="text" id="numeroSerie" placeholder="Ex: SN-2024-001" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="fabricante">Fabricante</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-industry icon"></i>
+                                <input type="text" id="fabricante" placeholder="Ex: Siemens">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="modelo">Modelo</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-cube icon"></i>
+                                <input type="text" id="modelo" placeholder="Ex: SITRANS F">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="tipoSensor">Tipo de Sensor *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-microchip icon"></i>
+                                <select id="tipoSensor">
+                                    <option value="Consumo Elétrico">Consumo Elétrico</option>
+                                    <option value="Consumo de Água">Consumo de Água</option>
+                                    <option value="Consumo de Gás">Consumo de Gás</option>
+                                    <option value="Temperatura">Temperatura</option>
+                                    <option value="Vibração">Vibração</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="unidadeMedida">Unidade *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-ruler icon"></i>
+                                <input type="text" id="unidadeMedida" placeholder="kWh" maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Comunicação -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-network-wired"></i> Comunicação</h3>
+                    <div class="input-group">
+                        <label for="protocolo">Protocolo *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-tower-broadcast icon"></i>
+                            <select id="protocolo">
+                                <option value="MQTT">MQTT</option>
+                                <option value="Modbus TCP">Modbus TCP</option>
+                                <option value="Modbus RTU">Modbus RTU</option>
+                                <option value="OPC UA">OPC UA</option>
+                                <option value="HTTP/REST">HTTP/REST</option>
+                                <option value="LoRaWAN">LoRaWAN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="macAddress">Endereço MAC * <small>(XX:XX:XX:XX:XX:XX)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-network-wired icon"></i>
+                            <input type="text" id="macAddress" placeholder="A1:B2:C3:D4:E5:F6" maxlength="17" oninput="formatMAC(this)">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="enderecoIp">Endereço IP <small>(opcional)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-globe icon"></i>
+                            <input type="text" id="enderecoIp" placeholder="192.168.1.101" maxlength="45">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="token">Token de Autenticação <small>(opcional)</small></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-key icon"></i>
+                            <input type="text" id="token" placeholder="tk_xxxxxxxx" maxlength="255" autocomplete="off">
+                        </div>
+                        <small class="kv-hint" id="tokenHint">Usado pelo equipamento para enviar leituras automaticamente. Por segurança, o token nunca é exibido depois de salvo.</small>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Status -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-signal"></i> Status</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="statusConexao">Conexão *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-wifi icon"></i>
+                                <select id="statusConexao">
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                    <option value="unknown">Desconhecido</option>
+                                    <option value="erro">Erro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="statusSensor">Operação *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-toggle-on icon"></i>
+                                <select id="statusSensor">
+                                    <option value="ativo">Ativo</option>
+                                    <option value="inativo">Inativo</option>
+                                    <option value="manutencao">Manutenção</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO: Datas e Vínculo -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fa-solid fa-calendar-days"></i> Datas e Vínculo</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="dataInstalacao">Instalação</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-plus icon"></i>
+                                <input type="date" id="dataInstalacao">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="dataCalibracao">Última Calibração</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-check icon"></i>
+                                <input type="date" id="dataCalibracao">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="maquinaSelectGroup">
+                        <label for="idMaquina">Máquina *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-industry icon"></i>
+                            <select id="idMaquina">
+                                <option value="" selected disabled>Selecione uma máquina cadastrada</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="maquinaInfoGroup" style="display: none;">
+                        <label>Máquina Vinculada</label>
+                        <div class="input-wrapper info-readonly">
+                            <i class="fa-solid fa-industry icon"></i>
+                            <span id="maquinaNome"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" id="modalActions"></div>
+        </div>
+    </div>
+
+<footer class="kv-footer"><p>© KLYVOLT · Gestão energética com clareza.</p><span>Design system / 2026</span></footer>
+<script src="../js/main.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/sensores.js" defer></script>
+</body>
+</html>
