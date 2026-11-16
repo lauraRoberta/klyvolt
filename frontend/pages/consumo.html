@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consumo | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/crud.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/crud.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="empresa.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container" data-rota="/consumos" data-chave="id_consumo" data-nome="consumo" data-editar="sim" data-excluir="sim">
+    <div class="titulo-pagina">
+      <p class="legenda">MEDIÇÕES</p>
+      <h1>Consumo</h1>
+      <p>Registre o consumo de energia de cada máquina em um período.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Cadastrar consumo</h2>
+        <span class="legenda">DADOS</span>
+      </div>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="f-data_inicio">Início do período</label>
+            <input type="datetime-local" id="f-data_inicio" data-campo="data_inicio" required>
+          </div>
+          <div class="campo">
+            <label for="f-data_fim">Fim do período</label>
+            <input type="datetime-local" id="f-data_fim" data-campo="data_fim" required>
+          </div>
+          <div class="campo">
+            <label for="f-consumo_kwh">Consumo (kWh)</label>
+            <input type="number" id="f-consumo_kwh" data-campo="consumo_kwh" required min="0" step="0.01" placeholder="Ex.: 12.50">
+          </div>
+          <div class="campo">
+            <label for="f-id_maquina">Máquina</label>
+            <select id="f-id_maquina" data-campo="id_maquina" required data-origem="/maquinas" data-valor="id_maquina" data-texto="{nome_maquina} (#{id_maquina})" data-numerico="sim"><option value="" disabled selected>Selecione...</option></select>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel" aria-labelledby="titulo-lista">
+      <div class="painel-titulo">
+        <h2 id="titulo-lista">Consumos cadastrados</h2>
+        <span id="total-registros" class="legenda">Carregando...</span>
+      </div>
+      <div class="barra-lista">
+        <button id="botao-listar" class="botao botao-secundario" type="button">↻ Atualizar lista</button>
+      </div>
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" data-campo="id_consumo">ID</th>
+              <th scope="col" data-campo="data_inicio" data-formato="datahora">Início</th>
+              <th scope="col" data-campo="data_fim" data-formato="datahora">Fim</th>
+              <th scope="col" data-campo="consumo_kwh" data-formato="numero">Consumo (kWh)</th>
+              <th scope="col" data-campo="id_maquina">Máquina</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-registros">
+            <tr>
+              <td colspan="6" class="vazio">Carregando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Consumo</footer>
+  </main>
+</body>
+</html>

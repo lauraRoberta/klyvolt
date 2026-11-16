@@ -97,44 +97,30 @@ def listar_leituras(
 ):
     return db.query(models.Leitura).all()
 
+
+def buscar_leitura_ou_404(db: Session, id_leitura: int) -> models.Leitura:
+    obj = db.get(models.Leitura, id_leitura)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Leitura não encontrado(a)")
+    return obj
+ 
+ 
 @router.get("/{id_leitura}", response_model=schemas.LeituraResponse)
-def buscar_leitura(id_leitura: int, db: Session = Depends(get_db)):
-    leitura = db.get(models.Leitura, id_leitura)
-    if leitura is None:
-        raise HTTPException(status_code=404, detail="Leitura não encontrada.")
-    return leitura
+def obter_leitura(id_leitura: int, db: Session = Depends(get_db)):
+    return buscar_leitura_ou_404(db, id_leitura)
  
  
 @router.put("/{id_leitura}", response_model=schemas.LeituraResponse)
 def atualizar_leitura(id_leitura: int, dados: schemas.LeituraCreate, db: Session = Depends(get_db)):
-    leitura = db.get(models.Leitura, id_leitura)
-    if leitura is None:
-        raise HTTPException(status_code=404, detail="Leitura não encontrada.")
-    valores = dados.model_dump()
-    # data_leitura é obrigatória no banco: se não vier, mantém a data que já está salva.
-    if valores.get("data_leitura") is None:
-        valores.pop("data_leitura", None)
-    for campo, valor in valores.items():
-        setattr(leitura, campo, valor)
+    obj = buscar_leitura_ou_404(db, id_leitura)
+    for campo, valor in dados.model_dump().items():
+        if campo == "data_leitura" and valor is None:
+            continue  # coluna obrigatória: mantém a data atual
+        setattr(obj, campo, valor)
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="O sensor, o usuário ou o consumo informado não existe.")
-    db.refresh(leitura)
-    return leitura
- 
- 
-@router.delete("/{id_leitura}", status_code=204)
-def excluir_leitura(id_leitura: int, db: Session = Depends(get_db)):
-    leitura = db.get(models.Leitura, id_leitura)
-    if leitura is None:
-        raise HTTPException(status_code=404, detail="Leitura não encontrada.")
-    db.delete(leitura)  # tomadas de decisão ligadas a ela ficam sem leitura (SET NULL)
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Não foi possível excluir a leitura.")
-    return Response(status_code=204)
- 
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj

@@ -65,11 +65,13 @@ class UsuarioCreate(BaseModel):
     tipo_usuario: Literal["Administrador", "Operador", "Visualizador"]
     id_empresa: int
 
-@field_validator("senha_usuario")
-@classmethod
-def validar_senha(cls, valor):
-    if not re.search(r"[A-Za-z]", valor) or not re.search(r"\d", valor):
-        raise ValueError("A senha deve ter letras e números")
+    senha_usuario: str = Field(min_length=6, max_length=72)
+
+    @field_validator("senha_usuario")
+    @classmethod
+    def validar_senha(cls, valor):
+        if not re.search(r"[A-Za-z]", valor) or not re.search(r"\d", valor):
+            raise ValueError("A senha deve ter letras e números")
         return valor
     
 
@@ -264,6 +266,8 @@ class TomadaDecisaoCreate(BaseModel):
 
 
 class TomadaDecisaoResponse(BaseModel):
+    
+
     id_tomada_decisao: int
     data_tomada_decisao: datetime
     decisao: str  # nome da decisão, não o id
@@ -272,3 +276,10 @@ class TomadaDecisaoResponse(BaseModel):
     observacao: Optional[str] = None
     id_leitura: Optional[int] = None
     id_consumo: Optional[int] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+    @field_validator("decisao", mode="before")
+    @classmethod
+    def nome_da_decisao(cls, valor):
+        return getattr(valor, "nome_decisao", valor)

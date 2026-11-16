@@ -81,27 +81,28 @@ def listar_tomadas_decisao(
     ]
 
 
+def buscar_tomada_decisao_ou_404(db: Session, id_tomada_decisao: int) -> models.TomadaDecisao:
+    obj = db.get(models.TomadaDecisao, id_tomada_decisao)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Tomada de decisão não encontrado(a)")
+    return obj
+ 
+ 
 @router.get("/{id_tomada_decisao}", response_model=schemas.TomadaDecisaoResponse)
-def buscar_tomada_decisao(id_tomada_decisao: int, db: Session = Depends(get_db)):
-    tomada = buscar_ou_404(db, models.TomadaDecisao, id_tomada_decisao, "Tomada de decisão")
-    return _resposta_tomada(tomada)
+def obter_tomada_decisao(id_tomada_decisao: int, db: Session = Depends(get_db)):
+    return buscar_tomada_decisao_ou_404(db, id_tomada_decisao)
  
  
 @router.put("/{id_tomada_decisao}", response_model=schemas.TomadaDecisaoResponse)
 def atualizar_tomada_decisao(id_tomada_decisao: int, dados: schemas.TomadaDecisaoCreate, db: Session = Depends(get_db)):
-    tomada = buscar_ou_404(db, models.TomadaDecisao, id_tomada_decisao, "Tomada de decisão")
-    buscar_ou_404(db, models.Decisao, dados.id_decisao, "Decisão")  # a decisão escolhida precisa existir
+    obj = buscar_tomada_decisao_ou_404(db, id_tomada_decisao)
     for campo, valor in dados.model_dump().items():
-        setattr(tomada, campo, valor)
-    salvar_ou_409(db, "A leitura ou o consumo informado não existe.")
-    db.refresh(tomada)
-    return _resposta_tomada(tomada)
- 
- 
-@router.delete("/{id_tomada_decisao}", status_code=204)
-def excluir_tomada_decisao(id_tomada_decisao: int, db: Session = Depends(get_db)):
-    tomada = buscar_ou_404(db, models.TomadaDecisao, id_tomada_decisao, "Tomada de decisão")
-    db.delete(tomada)
-    salvar_ou_409(db, "Não foi possível excluir a tomada de decisão.")
-    return Response(status_code=204)
+        setattr(obj, campo, valor)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj
  

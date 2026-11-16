@@ -76,44 +76,41 @@ def listar_sensores(
     return db.query(models.Sensor).all()
 
 
+def buscar_sensor_ou_404(db: Session, id_sensor: int) -> models.Sensor:
+    obj = db.get(models.Sensor, id_sensor)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Sensor não encontrado(a)")
+    return obj
+ 
+ 
 @router.get("/{id_sensor}", response_model=schemas.SensorResponse)
-def buscar_sensor(id_sensor: int, db: Session = Depends(get_db)):
-    sensor = db.get(models.Sensor, id_sensor)
-    if sensor is None:
-        raise HTTPException(status_code=404, detail="Sensor não encontrado.")
-    return sensor
+def obter_sensor(id_sensor: int, db: Session = Depends(get_db)):
+    return buscar_sensor_ou_404(db, id_sensor)
  
  
 @router.put("/{id_sensor}", response_model=schemas.SensorResponse)
 def atualizar_sensor(id_sensor: int, dados: schemas.SensorCreate, db: Session = Depends(get_db)):
-    sensor = db.get(models.Sensor, id_sensor)
-    if sensor is None:
-        raise HTTPException(status_code=404, detail="Sensor não encontrado.")
-    valores = dados.model_dump()
-    # O token nunca é devolvido pela API; se não vier no PUT, mantém o que já está salvo.
-    if valores.get("token_autenticacao") is None:
-        valores.pop("token_autenticacao", None)
-    for campo, valor in valores.items():
-        setattr(sensor, campo, valor)
+    obj = buscar_sensor_ou_404(db, id_sensor)
+    for campo, valor in dados.model_dump().items():
+        if campo == "token_autenticacao" and valor is None:
+            continue  # o front não recebe o token, então não pode apagá-lo
+        setattr(obj, campo, valor)
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="Já existe um sensor com esse número de série, MAC ou token, ou a máquina informada não existe.")
-    db.refresh(sensor)
-    return sensor
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj
  
  
 @router.delete("/{id_sensor}", status_code=204)
-def excluir_sensor(id_sensor: int, db: Session = Depends(get_db)):
-    sensor = db.get(models.Sensor, id_sensor)
-    if sensor is None:
-        raise HTTPException(status_code=404, detail="Sensor não encontrado.")
-    db.delete(sensor)  # atenção: as leituras desse sensor são apagadas junto (CASCADE)
+def remover_sensor(id_sensor: int, db: Session = Depends(get_db)):
+    obj = buscar_sensor_ou_404(db, id_sensor)
     try:
+        db.delete(obj)
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="Não foi possível excluir o sensor.")
-    return Response(status_code=204)
+        raise HTTPException(status_code=409, detail="Não pode ser removido: há registros que dependem dele")
  

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensor | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/crud.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/sensor.js" defer></script>
+  <script src="../js/crud.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="empresa.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container" data-rota="/sensores" data-chave="id_sensor" data-nome="sensor" data-editar="sim" data-excluir="sim">
+    <div class="titulo-pagina">
+      <p class="legenda">CADASTROS</p>
+      <h1>Sensor</h1>
+      <p>Cadastre e acompanhe os sensores instalados nas máquinas.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Cadastrar sensor</h2>
+        <span class="legenda">DADOS</span>
+      </div>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="f-numero_serie">Número de série</label>
+            <input type="text" id="f-numero_serie" data-campo="numero_serie" required maxlength="50">
+          </div>
+          <div class="campo">
+            <label for="f-tipo_sensor">Tipo de sensor</label>
+            <input type="text" id="f-tipo_sensor" data-campo="tipo_sensor" required maxlength="100" placeholder="Ex.: Medidor de energia">
+          </div>
+          <div class="campo">
+            <label for="f-fabricante">Fabricante</label>
+            <input type="text" id="f-fabricante" data-campo="fabricante" maxlength="100" placeholder="Opcional">
+          </div>
+          <div class="campo">
+            <label for="f-modelo">Modelo</label>
+            <input type="text" id="f-modelo" data-campo="modelo" maxlength="100" placeholder="Opcional">
+          </div>
+          <div class="campo">
+            <label for="f-unidade_medida">Unidade de medida</label>
+            <input type="text" id="f-unidade_medida" data-campo="unidade_medida" required maxlength="10" placeholder="Ex.: kWh">
+          </div>
+          <div class="campo">
+            <label for="f-protocolo_comunicacao">Protocolo de comunicação</label>
+            <input type="text" id="f-protocolo_comunicacao" data-campo="protocolo_comunicacao" required maxlength="50" placeholder="Ex.: MQTT">
+          </div>
+          <div class="campo">
+            <label for="f-mac_address">MAC address</label>
+            <input type="text" id="f-mac_address" data-campo="mac_address" required maxlength="17" pattern="^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$" title="Use o formato AA:BB:CC:DD:EE:FF." placeholder="AA:BB:CC:DD:EE:FF">
+          </div>
+          <div class="campo">
+            <label for="f-endereco_ip">Endereço IP</label>
+            <input type="text" id="f-endereco_ip" data-campo="endereco_ip" maxlength="45" placeholder="Opcional">
+          </div>
+          <div class="campo">
+            <label for="f-token_autenticacao">Token de autenticação</label>
+            <input type="password" id="f-token_autenticacao" data-campo="token_autenticacao" data-omitir-vazio="sim" maxlength="255" placeholder="Opcional; não é exibido depois de salvo" autocomplete="new-password">
+          </div>
+          <div class="campo">
+            <label for="f-status_conexao">Status da conexão</label>
+            <select id="f-status_conexao" data-campo="status_conexao" required><option value="" disabled selected>Selecione...</option><option value="online">online</option><option value="offline">offline</option><option value="unknown">unknown</option><option value="erro">erro</option></select>
+          </div>
+          <div class="campo">
+            <label for="f-status">Status do sensor</label>
+            <select id="f-status" data-campo="status" required><option value="" disabled selected>Selecione...</option><option value="ativo">ativo</option><option value="inativo">inativo</option><option value="manutencao">manutencao</option></select>
+          </div>
+          <div class="campo">
+            <label for="f-data_instalacao">Data de instalação</label>
+            <input type="date" id="f-data_instalacao" data-campo="data_instalacao">
+          </div>
+          <div class="campo">
+            <label for="f-data_ultima_calibracao">Data da última calibração</label>
+            <input type="date" id="f-data_ultima_calibracao" data-campo="data_ultima_calibracao">
+          </div>
+          <div class="campo campo-largo">
+            <label for="f-id_maquina">Máquina</label>
+            <select id="f-id_maquina" data-campo="id_maquina" required data-origem="/maquinas" data-valor="id_maquina" data-texto="{nome_maquina} (#{id_maquina})" data-numerico="sim"><option value="" disabled selected>Selecione...</option></select>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel" aria-labelledby="titulo-lista">
+      <div class="painel-titulo">
+        <h2 id="titulo-lista">Sensores cadastrados</h2>
+        <span id="total-registros" class="legenda">Carregando...</span>
+      </div>
+      <div class="barra-lista">
+        <button id="botao-listar" class="botao botao-secundario" type="button">↻ Atualizar lista</button>
+      </div>
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" data-campo="id_sensor">ID</th>
+              <th scope="col" data-campo="numero_serie">Nº de série</th>
+              <th scope="col" data-campo="tipo_sensor">Tipo</th>
+              <th scope="col" data-campo="mac_address">MAC</th>
+              <th scope="col" data-campo="status_conexao">Conexão</th>
+              <th scope="col" data-campo="status">Status</th>
+              <th scope="col" data-campo="id_maquina">Máquina</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-registros">
+            <tr>
+              <td colspan="8" class="vazio">Carregando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Sensor</footer>
+  </main>
+</body>
+</html>
+lunna

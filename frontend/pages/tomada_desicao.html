@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomada de decisão | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/crud.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/tomada-decisao.js" defer></script>
+  <script src="../js/crud.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="empresa.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container" data-rota="/tomadas-decisao" data-chave="id_tomada_decisao" data-nome="tomada de decisão" data-editar="sim" data-excluir="nao">
+    <div class="titulo-pagina">
+      <p class="legenda">CADASTROS</p>
+      <h1>Tomada de decisão</h1>
+      <p>Registre e acompanhe as decisões acionadas pelo sistema.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Cadastrar tomada de decisão</h2>
+        <span class="legenda">DADOS</span>
+      </div>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo campo-largo">
+            <label for="f-id_decisao">Decisão</label>
+            <select id="f-id_decisao" data-campo="id_decisao" required data-origem="/decisoes" data-valor="id_decisao" data-texto="{nome_decisao} (#{id_decisao})" data-numerico="sim"><option value="" disabled selected>Selecione...</option></select>
+          </div>
+          <div class="campo">
+            <label for="f-valor_referencia">Valor de referência</label>
+            <input type="number" id="f-valor_referencia" data-campo="valor_referencia" required step="0.01" placeholder="0.00">
+          </div>
+          <div class="campo">
+            <label for="f-status_execucao">Status da execução</label>
+            <input type="text" id="f-status_execucao" data-campo="status_execucao" required maxlength="15" placeholder="Ex.: Pendente" list="lista-status_execucao">
+            <datalist id="lista-status_execucao"><option value="Pendente"><option value="Executada"></datalist>
+          </div>
+          <div class="campo">
+            <label for="f-id_leitura">Leitura (opcional)</label>
+            <select id="f-id_leitura" data-campo="id_leitura" data-origem="/leituras" data-valor="id_leitura" data-texto="Leitura #{id_leitura} ({valor_medido_kwh} kWh)" data-numerico="sim"><option value="" selected>(nenhum)</option></select>
+          </div>
+          <div class="campo">
+            <label for="f-id_consumo">Consumo (opcional)</label>
+            <select id="f-id_consumo" data-campo="id_consumo" data-origem="/consumos" data-valor="id_consumo" data-texto="Consumo #{id_consumo} ({consumo_kwh} kWh)" data-numerico="sim"><option value="" selected>(nenhum)</option></select>
+          </div>
+          <div class="campo campo-largo">
+            <label for="f-observacao">Observação</label>
+            <textarea id="f-observacao" data-campo="observacao" placeholder="Opcional" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel" aria-labelledby="titulo-lista">
+      <div class="painel-titulo">
+        <h2 id="titulo-lista">Tomadas de decisão cadastradas</h2>
+        <span id="total-registros" class="legenda">Carregando...</span>
+      </div>
+      <div class="barra-lista">
+        <button id="botao-listar" class="botao botao-secundario" type="button">↻ Atualizar lista</button>
+      </div>
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" data-campo="id_tomada_decisao">ID</th>
+              <th scope="col" data-campo="data_tomada_decisao" data-formato="datahora">Data</th>
+              <th scope="col" data-campo="decisao">Decisão</th>
+              <th scope="col" data-campo="valor_referencia" data-formato="numero">Valor de referência</th>
+              <th scope="col" data-campo="status_execucao">Status</th>
+              <th scope="col" data-campo="id_leitura">Leitura</th>
+              <th scope="col" data-campo="id_consumo">Consumo</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-registros">
+            <tr>
+              <td colspan="8" class="vazio">Carregando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Tomada de decisão</footer>
+  </main>
+</body>
+</html>

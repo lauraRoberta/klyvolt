@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import models
@@ -24,15 +23,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Libera o frontend para chamar a API a partir do navegador.
-# "*" libera qualquer origem: serve para desenvolvimento.
-# Em produção, troque pelo endereço do frontend.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Content-Type"],
 )
+
 
 
 @app.get("/")

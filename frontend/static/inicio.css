@@ -1,0 +1,232 @@
+/* inicio.css - estilos das telas novas (início, login, cadastro, painel).
+   Carregar depois do empresa.css. */
+
+/* ===== Cabeçalho das páginas públicas ===== */
+.cabecalho-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+.cabecalho-acoes a {
+  padding: 6px 14px;
+  border: 2px solid var(--azul-bebe);
+  border-radius: 6px;
+  color: var(--azul-bebe);
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+}
+.cabecalho-acoes a:hover {
+  background: var(--azul-bebe);
+  color: var(--preto);
+}
+.cabecalho-acoes a.destaque {
+  background: var(--amarelo-bebe);
+  border-color: var(--amarelo-bebe);
+  color: var(--preto);
+}
+.cabecalho-acoes a:focus-visible {
+  outline: 3px solid var(--amarelo-bebe);
+  outline-offset: 3px;
+}
+
+/* Link "botão" (as classes .botao do empresa.css foram feitas para <button>) */
+a.botao {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* ===== Tela inicial ===== */
+.heroi {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 48px 0 40px;
+}
+.heroi h1 {
+  margin: 0 0 16px;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.heroi p {
+  max-width: 52ch;
+  margin: 0 0 24px;
+  font-size: 18px;
+  color: var(--texto-suave);
+}
+
+/* Exemplo de regra: mostra o que o sistema faz com uma leitura */
+.regra {
+  padding: 20px 24px;
+  background: var(--branco);
+  border: 1px solid var(--preto);
+  border-radius: 8px;
+  box-shadow: 6px 6px 0 var(--azul-bebe);
+}
+.regra h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+.regra dl {
+  margin: 0;
+}
+.regra .linha {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid #d5dde3;
+}
+.regra dt {
+  color: var(--texto-suave);
+}
+.regra dd {
+  margin: 0;
+  font-weight: bold;
+  text-align: right;
+}
+.regra .acima {
+  color: var(--erro);
+}
+.selo {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--amarelo-bebe);
+  border: 1px solid var(--preto);
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.faixa {
+  padding: 40px 0;
+  border-top: 2px solid var(--preto);
+}
+.faixa h2 {
+  margin: 0 0 20px;
+  font-size: 26px;
+}
+.tres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
+}
+.tres h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+.tres p {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+/* Passos: aqui a numeração faz sentido, é uma sequência de verdade */
+.passos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: passo;
+  display: grid;
+  gap: 12px;
+}
+.passos li {
+  counter-increment: passo;
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding: 12px 16px;
+  background: var(--branco);
+  border: 1px solid var(--preto);
+  border-radius: 6px;
+}
+.passos li::before {
+  content: counter(passo);
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: var(--azul-bebe);
+  border: 1px solid var(--preto);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* ===== Login e cadastro ===== */
+.painel-estreito {
+  max-width: 460px;
+  margin: 0 auto 24px;
+}
+.painel-medio {
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+.campos-uma {
+  grid-template-columns: 1fr;
+}
+.nota {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+.nota a {
+  color: var(--azul-bebe-forte);
+  font-weight: bold;
+}
+
+/* ===== Painel (atalhos para as telas) ===== */
+.atalhos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.atalho {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--branco);
+  border: 1px solid var(--preto);
+  border-radius: 8px;
+  color: var(--preto);
+  text-decoration: none;
+  box-shadow: 4px 4px 0 var(--azul-bebe);
+}
+.atalho span {
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+.atalho:hover {
+  background: #e8f4fb;
+}
+.atalho:focus-visible {
+  outline: 3px solid var(--azul-bebe-forte);
+  outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .heroi {
+    grid-template-columns: 1fr;
+    padding-top: 32px;
+  }
+  .heroi h1 {
+    font-size: 32px;
+  }
+}
+
+/* ===== Mostrar senha ===== */
+.mostrar-senha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: normal;
+  cursor: pointer;
+}
+.mostrar-senha input {
+  width: auto;
+  padding: 0;
+  margin: 0;
+}

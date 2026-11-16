@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Máquina | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/crud.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/crud.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="empresa.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container" data-rota="/maquinas" data-chave="id_maquina" data-nome="máquina" data-editar="sim" data-excluir="sim">
+    <div class="titulo-pagina">
+      <p class="legenda">CADASTROS</p>
+      <h1>Máquina</h1>
+      <p>Cadastre e acompanhe as máquinas de cada setor.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Cadastrar máquina</h2>
+        <span class="legenda">DADOS</span>
+      </div>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="f-nome_maquina">Nome da máquina</label>
+            <input type="text" id="f-nome_maquina" data-campo="nome_maquina" required maxlength="100" placeholder="Ex.: Overloque">
+          </div>
+          <div class="campo">
+            <label for="f-numero_serie">Número de série</label>
+            <input type="text" id="f-numero_serie" data-campo="numero_serie" maxlength="50" placeholder="Opcional">
+          </div>
+          <div class="campo campo-largo">
+            <label for="f-descricao_maquina">Descrição</label>
+            <textarea id="f-descricao_maquina" data-campo="descricao_maquina" required placeholder="Descreva a máquina" rows="3"></textarea>
+          </div>
+          <div class="campo">
+            <label for="f-potencia_nominal">Potência nominal</label>
+            <input type="number" id="f-potencia_nominal" data-campo="potencia_nominal" min="0.01" step="0.01" placeholder="Opcional, maior que 0">
+          </div>
+          <div class="campo">
+            <label for="f-id_setor">Setor</label>
+            <select id="f-id_setor" data-campo="id_setor" required data-origem="/setores" data-valor="id_setor" data-texto="{nome_setor} (#{id_setor})" data-numerico="sim"><option value="" disabled selected>Selecione...</option></select>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel" aria-labelledby="titulo-lista">
+      <div class="painel-titulo">
+        <h2 id="titulo-lista">Máquinas cadastradas</h2>
+        <span id="total-registros" class="legenda">Carregando...</span>
+      </div>
+      <div class="barra-lista">
+        <button id="botao-listar" class="botao botao-secundario" type="button">↻ Atualizar lista</button>
+      </div>
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" data-campo="id_maquina">ID</th>
+              <th scope="col" data-campo="nome_maquina">Nome</th>
+              <th scope="col" data-campo="numero_serie">Nº de série</th>
+              <th scope="col" data-campo="potencia_nominal" data-formato="numero">Potência</th>
+              <th scope="col" data-campo="id_setor">Setor</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-registros">
+            <tr>
+              <td colspan="6" class="vazio">Carregando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Máquina</footer>
+  </main>
+</body>
+</html>

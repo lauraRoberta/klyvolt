@@ -65,26 +65,39 @@ def listar_setores(
     return db.query(models.Setor).all()
 
 
+def buscar_setor_ou_404(db: Session, id_setor: int) -> models.Setor:
+    obj = db.get(models.Setor, id_setor)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Setor não encontrado(a)")
+    return obj
+ 
+ 
 @router.get("/{id_setor}", response_model=schemas.SetorResponse)
-def buscar_setor(id_setor: int, db: Session = Depends(get_db)):
-    setor = db.get(models.Setor, id_setor)
-    if setor is None:
-        raise HTTPException(status_code=404, detail="Setor não encontrado.")
-    return setor
+def obter_setor(id_setor: int, db: Session = Depends(get_db)):
+    return buscar_setor_ou_404(db, id_setor)
  
  
 @router.put("/{id_setor}", response_model=schemas.SetorResponse)
 def atualizar_setor(id_setor: int, dados: schemas.SetorCreate, db: Session = Depends(get_db)):
-    setor = db.get(models.Setor, id_setor)
-    if setor is None:
-        raise HTTPException(status_code=404, detail="Setor não encontrado.")
+    obj = buscar_setor_ou_404(db, id_setor)
     for campo, valor in dados.model_dump().items():
-        setattr(setor, campo, valor)
+        setattr(obj, campo, valor)
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="Já existe um setor com esse nome, ou o usuário responsável não existe.")
-    db.refresh(setor)
-    return setor
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj
+ 
+ 
+@router.delete("/{id_setor}", status_code=204)
+def remover_setor(id_setor: int, db: Session = Depends(get_db)):
+    obj = buscar_setor_ou_404(db, id_setor)
+    try:
+        db.delete(obj)
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Não pode ser removido: há registros que dependem dele")
  

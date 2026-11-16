@@ -66,40 +66,28 @@ def listar_consumos(
     return db.query(models.Consumo).all()
 
 
+def buscar_consumo_ou_404(db: Session, id_consumo: int) -> models.Consumo:
+    obj = db.get(models.Consumo, id_consumo)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Consumo não encontrado(a)")
+    return obj
+ 
+ 
 @router.get("/{id_consumo}", response_model=schemas.ConsumoResponse)
-def buscar_consumo(id_consumo: int, db: Session = Depends(get_db)):
-    consumo = db.get(models.Consumo, id_consumo)
-    if consumo is None:
-        raise HTTPException(status_code=404, detail="Consumo não encontrado.")
-    return consumo
+def obter_consumo(id_consumo: int, db: Session = Depends(get_db)):
+    return buscar_consumo_ou_404(db, id_consumo)
  
  
 @router.put("/{id_consumo}", response_model=schemas.ConsumoResponse)
 def atualizar_consumo(id_consumo: int, dados: schemas.ConsumoCreate, db: Session = Depends(get_db)):
-    consumo = db.get(models.Consumo, id_consumo)
-    if consumo is None:
-        raise HTTPException(status_code=404, detail="Consumo não encontrado.")
+    obj = buscar_consumo_ou_404(db, id_consumo)
     for campo, valor in dados.model_dump().items():
-        setattr(consumo, campo, valor)
+        setattr(obj, campo, valor)
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="A máquina informada não existe.")
-    db.refresh(consumo)
-    return consumo
- 
- 
-@router.delete("/{id_consumo}", status_code=204)
-def excluir_consumo(id_consumo: int, db: Session = Depends(get_db)):
-    consumo = db.get(models.Consumo, id_consumo)
-    if consumo is None:
-        raise HTTPException(status_code=404, detail="Consumo não encontrado.")
-    db.delete(consumo)  # leituras e tomadas de decisão ligadas a ele ficam sem consumo (SET NULL)
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Não foi possível excluir o consumo.")
-    return Response(status_code=204)
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj
  

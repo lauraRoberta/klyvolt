@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setor | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/crud.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/crud.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="empresa.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container" data-rota="/setores" data-chave="id_setor" data-nome="setor" data-editar="sim" data-excluir="sim">
+    <div class="titulo-pagina">
+      <p class="legenda">CADASTROS</p>
+      <h1>Setor</h1>
+      <p>Cadastre e acompanhe os setores da empresa.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Cadastrar setor</h2>
+        <span class="legenda">DADOS</span>
+      </div>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="f-nome_setor">Nome do setor</label>
+            <input type="text" id="f-nome_setor" data-campo="nome_setor" required maxlength="100" placeholder="Ex.: Costura">
+          </div>
+          <div class="campo">
+            <label for="f-divisao_setor">Divisão do setor</label>
+            <input type="text" id="f-divisao_setor" data-campo="divisao_setor" maxlength="100" placeholder="Opcional">
+          </div>
+          <div class="campo campo-largo">
+            <label for="f-id_usuario_responsavel">Usuário responsável</label>
+            <select id="f-id_usuario_responsavel" data-campo="id_usuario_responsavel" required data-origem="/usuarios" data-valor="id_usuario" data-texto="{nome_usuario} (#{id_usuario})" data-numerico="sim"><option value="" disabled selected>Selecione...</option></select>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel" aria-labelledby="titulo-lista">
+      <div class="painel-titulo">
+        <h2 id="titulo-lista">Setores cadastrados</h2>
+        <span id="total-registros" class="legenda">Carregando...</span>
+      </div>
+      <div class="barra-lista">
+        <button id="botao-listar" class="botao botao-secundario" type="button">↻ Atualizar lista</button>
+      </div>
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" data-campo="id_setor">ID</th>
+              <th scope="col" data-campo="nome_setor">Nome</th>
+              <th scope="col" data-campo="divisao_setor">Divisão</th>
+              <th scope="col" data-campo="id_usuario_responsavel">Responsável</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-registros">
+            <tr>
+              <td colspan="5" class="vazio">Carregando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Setor</footer>
+  </main>
+</body>
+</html>

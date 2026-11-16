@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 from deps import get_db
+from schemas_update import EmpresaUpdate
 from seguranca import gerar_hash_senha
 
 router = APIRouter(
@@ -56,21 +57,43 @@ def listar_empresas(
     return db.query(models.Empresa).all()
 
 
+# ===== Empresa: GET por ID e PUT =====
+# Cole no FIM do seu routers/empresa.py, depois das rotas que você já tem.
+# Não mexe no POST nem no GET da lista. Imports que ainda não existirem no arquivo:
+#   from fastapi import Depends, HTTPException
+#   from sqlalchemy.exc import IntegrityError
+#   from sqlalchemy.orm import Session
+#   import models, schemas
+#   from database import get_db  # o mesmo get_db que você já usa
+#   from schemas_update import EmpresaUpdate
+#   # e a sua função de hash (a mesma do POST), com o nome hash_senha ou ajuste abaixo
+# O caminho "/{id_empresa}" é relativo ao prefix do seu router.
+
+def buscar_empresa_ou_404(db: Session, id_empresa: int) -> models.Empresa:
+    obj = db.get(models.Empresa, id_empresa)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Empresa não encontrado(a)")
+    return obj
+
+
 @router.get("/{id_empresa}", response_model=schemas.EmpresaResponse)
-def buscar_empresa(id_empresa: int, db: Session = Depends(get_db)):
-    return buscar_ou_404(db, models.Empresa, id_empresa, "Empresa")
- 
- 
+def obter_empresa(id_empresa: int, db: Session = Depends(get_db)):
+    return buscar_empresa_ou_404(db, id_empresa)
+
+
 @router.put("/{id_empresa}", response_model=schemas.EmpresaResponse)
-def atualizar_empresa(id_empresa: int, dados: schemas.EmpresaCreate, db: Session = Depends(get_db)):
-    empresa = buscar_ou_404(db, models.Empresa, id_empresa, "Empresa")
+def atualizar_empresa(id_empresa: int, dados: EmpresaUpdate, db: Session = Depends(get_db)):
+    obj = buscar_empresa_ou_404(db, id_empresa)
     valores = dados.model_dump()
-    senha = valores.pop("senha_empresa")
+    senha = valores.pop("senha_empresa", None)
+    if senha:  # só troca a senha se ela vier preenchida
+        valores["senha_empresa"] = gerar_hash_senha(senha)  # use a MESMA função de hash do seu POST
     for campo, valor in valores.items():
-        setattr(empresa, campo, valor)
-    if senha:  # senha vazia = manter a atual
-        empresa.senha_empresa = gerar_hash(senha)
-    salvar_ou_409(db, "Já existe uma empresa com esse CNPJ ou e-mail.")
-    db.refresh(empresa)
-    return empresa
- 
+        setattr(obj, campo, valor)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj

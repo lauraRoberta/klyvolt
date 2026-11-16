@@ -45,52 +45,29 @@ def listar_decisoes(
     return db.query(models.Decisao).all() 
 
 
-
-@router.get("/{id_decisao}", response_model=schemas.DecisaoResponse)
-def buscar_decisao(id_decisao: int, db: Session = Depends(get_db)):
-    decisao = db.get(models.Decisao, id_decisao)
-    if decisao is None:
-        raise HTTPException(status_code=404, detail="Decisão não encontrada.")
-    return decisao
+def buscar_leitura_ou_404(db: Session, id_leitura: int) -> models.Leitura:
+    obj = db.get(models.Leitura, id_leitura)
+    if obj is None:
+        raise HTTPException(status_code=404, detail="Leitura não encontrado(a)")
+    return obj
  
  
-@router.put("/{id_decisao}", response_model=schemas.DecisaoResponse)
-def atualizar_decisao(id_decisao: int, dados: schemas.DecisaoCreate, db: Session = Depends(get_db)):
-    decisao = db.get(models.Decisao, id_decisao)
-    if decisao is None:
-        raise HTTPException(status_code=404, detail="Decisão não encontrada.")
+@router.get("/{id_leitura}", response_model=schemas.LeituraResponse)
+def obter_leitura(id_leitura: int, db: Session = Depends(get_db)):
+    return buscar_leitura_ou_404(db, id_leitura)
+ 
+ 
+@router.put("/{id_leitura}", response_model=schemas.LeituraResponse)
+def atualizar_leitura(id_leitura: int, dados: schemas.LeituraCreate, db: Session = Depends(get_db)):
+    obj = buscar_leitura_ou_404(db, id_leitura)
     for campo, valor in dados.model_dump().items():
-        setattr(decisao, campo, valor)
+        if campo == "data_leitura" and valor is None:
+            continue  # coluna obrigatória: mantém a data atual
+        setattr(obj, campo, valor)
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="Não foi possível salvar a decisão.")
-    db.refresh(decisao)
-    return decisao
- 
- 
-@router.delete("/{id_decisao}", status_code=204)
-def excluir_decisao(id_decisao: int, db: Session = Depends(get_db)):
-    decisao = db.get(models.Decisao, id_decisao)
-    if decisao is None:
-        raise HTTPException(status_code=404, detail="Decisão não encontrada.")
-    # A FK de tomada_decisao não tem ondelete: se a decisão já foi usada, o banco recusaria.
-    em_uso = (
-        db.query(models.TomadaDecisao)
-        .filter(models.TomadaDecisao.id_decisao == id_decisao)
-        .first()
-    )
-    if em_uso is not None:
-        raise HTTPException(
-            status_code=409,
-            detail="Esta decisão já foi usada em tomadas de decisão e não pode ser excluída.",
-        )
-    db.delete(decisao)
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Não foi possível excluir a decisão.")
-    return Response(status_code=204)
- 
+        raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
+    db.refresh(obj)
+    return obj

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresa | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/crud.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/crud.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="empresa.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container" data-rota="/empresas" data-chave="id_empresa" data-nome="empresa" data-editar="sim" data-excluir="nao">
+    <div class="titulo-pagina">
+      <p class="legenda">CADASTROS</p>
+      <h1>Empresa</h1>
+      <p>Cadastre e acompanhe as empresas do sistema.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Cadastrar empresa</h2>
+        <span class="legenda">DADOS</span>
+      </div>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="f-nome_empresa">Nome da empresa</label>
+            <input type="text" id="f-nome_empresa" data-campo="nome_empresa" required maxlength="100" placeholder="Ex.: Facção Costura Fina">
+          </div>
+          <div class="campo">
+            <label for="f-cnpj">CNPJ</label>
+            <input type="text" id="f-cnpj" data-campo="cnpj" required maxlength="18" inputmode="numeric" placeholder="00.000.000/0000-00">
+          </div>
+          <div class="campo">
+            <label for="f-email_empresa">E-mail</label>
+            <input type="email" id="f-email_empresa" data-campo="email_empresa" required maxlength="100" placeholder="contato@empresa.com">
+          </div>
+          <div class="campo">
+            <label for="f-telefone_empresa">Telefone</label>
+            <input type="tel" id="f-telefone_empresa" data-campo="telefone_empresa" required maxlength="20" inputmode="tel" placeholder="(00) 00000-0000">
+          </div>
+          <div class="campo">
+            <label for="f-senha_empresa">Senha</label>
+            <input type="password" id="f-senha_empresa" data-campo="senha_empresa" required data-obrigatorio-cadastro="sim" data-omitir-vazio="sim" minlength="6" maxlength="72" autocomplete="new-password" placeholder="Mín. 6, com letras e números">
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="painel" aria-labelledby="titulo-lista">
+      <div class="painel-titulo">
+        <h2 id="titulo-lista">Empresas cadastradas</h2>
+        <span id="total-registros" class="legenda">Carregando...</span>
+      </div>
+      <div class="barra-lista">
+        <button id="botao-listar" class="botao botao-secundario" type="button">↻ Atualizar lista</button>
+      </div>
+      <div class="tabela-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" data-campo="id_empresa">ID</th>
+              <th scope="col" data-campo="nome_empresa">Nome</th>
+              <th scope="col" data-campo="cnpj">CNPJ</th>
+              <th scope="col" data-campo="email_empresa">E-mail</th>
+              <th scope="col" data-campo="telefone_empresa">Telefone</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-registros">
+            <tr>
+              <td colspan="6" class="vazio">Carregando...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Empresa</footer>
+  </main>
+</body>
+</html>

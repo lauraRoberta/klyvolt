@@ -1,0 +1,57 @@
+/* Complemento do empresa.css para as telas com select, textarea e menu.
+   Carregue depois do empresa.css. */
+
+/* ===== Select e textarea iguais aos inputs ===== */
+select, textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--preto);
+  border-radius: 6px;
+  color: var(--preto);
+  background: var(--branco);
+  font: inherit;
+}
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--azul-bebe-forte);
+  outline-offset: 3px;
+}
+textarea::placeholder {
+  color: #5d6873;
+}
+
+/* ===== Menu entre as telas ===== */
+.cabecalho .container {
+  flex-wrap: wrap;
+}
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+}
+.menu a {
+  color: var(--azul-bebe);
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+}
+.menu a:hover {
+  border-color: var(--azul-bebe);
+}
+.menu a[aria-current="page"] {
+  background: var(--amarelo-bebe);
+  color: var(--preto);
+}
+.menu a:focus-visible {
+  outline: 3px solid var(--amarelo-bebe);
+  outline-offset: 3px;
+}
