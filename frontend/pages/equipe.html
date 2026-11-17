@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipe | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/painel.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/empresa-ativa.js" defer></script>
+  <script src="../js/equipe.js" defer></script>
+</head>
+<body class="amarelo">
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="index.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="titulo-pagina">
+      <p class="legenda">VISÃO GERAL</p>
+      <h1>Equipe</h1>
+      <p>Pessoas de <strong id="nome-empresa">—</strong> e a função de cada uma. Escolha a empresa na lista do cabeçalho.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <div id="conteudo" hidden>
+      <section class="secao" aria-labelledby="titulo-funcoes">
+        <h2 id="titulo-funcoes">Funções</h2>
+        <div id="funcoes" class="kpis funcoes"></div>
+      </section>
+
+      <section class="painel" aria-labelledby="titulo-pessoas">
+        <div class="painel-titulo">
+          <h2 id="titulo-pessoas">Pessoas da empresa</h2>
+          <div class="titulo-acoes">
+            <span id="total-pessoas" class="legenda"></span>
+            <a class="botao botao-secundario" href="usuario.html">Cadastrar usuário</a>
+          </div>
+        </div>
+        <ul id="pessoas" class="pessoas"></ul>
+      </section>
+    </div>
+
+    <footer class="rodape">Klyvolt · Equipe</footer>
+  </main>
+</body>
+</html>

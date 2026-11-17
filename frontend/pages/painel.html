@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/painel.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/empresa-ativa.js" defer></script>
+  <script src="../js/painel.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="index.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="titulo-pagina">
+      <p class="legenda">VISÃO GERAL</p>
+      <h1>Painel</h1>
+      <p>Resumo de <strong id="nome-empresa">—</strong>. Escolha a empresa na lista do cabeçalho.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <div id="conteudo" hidden>
+      <div id="kpis" class="kpis"></div>
+
+      <div class="duas-colunas">
+        <section class="painel" aria-labelledby="titulo-maquinas">
+          <div class="painel-titulo">
+            <h2 id="titulo-maquinas">Consumo por máquina</h2>
+            <span class="legenda">kWh</span>
+          </div>
+          <ul id="por-maquina" class="barras"></ul>
+        </section>
+
+        <section class="painel" aria-labelledby="titulo-setores">
+          <div class="painel-titulo">
+            <h2 id="titulo-setores">Consumo por setor</h2>
+            <span class="legenda">kWh</span>
+          </div>
+          <ul id="por-setor" class="barras"></ul>
+        </section>
+      </div>
+
+      <section class="painel painel-sensores" aria-labelledby="titulo-sensores">
+        <div class="painel-titulo">
+          <h2 id="titulo-sensores">Sensores cadastrados</h2>
+          <span id="total-sensores" class="legenda"></span>
+        </div>
+        <div class="tabela-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Nº de série</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Máquina</th>
+                <th scope="col">Conexão</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="lista-sensores"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <footer class="rodape">Klyvolt · Painel</footer>
+  </main>
+</body>
+</html>

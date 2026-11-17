@@ -110,6 +110,162 @@
   from { width: 0; }
 }
 
+/* ===== Sensores cadastrados ===== */
+.painel-sensores {
+  margin-top: 24px;
+}
+.selo {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.selo-online {
+  background: #e3f6ec;
+  color: #1b6b43;
+}
+.selo-offline {
+  background: var(--erro-fundo);
+  color: var(--erro);
+}
+.selo-outro {
+  background: #eef2f6;
+  color: #4a5866;
+}
+
+/* ===== Equipe ===== */
+.secao {
+  margin-bottom: 24px;
+}
+.secao h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+.kpis.funcoes {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-bottom: 0;
+}
+.titulo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.titulo-acoes .botao {
+  padding: 6px 14px;
+  font-size: 14px;
+}
+a.botao {
+  display: inline-block;
+  text-decoration: none;
+}
+.pessoas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pessoas .vazio {
+  grid-column: 1 / -1;
+}
+.pessoa {
+  display: flex;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  box-shadow: var(--sombra);
+  animation: surgir 0.4s ease backwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.pessoa:hover {
+  transform: translateY(-3px);
+  border-color: #f8c8dc;
+  box-shadow: 0 0 0 1px rgba(248, 200, 220, 0.9), 0 14px 36px rgba(244, 143, 184, 0.40);
+}
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+.pessoa-dados {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.pessoa-dados strong {
+  font-size: 17px;
+}
+.pessoa-email {
+  font-size: 14px;
+  color: var(--texto-suave);
+  overflow-wrap: anywhere;
+}
+.pessoa-setores {
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+.selo-funcao {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.funcao-administrador {
+  background: #fde4ee;
+  color: #8f2a55;
+}
+.funcao-operador {
+  background: #e1f1fb;
+  color: #1b5f8a;
+}
+.funcao-visualizador,
+.funcao-outra {
+  background: #eef2f6;
+  color: #4a5866;
+}
+
+/* ===== Tela Equipe (amarelo bebê) ===== */
+body.amarelo {
+  --fundo: #fffbea;
+  --borda: #f2e4ac;
+  --azul-bebe: #ffe58a;
+  --azul-bebe-forte: #8a6500;
+  --sombra: 0 8px 28px rgba(214, 170, 40, 0.16);
+  background-color: #fffbea;
+  background-image: linear-gradient(180deg, #fff1b8 0, #fffbea 340px);
+}
+.amarelo .botao-principal {
+  background: linear-gradient(135deg, #ffe58a, #ffd35c);
+  box-shadow: 0 4px 12px rgba(214, 170, 40, 0.32);
+}
+.amarelo .botao-principal:hover {
+  background: linear-gradient(135deg, #ffedaa, #ffdc7a);
+  box-shadow: 0 6px 16px rgba(214, 170, 40, 0.40);
+}
+.amarelo .botao-secundario:hover {
+  background: #fff8dc;
+  border-color: #ffe58a;
+}
+.amarelo .mensagem:not(.erro) {
+  background: #fff8dc;
+}
+/* brilho dourado ao passar o mouse (nesta tela o rosa dá lugar ao amarelo) */
+.amarelo .kpi:hover,
+.amarelo .pessoa:hover {
+  border-color: #ffe58a;
+  box-shadow: 0 0 0 1px rgba(255, 229, 138, 0.95), 0 14px 36px rgba(245, 185, 66, 0.45);
+}
+
 @media (max-width: 820px) {
   .duas-colunas {
     grid-template-columns: 1fr;

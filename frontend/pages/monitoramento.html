@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoramento | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/painel.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/empresa-ativa.js" defer></script>
+  <script src="../js/monitoramento.js" defer></script>
+</head>
+<body class="menta">
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="index.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="titulo-pagina">
+      <p class="legenda">VISÃO GERAL</p>
+      <h1>Monitoramento</h1>
+      <p>Sensores, leituras e decisões de <strong id="nome-empresa">—</strong>. Escolha a empresa na lista do cabeçalho.</p>
+    </div>
+
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <div id="conteudo" hidden>
+      <div class="barra-lista">
+        <button id="botao-atualizar" class="botao botao-secundario" type="button">↻ Atualizar</button>
+        <span id="ultima-atualizacao" class="legenda"></span>
+      </div>
+
+      <div id="kpis" class="kpis"></div>
+
+      <section class="painel" aria-labelledby="titulo-sensores">
+        <div class="painel-titulo">
+          <h2 id="titulo-sensores">Sensores</h2>
+          <span id="total-sensores" class="legenda"></span>
+        </div>
+        <div class="tabela-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Nº de série</th>
+                <th scope="col">Máquina</th>
+                <th scope="col">Conexão</th>
+                <th scope="col">Status</th>
+                <th scope="col">Última leitura</th>
+                <th scope="col">Último valor</th>
+              </tr>
+            </thead>
+            <tbody id="lista-sensores"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="painel" aria-labelledby="titulo-leituras">
+        <div class="painel-titulo">
+          <h2 id="titulo-leituras">Últimas leituras</h2>
+          <span class="legenda">10 mais recentes</span>
+        </div>
+        <div class="tabela-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Data e hora</th>
+                <th scope="col">Máquina</th>
+                <th scope="col">Sensor</th>
+                <th scope="col">Valor</th>
+              </tr>
+            </thead>
+            <tbody id="lista-leituras"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="painel" aria-labelledby="titulo-decisoes">
+        <div class="painel-titulo">
+          <h2 id="titulo-decisoes">Decisões tomadas</h2>
+          <span class="legenda">10 mais recentes</span>
+        </div>
+        <div class="tabela-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Data e hora</th>
+                <th scope="col">Decisão</th>
+                <th scope="col">Valor de referência</th>
+                <th scope="col">Status</th>
+                <th scope="col">Observação</th>
+              </tr>
+            </thead>
+            <tbody id="lista-decisoes"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <footer class="rodape">Klyvolt · Monitoramento</footer>
+  </main>
+</body>
+</html>

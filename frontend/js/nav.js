@@ -4,6 +4,8 @@
 (function () {
   const ITENS = [
     ['Início', 'index.html'],
+    ['Painel', 'painel.html'],
+    ['Equipe', 'equipe.html'],
     ['Empresa', 'empresa.html'],
     ['Usuário', 'usuario.html'],
     ['Setor', 'setor.html'],
@@ -18,6 +20,10 @@
   const destino = document.querySelector('.cabecalho .container');
   if (!destino) return;
 
+  // O logo leva para o início
+  const marca = destino.querySelector('.marca');
+  if (marca) marca.setAttribute('href', 'index.html');
+
   const menu = document.createElement('nav');
   menu.className = 'menu';
   menu.setAttribute('aria-label', 'Telas do sistema');
@@ -30,6 +36,3 @@
   }
   destino.append(menu);
 })();
-
-  const marca = destino.querySelector('.marca');
-  if (marca) marca.setAttribute('href', 'index.html');

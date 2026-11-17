@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine
 from routes import (
+    painel,
     consumo,
     decisao,
     empresa,
@@ -49,3 +50,4 @@ app.include_router(consumo.router)
 app.include_router(leitura.router)
 app.include_router(decisao.router)
 app.include_router(tomada_decisao.router)
+app.include_router(painel.router)
