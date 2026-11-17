@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Como funciona | Klyvolt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/inicio.css">
+  <script src="../js/nav.js" defer></script>
+</head>
+<body class="inicio rosa">
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="index.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="titulo-pagina">
+      <h1>Como o Klyvolt <span class="destaque">funciona</span></h1>
+      <p>Do cadastro da empresa até a decisão tomada, em quatro passos.</p>
+    </div>
+
+    <ol class="passos">
+      <li class="cartao">
+        <div class="texto">
+          <strong>Cadastre a empresa</strong>
+          <span>Informe a empresa, os setores (costura, corte, acabamento) e as máquinas de cada um.</span>
+        </div>
+        <div class="atalhos">
+          <a href="empresa.html">Empresa →</a>
+          <a href="setor.html">Setor →</a>
+          <a href="maquina.html">Máquina →</a>
+        </div>
+      </li>
+      <li class="cartao">
+        <div class="texto">
+          <strong>Registre os sensores</strong>
+          <span>Cada máquina recebe um sensor de energia, que fica vinculado a ela no sistema.</span>
+        </div>
+        <div class="atalhos">
+          <a href="sensor.html">Sensor →</a>
+        </div>
+      </li>
+      <li class="cartao">
+        <div class="texto">
+          <strong>Acompanhe as leituras</strong>
+          <span>As medições em kWh ficam guardadas, e o consumo é somado por período.</span>
+        </div>
+        <div class="atalhos">
+          <a href="leitura.html">Leitura →</a>
+          <a href="consumo.html">Consumo →</a>
+        </div>
+      </li>
+      <li class="cartao">
+        <div class="texto">
+          <strong>Defina limites</strong>
+          <span>Crie regras com critério e limite, e acompanhe as decisões tomadas quando uma máquina passa dele.</span>
+        </div>
+        <div class="atalhos">
+          <a href="desicao.html">Decisão →</a>
+          <a href="tomada_desicao.html">Tomada de decisão →</a>
+        </div>
+      </li>
+    </ol>
+
+    <section class="faixa" aria-labelledby="titulo-cadeia">
+      <div class="cartao cartao-grande">
+        <h2 id="titulo-cadeia">Tudo parte da empresa</h2>
+        <p class="intro">Cada informação se liga à anterior, então dá para seguir o caminho do consumo até quem é o responsável por ele.</p>
+        <ol class="cadeia">
+          <li><span>Empresa</span></li>
+          <li><span>Usuário</span></li>
+          <li><span>Setor</span></li>
+          <li><span>Máquina</span></li>
+          <li><span>Sensor</span></li>
+          <li><span>Leitura</span></li>
+        </ol>
+        <p class="detalhe">Cada setor tem um usuário responsável. O consumo é registrado por máquina, e as decisões tomadas se ligam a uma leitura ou a um consumo.</p>
+      </div>
+    </section>
+
+    <section class="faixa" aria-labelledby="titulo-chamada">
+      <div class="cartao cartao-rosado chamada">
+        <h2 id="titulo-chamada">Pronto para começar?</h2>
+        <p>Cadastre sua empresa e vá adicionando setores, máquinas e sensores.</p>
+        <div class="acoes acoes-centro">
+          <a class="botao botao-principal" href="empresa.html">Cadastrar empresa</a>
+          <a class="botao botao-secundario" href="index.html">Voltar ao início</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Como funciona</footer>
+  </main>
+</body>
+</html>

@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Início | Klyvolt</title>
+  <title>Klyvolt | Descubra de onde vem o gasto de energia da sua confecção</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/inicio.css">
   <script src="../js/nav.js" defer></script>
 </head>
-<body>
+<body class="inicio escuro">
   <header class="cabecalho">
     <div class="container">
       <a class="marca" href="index.html">
@@ -19,12 +23,107 @@
   </header>
 
   <main class="container">
-    <section class="cartao-imagem">
-      <div class="texto">
-        <h1>Início</h1>
-        <p>Escolha uma tela no menu acima.</p>
+
+    <!-- Abertura: texto de um lado, foto em cartão do outro -->
+    <section class="heroi" aria-labelledby="titulo-heroi">
+      <div>
+        <h1 id="titulo-heroi">Descubra de onde vem o <span class="destaque">gasto de energia</span> da sua fábrica de costura.</h1>
+        <p>O Klyvolt acompanha o consumo de cada máquina e mostra onde a conta de luz pesa no fim do mês.</p>
+        <div class="acoes">
+          <a class="botao botao-principal" href="empresa.html">Cadastrar empresa</a>
+          <a class="botao botao-secundario" href="como-funciona.html">Ver como funciona</a>
+        </div>
+      </div>
+
+      <!-- Para usar uma foto: salve como static/fundo.jpg (ou troque o endereço no inicio.css) -->
+      <div class="foto cartao">
+        <aside class="conta" aria-labelledby="titulo-conta">
+          <h2 id="titulo-conta">Consumo por máquina no mês</h2>
+          <p class="nota-exemplo">Exemplo ilustrativo</p>
+          <ul>
+            <li>
+              <span>Ferro a vapor</span><strong>410 kWh</strong>
+              <span class="barra" aria-hidden="true"><i style="--p: 100%"></i></span>
+            </li>
+            <li>
+              <span>Máquina de corte</span><strong>260 kWh</strong>
+              <span class="barra" aria-hidden="true"><i style="--p: 63%"></i></span>
+            </li>
+            <li>
+              <span>Overloque</span><strong>190 kWh</strong>
+              <span class="barra" aria-hidden="true"><i style="--p: 46%"></i></span>
+            </li>
+            <li>
+              <span>Reta industrial</span><strong>150 kWh</strong>
+              <span class="barra" aria-hidden="true"><i style="--p: 37%"></i></span>
+            </li>
+            <li>
+              <span>Galoneira</span><strong>90 kWh</strong>
+              <span class="barra" aria-hidden="true"><i style="--p: 22%"></i></span>
+            </li>
+          </ul>
+          <p class="total">Total do mês: <strong>1.100 kWh</strong>. Só o ferro a vapor responde por cerca de 37%.</p>
+        </aside>
       </div>
     </section>
+
+    <!-- O problema -->
+    <section class="faixa" aria-labelledby="titulo-problema">
+      <div class="cartao cartao-rosado cartao-grande">
+        <h2 id="titulo-problema">A conta de luz chega como um número só</h2>
+        <p class="intro">No fim do mês o valor vem fechado: não diz qual máquina gastou mais, qual setor pesou nem quando o consumo subiu. O Klyvolt separa esse número por máquina e por setor, para você enxergar onde agir.</p>
+      </div>
+    </section>
+
+    <!-- O que você acompanha -->
+    <section class="faixa" aria-labelledby="titulo-recursos">
+      <h2 id="titulo-recursos">O que você acompanha</h2>
+      <div class="grade">
+        <div class="cartao">
+          <h3>Consumo por máquina</h3>
+          <p>Veja quais equipamentos gastam mais e compare uns com os outros.</p>
+        </div>
+        <div class="cartao">
+          <h3>Consumo por setor</h3>
+          <p>Descubra qual parte da fábrica pesa mais na conta.</p>
+        </div>
+        <div class="cartao">
+          <h3>Limites e decisões</h3>
+          <p>Registre o que foi feito quando o consumo passou do esperado.</p>
+        </div>
+        <div class="cartao">
+          <h3>Equipe e funções</h3>
+          <p>Cada pessoa entra como administrador, operador ou visualizador.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Para quem é -->
+    <section class="faixa para-quem" aria-labelledby="titulo-publico">
+      <div>
+        <h2 id="titulo-publico">Para quem é</h2>
+        <p class="intro">Para fábricas e facções de costura em que a conta de energia pesa no fim do mês e ninguém sabe ao certo de onde vem o gasto das máquinas.</p>
+      </div>
+      <ul class="perguntas" aria-label="Perguntas que o Klyvolt ajuda a responder">
+        <li class="cartao">Qual máquina gasta mais?</li>
+        <li class="cartao">Qual setor pesou mais neste mês?</li>
+        <li class="cartao">Algum equipamento passou do limite?</li>
+      </ul>
+    </section>
+
+    <!-- Chamada final -->
+    <section class="faixa" aria-labelledby="titulo-chamada">
+      <div class="cartao cartao-rosado chamada">
+        <h2 id="titulo-chamada">Comece pela sua empresa</h2>
+        <p>O cadastro leva poucos minutos. Depois é só ir adicionando setores, máquinas e sensores.</p>
+        <div class="acoes acoes-centro">
+          <a class="botao botao-principal" href="empresa.html">Cadastrar empresa</a>
+          <a class="botao botao-secundario" href="como-funciona.html">Ver como funciona</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="rodape">Klyvolt · Gestão de consumo elétrico</footer>
   </main>
 </body>
 </html>
