@@ -1,3 +1,4 @@
+import secrets
 import time
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -115,7 +116,8 @@ def registrar_empresa(dados: RegistroEmpresa, db: Session = Depends(get_db)):
         cnpj=dados.cnpj,
         nome_empresa=dados.nome_empresa,
         email_empresa=dados.email_empresa,
-        senha_empresa=senha_hash,
+        # a empresa não tem senha própria: guarda um valor aleatório que ninguém usa
+        senha_empresa=gerar_hash_senha(secrets.token_urlsafe(32)),
         telefone_empresa=dados.telefone_empresa,
     )
     db.add(empresa)

@@ -16,7 +16,7 @@
   <header class="cabecalho">
     <div class="container">
       <a class="marca" href="index.html">
-        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <img class="logo" src="../static/klyvolt-logo.svg" alt="" width="44" height="44">
         <span>Klyvolt</span>
       </a>
       <span class="subtitulo">Gestão de consumo elétrico</span>
@@ -32,32 +32,35 @@
     <ol class="passos">
       <li class="cartao">
         <div class="texto">
-          <strong>Cadastre a empresa</strong>
-          <span>Informe a empresa, os setores (costura, corte, acabamento) e as máquinas de cada um.</span>
+          <strong>Cadastre a empresa e entre</strong>
+          <span>O cadastro cria a empresa e o administrador de uma vez. Com o e-mail e a senha dele, você já entra no sistema.</span>
         </div>
         <div class="atalhos">
-          <a href="empresa.html">Empresa →</a>
-          <a href="setor.html">Setor →</a>
-          <a href="maquina.html">Máquina →</a>
+          <a href="cadastro.html">Cadastrar empresa →</a>
+          <a href="login.html">Entrar →</a>
         </div>
       </li>
       <li class="cartao">
         <div class="texto">
-          <strong>Registre os sensores</strong>
-          <span>Cada máquina recebe um sensor de energia, que fica vinculado a ela no sistema.</span>
+          <strong>Monte a estrutura</strong>
+          <span>Dentro do sistema, o administrador cadastra a equipe, os setores (costura, corte, acabamento), as máquinas de cada um e os sensores instalados nelas.</span>
         </div>
         <div class="atalhos">
+          <a href="usuario.html">Usuário →</a>
+          <a href="setor.html">Setor →</a>
+          <a href="maquina.html">Máquina →</a>
           <a href="sensor.html">Sensor →</a>
         </div>
       </li>
       <li class="cartao">
         <div class="texto">
           <strong>Acompanhe as leituras</strong>
-          <span>As medições em kWh ficam guardadas, e o consumo é somado por período.</span>
+          <span>As medições em kWh ficam guardadas, e o consumo é somado por período. O Painel e o Monitoramento mostram o resultado.</span>
         </div>
         <div class="atalhos">
           <a href="leitura.html">Leitura →</a>
           <a href="consumo.html">Consumo →</a>
+          <a href="painel.html">Painel →</a>
         </div>
       </li>
       <li class="cartao">
@@ -72,6 +75,24 @@
       </li>
     </ol>
 
+    <section class="faixa" aria-labelledby="titulo-acesso">
+      <h2 id="titulo-acesso">Como é o acesso</h2>
+      <div class="grade">
+        <div class="cartao">
+          <h3>Empresa e administrador juntos</h3>
+          <p>Quem cadastra a empresa já vira o administrador. Não é preciso cadastrar a empresa de novo.</p>
+        </div>
+        <div class="cartao">
+          <h3>Entrada com e-mail e senha</h3>
+          <p>O acesso dura algumas horas. O botão Sair encerra a sessão, e depois dela é preciso entrar de novo.</p>
+        </div>
+        <div class="cartao">
+          <h3>Cada empresa vê a sua</h3>
+          <p>O Painel, a Equipe, a Minha empresa e o Monitoramento mostram só os dados da empresa de quem entrou.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="faixa" aria-labelledby="titulo-cadeia">
       <div class="cartao cartao-grande">
         <h2 id="titulo-cadeia">Tudo parte da empresa</h2>
@@ -84,17 +105,18 @@
           <li><span>Sensor</span></li>
           <li><span>Leitura</span></li>
         </ol>
-        <p class="detalhe">Cada setor tem um usuário responsável. O consumo é registrado por máquina, e as decisões tomadas se ligam a uma leitura ou a um consumo.</p>
+        <p class="detalhe">A empresa e o administrador nascem juntos no cadastro. Cada setor tem um usuário responsável, o consumo é registrado por máquina, e as decisões tomadas se ligam a uma leitura ou a um consumo.</p>
       </div>
     </section>
 
     <section class="faixa" aria-labelledby="titulo-chamada">
       <div class="cartao cartao-rosado chamada">
         <h2 id="titulo-chamada">Pronto para começar?</h2>
-        <p>Cadastre sua empresa e vá adicionando setores, máquinas e sensores.</p>
+        <p>Monte a estrutura da sua empresa e acompanhe o consumo de cada máquina.</p>
         <div class="acoes acoes-centro">
-          <a class="botao botao-principal" href="cadastro.html">Cadastrar empresa</a>
-          <a class="botao botao-secundario" href="index.html">Voltar ao início</a>
+          <a class="botao botao-principal" href="cadastro.html" data-so-deslogado>Cadastrar empresa</a>
+          <a class="botao botao-secundario" href="login.html" data-so-deslogado>Entrar</a>
+          <a class="botao botao-principal" href="painel.html" data-so-logado hidden>Ir para o painel</a>
         </div>
       </div>
     </section>

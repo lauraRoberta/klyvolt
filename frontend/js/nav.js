@@ -9,11 +9,18 @@
   const publica = document.body.hasAttribute('data-publica');
   const logado = typeof obterToken === 'function' && Boolean(obterToken());
 
+  // Nas telas públicas, o que é só para quem ainda não entrou some depois do login
+  if (publica) {
+    document.querySelectorAll('[data-so-deslogado]').forEach(el => { el.hidden = logado; });
+    document.querySelectorAll('[data-so-logado]').forEach(el => { el.hidden = !logado; });
+  }
+
   const ITENS_DO_SISTEMA = [
     ['Painel', 'painel.html'],
+    ['Minha empresa', 'minha-empresa.html'],
     ['Equipe', 'equipe.html'],
     ['Monitoramento', 'monitoramento.html'],
-    ['Empresa', 'empresa.html'],
+    ['Dados da empresa', 'empresa.html'],
     ['Usuário', 'usuario.html'],
     ['Setor', 'setor.html'],
     ['Máquina', 'maquina.html'],

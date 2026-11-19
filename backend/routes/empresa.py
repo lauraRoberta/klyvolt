@@ -6,7 +6,7 @@ import models
 import schemas
 from deps import get_db
 from schemas_update import EmpresaUpdate
-from seguranca import Sessao, exigir_funcao, gerar_hash_senha, sessao_atual
+from seguranca import Sessao, exigir_funcao, sessao_atual
 
 router = APIRouter(
     prefix="/empresas",
@@ -59,9 +59,8 @@ def atualizar_empresa(
 ):
     obj = buscar_empresa_ou_404(db, id_empresa, sessao)
     valores = dados.model_dump()
-    senha = valores.pop("senha_empresa", None)
-    if senha:  # só troca a senha se ela vier preenchida
-        valores["senha_empresa"] = gerar_hash_senha(senha)
+    valores.pop("cnpj", None)           # o CNPJ não pode ser alterado
+    valores.pop("senha_empresa", None)  # a senha é a do usuário (tela Usuário), não a da empresa
     for campo, valor in valores.items():
         setattr(obj, campo, valor)
     try:

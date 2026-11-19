@@ -16,7 +16,7 @@
   <header class="cabecalho">
     <div class="container">
       <a class="marca" href="index.html">
-        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <img class="logo" src="../static/klyvolt-logo.svg" alt="" width="44" height="44">
         <span>Klyvolt</span>
       </a>
       <span class="subtitulo">Gestão de consumo elétrico</span>
@@ -31,8 +31,9 @@
         <h1 id="titulo-heroi">Descubra de onde vem o <span class="destaque">gasto de energia</span> da sua fábrica de costura.</h1>
         <p>O Klyvolt acompanha o consumo de cada máquina e mostra onde a conta de luz pesa no fim do mês.</p>
         <div class="acoes">
-          <a class="botao botao-principal" href="login.html">Entrar</a>
-          <a class="botao botao-secundario" href="cadastro.html">Cadastrar empresa</a>
+          <a class="botao botao-principal" href="login.html" data-so-deslogado>Entrar</a>
+          <a class="botao botao-secundario" href="cadastro.html" data-so-deslogado>Cadastrar empresa</a>
+          <a class="botao botao-principal" href="painel.html" data-so-logado hidden>Ir para o painel</a>
           <a class="botao botao-secundario" href="como-funciona.html">Ver como funciona</a>
         </div>
       </div>
@@ -114,7 +115,7 @@
     </section>
 
     <!-- Chamada final -->
-    <section class="faixa" aria-labelledby="titulo-chamada">
+    <section class="faixa" aria-labelledby="titulo-chamada" data-so-deslogado>
       <div class="cartao cartao-rosado chamada">
         <h2 id="titulo-chamada">Comece pela sua empresa</h2>
         <p>O cadastro leva poucos minutos. Depois é só ir adicionando setores, máquinas e sensores.</p>
