@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico | Klyvolt</title>
+  <script src="../js/api.js" defer></script>
+</head>
+<body data-publica style="font-family: system-ui, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; line-height: 1.6">
+  <h1>Diagnóstico do login</h1>
+  <p>Deixe a API rodando e abra esta página com <b>Ctrl + Shift + R</b>. Cada linha mostra ✔ (certo) ou ✘ (errado, com o motivo).</p>
+  <ul id="resultado" style="list-style: none; padding: 0"></ul>
+
+  <script>
+    const BASE = 'http://127.0.0.1:8000';
+    const lista = document.getElementById('resultado');
+
+    async function verificar(titulo, funcao) {
+      const item = document.createElement('li');
+      try {
+        const r = await funcao();
+        item.textContent = (r === true ? '✔ ' : '✘ ') + titulo + (r === true ? '' : '  →  ' + r);
+      } catch (erro) {
+        item.textContent = '✘ ' + titulo + '  →  ' + erro.message;
+      }
+      lista.append(item);
+    }
+
+    const status = (caminho, opcoes) => fetch(BASE + caminho, opcoes).then(r => r.status);
+    const texto = caminho => fetch(caminho, { cache: 'no-store' }).then(r => r.text());
+    const json = { 'Content-Type': 'application/json' };
+
+    window.addEventListener('load', async () => {
+      await verificar('api.js é a versão nova (login-1)', () =>
+        (typeof KLYVOLT_VERSAO !== 'undefined' && KLYVOLT_VERSAO === 'login-1')
+          || 'o navegador está usando um api.js antigo: recarregue com Ctrl + Shift + R ou cole de novo o arquivo');
+
+      for (const arquivo of ['nav.js', 'login.js', 'cadastro.js']) {
+        await verificar(`js/${arquivo} é a versão nova`, async () =>
+          (await texto('../js/' + arquivo)).includes('login-1') || `o arquivo js/${arquivo} da pasta é antigo ou não existe`);
+      }
+
+      await verificar('A API está no ar', async () => {
+        const s = await status('/');
+        return s === 200 || 'a API respondeu ' + s;
+      });
+
+      await verificar('Rota de login existe (esperado: 401 com dados falsos)', async () => {
+        const s = await status('/auth/login', { method: 'POST', headers: json, body: JSON.stringify({ email: 'x@x.com', senha: 'x' }) });
+        if (s === 401) return true;
+        if (s === 404) return 'rota /auth/login não existe: confira o main.py e o routes/auth.py';
+        if (s === 429) return true; // bloqueio por tentativas: a rota existe
+        return 'a API respondeu ' + s;
+      });
+
+      await verificar('Cadastro de empresa está aberto (esperado: 422 com corpo vazio)', async () => {
+        const s = await status('/auth/registrar', { method: 'POST', headers: json, body: '{}' });
+        if (s === 422) return true;
+        if (s === 404) return 'rota /auth/registrar não existe: confira o routes/auth.py';
+        return 'a API respondeu ' + s;
+      });
+
+      for (const caminho of ['/usuarios', '/empresas', '/setores', '/painel/1']) {
+        await verificar(`${caminho} sem login está bloqueado (esperado: 401)`, async () => {
+          const s = await status(caminho);
+          if (s === 401) return true;
+          if (s === 200) return 'AINDA ABERTO: qualquer pessoa vê os dados. Confira o main.py';
+          return 'a API respondeu ' + s;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

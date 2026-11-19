@@ -130,7 +130,7 @@ def criar(db):
 
     db.commit()
     print("Pronto! Empresa de exemplo criada: Facção Exemplo")
-    print("Abra o Painel e escolha essa empresa na lista do cabeçalho.")
+    print("Entre no sistema com:  marina@exemplo.klyvolt.com  /  senha: exemplo123  (administradora)")
     print("Para apagar tudo depois: python dados_exemplo.py remover")
 
 

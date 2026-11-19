@@ -41,8 +41,8 @@
 }
 .kpi:hover {
   transform: translateY(-3px);
-  border-color: #f8c8dc;
-  box-shadow: 0 0 0 1px rgba(248, 200, 220, 0.9), 0 14px 36px rgba(244, 143, 184, 0.40);
+  border-color: var(--hover-borda, #f8c8dc);
+  box-shadow: 0 0 0 1px var(--hover-anel, rgba(248, 200, 220, 0.9)), 0 14px 36px var(--hover-brilho, rgba(244, 143, 184, 0.40));
 }
 .kpi-rotulo {
   font-size: 14px;
@@ -183,8 +183,8 @@ a.botao {
 }
 .pessoa:hover {
   transform: translateY(-3px);
-  border-color: #f8c8dc;
-  box-shadow: 0 0 0 1px rgba(248, 200, 220, 0.9), 0 14px 36px rgba(244, 143, 184, 0.40);
+  border-color: var(--hover-borda, #f8c8dc);
+  box-shadow: 0 0 0 1px var(--hover-anel, rgba(248, 200, 220, 0.9)), 0 14px 36px var(--hover-brilho, rgba(244, 143, 184, 0.40));
 }
 .avatar {
   flex: none;
@@ -264,6 +264,180 @@ body.amarelo {
 .amarelo .pessoa:hover {
   border-color: #ffe58a;
   box-shadow: 0 0 0 1px rgba(255, 229, 138, 0.95), 0 14px 36px rgba(245, 185, 66, 0.45);
+}
+
+/* ===== Temas por tela: lilás (Minha empresa) e menta (Monitoramento) ===== */
+body.lilas {
+  --fundo: #f8f4fe;
+  --borda: #e6dcf5;
+  --azul-bebe: #dccbf5;
+  --azul-bebe-forte: #6b3fa0;
+  --sombra: 0 8px 28px rgba(140, 100, 200, 0.14);
+  --tema-1: #dccbf5;
+  --tema-2: #c7aef0;
+  --tema-claro: #f3ebfc;
+  --tema-sombra: rgba(140, 100, 200, 0.28);
+  --hover-borda: #dccbf5;
+  --hover-anel: rgba(220, 203, 245, 0.95);
+  --hover-brilho: rgba(170, 130, 225, 0.42);
+  background-color: #f8f4fe;
+  background-image: linear-gradient(180deg, #ece0fb 0, #f8f4fe 340px);
+}
+body.menta {
+  --fundo: #f1fbf6;
+  --borda: #cfeadb;
+  --azul-bebe: #bfead3;
+  --azul-bebe-forte: #1f7a52;
+  --sombra: 0 8px 28px rgba(60, 160, 110, 0.14);
+  --tema-1: #bfead3;
+  --tema-2: #9fdcbb;
+  --tema-claro: #e6f7ee;
+  --tema-sombra: rgba(60, 160, 110, 0.28);
+  --hover-borda: #bfead3;
+  --hover-anel: rgba(191, 234, 211, 0.95);
+  --hover-brilho: rgba(100, 195, 150, 0.42);
+  background-color: #f1fbf6;
+  background-image: linear-gradient(180deg, #ddf5e8 0, #f1fbf6 340px);
+}
+.lilas .botao-principal,
+.menta .botao-principal {
+  background: linear-gradient(135deg, var(--tema-1), var(--tema-2));
+  box-shadow: 0 4px 12px var(--tema-sombra);
+}
+.lilas .botao-secundario:hover,
+.menta .botao-secundario:hover {
+  background: var(--tema-claro);
+  border-color: var(--tema-1);
+}
+.lilas .mensagem:not(.erro),
+.menta .mensagem:not(.erro) {
+  background: var(--tema-claro);
+}
+
+/* ===== Minha empresa ===== */
+.secao-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 8px 0 14px;
+}
+.secao-titulo h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.secao-titulo .titulo-acoes {
+  flex-wrap: wrap;
+}
+.dados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px 24px;
+  margin: 0;
+}
+.dados dt {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+.dados dd {
+  margin: 2px 0 0;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.estrutura {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.estrutura > .vazio {
+  grid-column: 1 / -1;
+}
+.setor-cartao {
+  padding: 20px 22px;
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  box-shadow: var(--sombra);
+  animation: surgir 0.4s ease backwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.setor-cartao:hover {
+  transform: translateY(-3px);
+  border-color: var(--hover-borda, #f8c8dc);
+  box-shadow: 0 0 0 1px var(--hover-anel, rgba(248, 200, 220, 0.9)), 0 14px 36px var(--hover-brilho, rgba(244, 143, 184, 0.40));
+}
+.setor-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.setor-topo h3 {
+  margin: 0;
+  font-size: 20px;
+}
+.setor-meta {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+.setor-total {
+  text-align: right;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+.setor-total strong {
+  display: block;
+  font-size: 18px;
+  color: var(--preto);
+}
+.maquinas {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.maquinas li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--borda);
+}
+.maquina-nome {
+  font-weight: 600;
+}
+.maquina-meta {
+  grid-column: 1;
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+.maquina-kwh {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+.maquinas .vazio {
+  display: block;
+  padding: 12px 0;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+/* ===== Monitoramento ===== */
+.selo-pendente {
+  background: #fff3c4;
+  color: #7a5a00;
+}
+.painel .barra-lista {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 @media (max-width: 820px) {

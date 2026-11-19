@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 import models
 from deps import get_db
+from seguranca import Sessao, sessao_atual
 
 router = APIRouter(
     prefix="/painel",
@@ -19,10 +20,18 @@ def _buscar(db: Session, modelo, coluna, ids):
 
 
 @router.get("/{id_empresa}")
-def painel_da_empresa(id_empresa: int, db: Session = Depends(get_db)):
+def painel_da_empresa(
+    id_empresa: int,
+    sessao: Sessao = Depends(sessao_atual),
+    db: Session = Depends(get_db)
+):
     """Junta tudo o que pertence a uma empresa, seguindo a cadeia do banco:
     empresa -> usuários -> setores -> máquinas -> sensores -> leituras
     (e máquinas -> consumos; decisões ligadas a leituras ou consumos)."""
+    # cada empresa só vê o próprio painel
+    if id_empresa != sessao.id_empresa:
+        raise HTTPException(status_code=404, detail="Empresa não encontrada")
+
     empresa = db.get(models.Empresa, id_empresa)
     if empresa is None:
         raise HTTPException(status_code=404, detail="Empresa não encontrada")
@@ -105,6 +114,54 @@ def painel_da_empresa(id_empresa: int, db: Session = Depends(get_db)):
 
     ultimas_leituras = sorted(leituras, key=lambda l: l.data_leitura, reverse=True)[:10]
 
+    # última leitura de cada sensor (usada na tela Monitoramento)
+    ultima_do_sensor = {}
+    for leitura in sorted(leituras, key=lambda l: l.data_leitura, reverse=True):
+        ultima_do_sensor.setdefault(leitura.id_sensor, leitura)
+
+    lista_sensores = []
+    for s in sensores:
+        ultima = ultima_do_sensor.get(s.id_sensor)
+        lista_sensores.append({
+            "id_sensor": s.id_sensor,
+            "numero_serie": s.numero_serie,
+            "tipo_sensor": s.tipo_sensor,
+            "status": s.status,
+            "status_conexao": s.status_conexao,
+            "maquina": nome_maquina[s.id_maquina],
+            "ultima_leitura": ultima.data_leitura if ultima else None,
+            "ultimo_valor_kwh": float(ultima.valor_medido_kwh) if ultima else None,
+        })
+
+    # estrutura da empresa: setores com suas máquinas (tela Minha empresa)
+    nome_usuario = {u.id_usuario: u.nome_usuario for u in usuarios}
+    sensores_por_maquina = {}
+    for s in sensores:
+        sensores_por_maquina[s.id_maquina] = sensores_por_maquina.get(s.id_maquina, 0) + 1
+
+    estrutura = [
+        {
+            "id_setor": s.id_setor,
+            "nome": s.nome_setor,
+            "divisao": s.divisao_setor,
+            "responsavel": nome_usuario.get(s.id_usuario_responsavel),
+            "consumo_kwh": round(kwh_setor[s.id_setor], 2),
+            "maquinas": [
+                {
+                    "id_maquina": m.id_maquina,
+                    "nome": m.nome_maquina,
+                    "numero_serie": m.numero_serie,
+                    "potencia_nominal": float(m.potencia_nominal) if m.potencia_nominal is not None else None,
+                    "sensores": sensores_por_maquina.get(m.id_maquina, 0),
+                    "consumo_kwh": round(kwh_maquina.get(m.id_maquina, 0.0), 2),
+                }
+                for m in maquinas
+                if m.id_setor == s.id_setor
+            ],
+        }
+        for s in sorted(setores, key=lambda x: x.nome_setor)
+    ]
+
     return {
         "empresa": {
             "id_empresa": empresa.id_empresa,
@@ -125,6 +182,7 @@ def painel_da_empresa(id_empresa: int, db: Session = Depends(get_db)):
         },
         "consumo_por_maquina": consumo_por_maquina,
         "consumo_por_setor": consumo_por_setor,
+        "estrutura": estrutura,
         "usuarios": [
             {
                 "id_usuario": u.id_usuario,
@@ -135,17 +193,7 @@ def painel_da_empresa(id_empresa: int, db: Session = Depends(get_db)):
             }
             for u in usuarios
         ],
-        "sensores": [
-            {
-                "id_sensor": s.id_sensor,
-                "numero_serie": s.numero_serie,
-                "tipo_sensor": s.tipo_sensor,
-                "status": s.status,
-                "status_conexao": s.status_conexao,
-                "maquina": nome_maquina[s.id_maquina],
-            }
-            for s in sensores
-        ],
+        "sensores": lista_sensores,
         "ultimas_leituras": [
             {
                 "id_leitura": l.id_leitura,

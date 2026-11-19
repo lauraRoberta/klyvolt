@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar empresa | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/inicio.css">
+  <link rel="stylesheet" href="../static/acesso.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/cadastro.js" defer></script>
+</head>
+<body class="inicio escuro" data-publica>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="index.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="cartao acesso acesso-largo" aria-labelledby="titulo-cadastro">
+      <h1 id="titulo-cadastro">Cadastrar empresa</h1>
+      <p class="intro-acesso">Crie a conta da sua empresa. Quem se cadastra aqui vira o administrador e já entra no sistema.</p>
+
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-cadastro" method="post" novalidate onsubmit="return false">
+        <div class="campos">
+          <h2 class="grupo-titulo">Dados da empresa</h2>
+          <div class="campo">
+            <label for="f-empresa-nome">Nome da empresa</label>
+            <input type="text" id="f-empresa-nome" name="empresa_nome" required maxlength="100" placeholder="Ex.: Facção Costura Fina">
+          </div>
+          <div class="campo">
+            <label for="f-cnpj">CNPJ</label>
+            <input type="text" id="f-cnpj" name="cnpj" required maxlength="18" inputmode="numeric" placeholder="00.000.000/0000-00">
+          </div>
+          <div class="campo">
+            <label for="f-empresa-email">E-mail da empresa</label>
+            <input type="email" id="f-empresa-email" name="empresa_email" required maxlength="100" placeholder="contato@empresa.com">
+          </div>
+          <div class="campo">
+            <label for="f-telefone">Telefone</label>
+            <input type="tel" id="f-telefone" name="telefone" required maxlength="20" inputmode="tel" placeholder="(00) 00000-0000">
+          </div>
+
+          <h2 class="grupo-titulo">Administrador</h2>
+          <div class="campo">
+            <label for="f-admin-nome">Seu nome</label>
+            <input type="text" id="f-admin-nome" name="admin_nome" required maxlength="100" placeholder="Nome completo">
+          </div>
+          <div class="campo">
+            <label for="f-admin-email">Seu e-mail (usado para entrar)</label>
+            <input type="email" id="f-admin-email" name="admin_email" required maxlength="100" autocomplete="username" placeholder="voce@empresa.com">
+          </div>
+          <div class="campo">
+            <label for="f-senha">Senha</label>
+            <input type="password" id="f-senha" name="senha" required minlength="6" maxlength="72" autocomplete="new-password" placeholder="Mín. 6, com letras e números">
+            <label class="mostrar-senha" for="f-mostrar"><input type="checkbox" id="f-mostrar"> Mostrar senha</label>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-cadastrar" class="botao botao-principal" type="submit">Cadastrar e entrar</button>
+        </div>
+      </form>
+      <p class="nota-acesso">Já tem conta? <a href="login.html">Entrar</a>.</p>
+    </section>
+  </main>
+</body>
+</html>

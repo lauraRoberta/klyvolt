@@ -6,7 +6,7 @@ import models
 import schemas
 from deps import get_db
 from schemas_update import EmpresaUpdate
-from seguranca import gerar_hash_senha
+from seguranca import Sessao, exigir_funcao, gerar_hash_senha, sessao_atual
 
 router = APIRouter(
     prefix="/empresas",
@@ -14,80 +14,54 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "",
-    response_model=schemas.EmpresaResponse
-)
-def criar_empresa(
-    empresa: schemas.EmpresaCreate,
-    db: Session = Depends(get_db)
-):
-    nova_empresa = models.Empresa(
-        cnpj=empresa.cnpj,
-        nome_empresa=empresa.nome_empresa,
-        email_empresa=empresa.email_empresa,
-        # a senha nunca é guardada em texto puro
-        senha_empresa=gerar_hash_senha(empresa.senha_empresa),
-        telefone_empresa=empresa.telefone_empresa
+# O cadastro de empresa agora é público e fica em POST /auth/registrar
+# (cria a empresa e o primeiro administrador). Aqui ele fica fechado.
+@router.post("")
+def criar_empresa():
+    raise HTTPException(
+        status_code=403,
+        detail="Novas empresas são cadastradas na tela pública (Cadastrar empresa)."
     )
 
-    db.add(nova_empresa)
 
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(
-            status_code=409,
-            detail="CNPJ ou e-mail já cadastrado"
-        )
-
-    db.refresh(nova_empresa)
-
-    return nova_empresa
-
-
-@router.get(
-    "",
-    response_model=list[schemas.EmpresaResponse]
-)
+@router.get("", response_model=list[schemas.EmpresaResponse])
 def listar_empresas(
+    sessao: Sessao = Depends(sessao_atual),
     db: Session = Depends(get_db)
 ):
-    return db.query(models.Empresa).all()
+    # cada empresa enxerga só a própria
+    empresa = db.get(models.Empresa, sessao.id_empresa)
+    return [empresa] if empresa is not None else []
 
 
-# ===== Empresa: GET por ID e PUT =====
-# Cole no FIM do seu routers/empresa.py, depois das rotas que você já tem.
-# Não mexe no POST nem no GET da lista. Imports que ainda não existirem no arquivo:
-#   from fastapi import Depends, HTTPException
-#   from sqlalchemy.exc import IntegrityError
-#   from sqlalchemy.orm import Session
-#   import models, schemas
-#   from database import get_db  # o mesmo get_db que você já usa
-#   from schemas_update import EmpresaUpdate
-#   # e a sua função de hash (a mesma do POST), com o nome hash_senha ou ajuste abaixo
-# O caminho "/{id_empresa}" é relativo ao prefix do seu router.
-
-def buscar_empresa_ou_404(db: Session, id_empresa: int) -> models.Empresa:
+def buscar_empresa_ou_404(db: Session, id_empresa: int, sessao: Sessao) -> models.Empresa:
     obj = db.get(models.Empresa, id_empresa)
-    if obj is None:
+    if obj is None or obj.id_empresa != sessao.id_empresa:
         raise HTTPException(status_code=404, detail="Empresa não encontrado(a)")
     return obj
 
 
 @router.get("/{id_empresa}", response_model=schemas.EmpresaResponse)
-def obter_empresa(id_empresa: int, db: Session = Depends(get_db)):
-    return buscar_empresa_ou_404(db, id_empresa)
+def obter_empresa(
+    id_empresa: int,
+    sessao: Sessao = Depends(sessao_atual),
+    db: Session = Depends(get_db)
+):
+    return buscar_empresa_ou_404(db, id_empresa, sessao)
 
 
 @router.put("/{id_empresa}", response_model=schemas.EmpresaResponse)
-def atualizar_empresa(id_empresa: int, dados: EmpresaUpdate, db: Session = Depends(get_db)):
-    obj = buscar_empresa_ou_404(db, id_empresa)
+def atualizar_empresa(
+    id_empresa: int,
+    dados: EmpresaUpdate,
+    sessao: Sessao = Depends(exigir_funcao("Administrador")),
+    db: Session = Depends(get_db)
+):
+    obj = buscar_empresa_ou_404(db, id_empresa, sessao)
     valores = dados.model_dump()
     senha = valores.pop("senha_empresa", None)
     if senha:  # só troca a senha se ela vier preenchida
-        valores["senha_empresa"] = gerar_hash_senha(senha)  # use a MESMA função de hash do seu POST
+        valores["senha_empresa"] = gerar_hash_senha(senha)
     for campo, valor in valores.items():
         setattr(obj, campo, valor)
     try:

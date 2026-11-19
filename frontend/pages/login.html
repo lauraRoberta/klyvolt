@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar | Klyvolt</title>
+  <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/inicio.css">
+  <link rel="stylesheet" href="../static/acesso.css">
+  <script src="../js/api.js" defer></script>
+  <script src="../js/nav.js" defer></script>
+  <script src="../js/login.js" defer></script>
+</head>
+<body class="inicio escuro" data-publica>
+  <header class="cabecalho">
+    <div class="container">
+      <a class="marca" href="index.html">
+        <img class="logo" src="../static/logo-klyvolt.svg" alt="" width="44" height="44">
+        <span>Klyvolt</span>
+      </a>
+      <span class="subtitulo">Gestão de consumo elétrico</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="cartao acesso" aria-labelledby="titulo-login">
+      <h1 id="titulo-login">Entrar</h1>
+      <p class="intro-acesso">Acesse o sistema com o e-mail e a senha da sua conta.</p>
+
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+      <form id="form-login" method="post" novalidate onsubmit="return false">
+        <div class="campos campos-uma">
+          <div class="campo">
+            <label for="f-email">E-mail</label>
+            <input type="email" id="f-email" name="email" required maxlength="100" autocomplete="username" placeholder="voce@empresa.com">
+          </div>
+          <div class="campo">
+            <label for="f-senha">Senha</label>
+            <input type="password" id="f-senha" name="senha" required maxlength="72" autocomplete="current-password">
+            <label class="mostrar-senha" for="f-mostrar"><input type="checkbox" id="f-mostrar"> Mostrar senha</label>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-entrar" class="botao botao-principal" type="submit">Entrar</button>
+        </div>
+      </form>
+      <p class="nota-acesso">Ainda não tem conta? <a href="cadastro.html">Cadastre sua empresa</a>.</p>
+    </section>
+  </main>
+</body>
+</html>

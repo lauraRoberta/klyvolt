@@ -1,0 +1,54 @@
+/* acesso.css - telas de login e cadastro. Carregar depois de empresa.css e inicio.css. */
+
+.acesso {
+  max-width: 460px;
+  margin: 40px auto 24px;
+  padding: 28px 28px 24px;
+}
+.acesso-largo {
+  max-width: 760px;
+}
+.acesso:hover {
+  transform: none;
+}
+.acesso h1 {
+  margin: 0 0 4px;
+  font-size: 34px;
+  line-height: 1.15;
+}
+.acesso .intro-acesso {
+  margin: 0 0 20px;
+  color: var(--texto-suave);
+}
+.acesso .mensagem {
+  margin: 0 0 20px;
+}
+.campos-uma {
+  grid-template-columns: 1fr;
+}
+.grupo-titulo {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  font-size: 20px;
+}
+.mostrar-senha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+  cursor: pointer;
+}
+.mostrar-senha input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+.nota-acesso {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+.nota-acesso a {
+  color: var(--azul-bebe-forte);
+  font-weight: 600;
+}

@@ -1,10 +1,44 @@
-// js/api.js - funções comuns de acesso à API e de aviso na tela.
-// Usado por crud.js e pelas telas específicas (sensor.js, tomada_desicao.js...).
+// js/api.js - acesso à API, sessão (login) e avisos na tela.
 // Carregue antes dos outros scripts (com defer, na ordem: api.js, nav.js, crud.js).
+// Páginas públicas (início, como funciona, login, cadastro) usam <body data-publica>.
+// Todas as outras exigem login: sem sessão, mandam para login.html.
+
+const KLYVOLT_VERSAO = 'login-1';
 
 // Endereço do backend (uvicorn main:app --reload). Se mudar a porta, mude aqui.
 const API_URL = 'http://127.0.0.1:8000';
 
+// ---------- sessão ----------
+const CHAVE_TOKEN = 'klyvolt_token';
+const CHAVE_SESSAO = 'klyvolt_sessao';
+
+function obterToken() {
+  return localStorage.getItem(CHAVE_TOKEN);
+}
+
+// { id_usuario, nome, funcao, empresa: { id_empresa, nome_empresa, ... } } ou null
+function sessaoAtual() {
+  try { return JSON.parse(localStorage.getItem(CHAVE_SESSAO)); }
+  catch (erro) { return null; }
+}
+
+function salvarSessao(token, sessao) {
+  localStorage.setItem(CHAVE_TOKEN, token);
+  localStorage.setItem(CHAVE_SESSAO, JSON.stringify(sessao));
+}
+
+function sair() {
+  localStorage.removeItem(CHAVE_TOKEN);
+  localStorage.removeItem(CHAVE_SESSAO);
+  window.location.replace('login.html');
+}
+
+// Sem login, volta para o login.
+if (!document.body.hasAttribute('data-publica') && !obterToken()) {
+  window.location.replace('login.html');
+}
+
+// ---------- requisições ----------
 // O FastAPI devolve erros como {"detail": "texto"} (HTTPException)
 // ou {"detail": [{"loc": [...], "msg": "..."}]} (validação do Pydantic, status 422).
 function mensagemDeErro(dados, status) {
@@ -25,9 +59,12 @@ function mensagemDeErro(dados, status) {
 // requisicao('/maquinas', 'POST', {...})       -> POST com JSON
 // requisicao('/maquinas/3', 'PUT', {...})      -> PUT
 // requisicao('/maquinas/3', 'DELETE')          -> DELETE
-// Devolve o JSON da resposta (ou null se vier vazia) e lança Error com texto legível se falhar.
+// Manda o token do login em toda requisição. Se a API responder 401 (sessão vencida),
+// encerra a sessão e volta para o login. Lança Error com texto legível se falhar.
 async function requisicao(rota, metodo = 'GET', corpo = null) {
   const opcoes = { method: metodo, headers: {} };
+  const token = obterToken();
+  if (token) opcoes.headers['Authorization'] = `Bearer ${token}`;
   if (corpo !== null && corpo !== undefined) {
     opcoes.headers['Content-Type'] = 'application/json';
     opcoes.body = JSON.stringify(corpo);
@@ -43,6 +80,11 @@ async function requisicao(rota, metodo = 'GET', corpo = null) {
   let dados = null;
   try { dados = await resposta.json(); } catch (erro) { /* resposta sem corpo (ex.: 204) */ }
 
+  // 401 no login = senha errada (mostra a mensagem); nas demais rotas = sessão vencida
+  if (resposta.status === 401 && token && rota !== '/auth/login') {
+    sair();
+    throw new Error('Sessão expirada. Entre novamente.');
+  }
   if (!resposta.ok) throw new Error(mensagemDeErro(dados, resposta.status));
   return dados;
 }

@@ -1,21 +1,23 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 
 from fastapi.middleware.cors import CORSMiddleware
 
 import models
 from database import engine
 from routes import (
-    painel,
+    auth,
     consumo,
     decisao,
     empresa,
     leitura,
     maquina,
+    painel,
     sensor,
     setor,
     tomada_decisao,
     usuario,
 )
+from seguranca import sessao_atual
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -31,9 +33,8 @@ app.add_middleware(
         "http://localhost:5500",
     ],
     allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization"],
 )
-
 
 
 @app.get("/")
@@ -41,13 +42,20 @@ def inicio():
     return {"mensagem": "API funcionando"}
 
 
+# Públicas: login e cadastro de empresa (POST /auth/registrar).
+app.include_router(auth.router)
+
+# empresa e painel conferem o login dentro do próprio arquivo.
 app.include_router(empresa.router)
-app.include_router(usuario.router)
-app.include_router(setor.router)
-app.include_router(maquina.router)
-app.include_router(sensor.router)
-app.include_router(consumo.router)
-app.include_router(leitura.router)
-app.include_router(decisao.router)
-app.include_router(tomada_decisao.router)
 app.include_router(painel.router)
+
+# Todo o resto só funciona com login.
+protegido = [Depends(sessao_atual)]
+app.include_router(usuario.router, dependencies=protegido)
+app.include_router(setor.router, dependencies=protegido)
+app.include_router(maquina.router, dependencies=protegido)
+app.include_router(sensor.router, dependencies=protegido)
+app.include_router(consumo.router, dependencies=protegido)
+app.include_router(leitura.router, dependencies=protegido)
+app.include_router(decisao.router, dependencies=protegido)
+app.include_router(tomada_decisao.router, dependencies=protegido)
