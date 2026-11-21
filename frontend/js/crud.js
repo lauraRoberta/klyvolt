@@ -1,21 +1,24 @@
-// js/crud.js - código comum das telas de cadastro (usuário, setor, máquina, sensor...).
+// js/crud.js - código comum das telas de cadastro (usuário, setor, máquina, sensor...). (perfis-1)
 // O HTML da página diz o que existe nela:
 //   <main data-rota="/setores" data-chave="id_setor" data-nome="setor"
 //         data-editar="sim|nao" data-excluir="sim|nao">
 //   campo do formulário:  data-campo="nome_do_campo_na_api"
 //   coluna da tabela:     <th data-campo="..." data-formato="data|datahora|numero">
 //   select ligado a outra tabela: data-origem="/rota" data-valor="chave" data-texto="{nome} (#{id})"
-// Depende de api.js (requisicao, mostrarMensagem, formatarDataHora), carregado antes com defer.
+// Depende de api.js (requisicao, mostrarMensagem, formatarDataHora, podeAlterar), carregado antes com defer.
 // Regras específicas de uma tela (opcional), em outro arquivo carregado antes deste:
 //   window.crudHooks = { validar(corpo, editando), transformarRegistro(registro, ctx) }
+// Quem não tem função para alterar a tela (ex.: visualizador) só consulta: o formulário e os
+// botões Editar/Excluir somem. Quem realmente barra é a API.
 
 (async function () {
   const principal = document.querySelector('main[data-rota]');
   const ROTA = principal.dataset.rota;
   const CHAVE = principal.dataset.chave;
   const NOME = principal.dataset.nome;
-  const PODE_EDITAR = principal.dataset.editar === 'sim';
-  const PODE_EXCLUIR = principal.dataset.excluir === 'sim';
+  const PODE_ALTERAR = typeof podeAlterar === 'function' ? podeAlterar(ROTA) : true;
+  const PODE_EDITAR = PODE_ALTERAR && principal.dataset.editar === 'sim';
+  const PODE_EXCLUIR = PODE_ALTERAR && principal.dataset.excluir === 'sim';
   const hooks = window.crudHooks || {};
 
   const formulario = document.querySelector('#form-registro');
@@ -30,6 +33,13 @@
     campo: th.dataset.campo,
     formato: th.dataset.formato
   }));
+
+  // Só consulta: esconde o painel do formulário
+  if (!PODE_ALTERAR) {
+    const painelFormulario = formulario.closest('section');
+    if (painelFormulario) painelFormulario.hidden = true;
+    mostrarMensagem(mensagemEl, 'Você pode consultar estes dados, mas não alterá-los.');
+  }
 
   // Id do registro em edição; null = modo de cadastro.
   let idEdicao = null;
@@ -227,6 +237,7 @@
   // ---------- eventos ----------
   formulario.addEventListener('submit', async evento => {
     evento.preventDefault();
+    if (!PODE_ALTERAR) return;
     esconderMensagem(mensagemEl);
     const invalido = primeiroInvalido();
     if (invalido) {

@@ -5,7 +5,7 @@ from typing import Optional
 
 import bcrypt
 import jwt
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
@@ -42,6 +42,7 @@ class Sessao:
     id_empresa: int
     funcao: str
     nome: str
+    email: str
 
 
 def criar_token(sessao: Sessao) -> str:
@@ -78,7 +79,7 @@ def sessao_atual(
         empresa = db.get(models.Empresa, id_empresa)
         if empresa is None:
             raise erro
-        return Sessao(None, empresa.id_empresa, "Administrador", empresa.nome_empresa)
+        return Sessao(None, empresa.id_empresa, "Administrador", empresa.nome_empresa, empresa.email_empresa)
 
     try:
         id_usuario = int(sub)
@@ -87,7 +88,7 @@ def sessao_atual(
     usuario = db.get(models.Usuario, id_usuario)
     if usuario is None or usuario.id_empresa != id_empresa:
         raise erro
-    return Sessao(usuario.id_usuario, usuario.id_empresa, usuario.tipo_usuario, usuario.nome_usuario)
+    return Sessao(usuario.id_usuario, usuario.id_empresa, usuario.tipo_usuario, usuario.nome_usuario, usuario.email_usuario)
 
 
 def exigir_funcao(*funcoes: str):
@@ -95,5 +96,15 @@ def exigir_funcao(*funcoes: str):
     def verificar(sessao: Sessao = Depends(sessao_atual)) -> Sessao:
         if sessao.funcao not in funcoes:
             raise HTTPException(status_code=403, detail="Você não tem permissão para esta ação.")
+        return sessao
+    return verificar
+
+
+def permissao_por_metodo(*funcoes_que_alteram: str):
+    """Dependência para um conjunto de rotas: qualquer pessoa logada pode CONSULTAR (GET);
+    só as funções informadas podem CRIAR, EDITAR ou APAGAR (POST, PUT, DELETE)."""
+    def verificar(request: Request, sessao: Sessao = Depends(sessao_atual)) -> Sessao:
+        if request.method not in ("GET", "HEAD", "OPTIONS") and sessao.funcao not in funcoes_que_alteram:
+            raise HTTPException(status_code=403, detail="Você não tem permissão para alterar estes dados.")
         return sessao
     return verificar

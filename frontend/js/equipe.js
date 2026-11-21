@@ -10,9 +10,9 @@
 
   // [nome da função, classe de cor, o que essa função faz]
   const FUNCOES = [
-    ['Administrador', 'administrador', 'Cuida da configuração da empresa e da equipe: cadastra setores, máquinas e usuários.'],
-    ['Operador', 'operador', 'Acompanha o consumo no dia a dia e registra leituras e decisões.'],
-    ['Visualizador', 'visualizador', 'Consulta o painel e os cadastros, sem alterar nada.']
+    ['Administrador', 'administrador', 'Cuida da configuração da empresa e da equipe: cadastra usuários, setores, máquinas e sensores.'],
+    ['Operador', 'operador', 'Registra consumos, leituras e decisões e acompanha o dia a dia.'],
+    ['Visualizador', 'visualizador', 'Só consulta: vê o painel e os cadastros, sem alterar nenhum dado.']
   ];
 
   function criar(tag, classe, texto) {

@@ -14,6 +14,7 @@ class LoginRequest(BaseModel):
 class SessaoResponse(BaseModel):
     id_usuario: Optional[int] = None
     nome: str
+    email: Optional[str] = None
     funcao: str
     empresa: EmpresaResponse
 

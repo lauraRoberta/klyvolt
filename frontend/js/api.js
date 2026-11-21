@@ -3,7 +3,7 @@
 // Páginas públicas (início, como funciona, login, cadastro) usam <body data-publica>.
 // Todas as outras exigem login: sem sessão, mandam para login.html.
 
-const KLYVOLT_VERSAO = 'login-1';
+const KLYVOLT_VERSAO = 'perfis-1';
 
 // Endereço do backend (uvicorn main:app --reload). Se mudar a porta, mude aqui.
 const API_URL = 'http://127.0.0.1:8000';
@@ -36,6 +36,27 @@ function sair() {
 // Sem login, volta para o login.
 if (!document.body.hasAttribute('data-publica') && !obterToken()) {
   window.location.replace('login.html');
+}
+
+// ---------- permissões ----------
+// Quem pode criar, editar e apagar em cada cadastro. Aqui só se escondem os botões:
+// quem realmente barra é a API (erro 403). Tela fora desta lista = só consulta.
+const FUNCOES_QUE_ALTERAM = {
+  '/empresas': ['Administrador'],
+  '/usuarios': ['Administrador'],
+  '/setores': ['Administrador'],
+  '/maquinas': ['Administrador'],
+  '/sensores': ['Administrador'],
+  '/decisoes': ['Administrador'],
+  '/consumos': ['Administrador', 'Operador'],
+  '/leituras': ['Administrador', 'Operador'],
+  '/tomadas-decisao': ['Administrador', 'Operador']
+};
+
+function podeAlterar(rota) {
+  const sessao = sessaoAtual();
+  const permitidas = FUNCOES_QUE_ALTERAM[rota];
+  return Boolean(sessao && permitidas && permitidas.includes(sessao.funcao));
 }
 
 // ---------- requisições ----------

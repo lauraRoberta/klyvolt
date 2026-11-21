@@ -46,6 +46,7 @@ def _dados_da_sessao(sessao: Sessao, empresa: models.Empresa) -> dict:
     return {
         "id_usuario": sessao.id_usuario,
         "nome": sessao.nome,
+        "email": sessao.email,
         "funcao": sessao.funcao,
         "empresa": schemas.EmpresaResponse.model_validate(empresa),
     }
@@ -78,7 +79,7 @@ def login(dados: LoginRequest, request: Request, db: Session = Depends(get_db)):
     )
     if usuario is not None and verificar_senha(dados.senha, usuario.senha_usuario):
         empresa = db.get(models.Empresa, usuario.id_empresa)
-        sessao = Sessao(usuario.id_usuario, usuario.id_empresa, usuario.tipo_usuario, usuario.nome_usuario)
+        sessao = Sessao(usuario.id_usuario, usuario.id_empresa, usuario.tipo_usuario, usuario.nome_usuario, usuario.email_usuario)
         _falhas.pop(chave, None)
         return _resposta_de_login(sessao, empresa)
 
@@ -89,7 +90,7 @@ def login(dados: LoginRequest, request: Request, db: Session = Depends(get_db)):
         .first()
     )
     if empresa is not None and verificar_senha(dados.senha, empresa.senha_empresa):
-        sessao = Sessao(None, empresa.id_empresa, "Administrador", empresa.nome_empresa)
+        sessao = Sessao(None, empresa.id_empresa, "Administrador", empresa.nome_empresa, empresa.email_empresa)
         _falhas.pop(chave, None)
         return _resposta_de_login(sessao, empresa)
 
@@ -143,7 +144,7 @@ def registrar_empresa(dados: RegistroEmpresa, db: Session = Depends(get_db)):
 
     db.refresh(empresa)
     db.refresh(admin)
-    sessao = Sessao(admin.id_usuario, empresa.id_empresa, admin.tipo_usuario, admin.nome_usuario)
+    sessao = Sessao(admin.id_usuario, empresa.id_empresa, admin.tipo_usuario, admin.nome_usuario, admin.email_usuario)
     return _resposta_de_login(sessao, empresa)
 
 

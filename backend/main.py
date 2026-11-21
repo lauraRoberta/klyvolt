@@ -17,7 +17,7 @@ from routes import (
     tomada_decisao,
     usuario,
 )
-from seguranca import sessao_atual
+from seguranca import permissao_por_metodo
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -49,13 +49,19 @@ app.include_router(auth.router)
 app.include_router(empresa.router)
 app.include_router(painel.router)
 
-# Todo o resto só funciona com login.
-protegido = [Depends(sessao_atual)]
-app.include_router(usuario.router, dependencies=protegido)
-app.include_router(setor.router, dependencies=protegido)
-app.include_router(maquina.router, dependencies=protegido)
-app.include_router(sensor.router, dependencies=protegido)
-app.include_router(consumo.router, dependencies=protegido)
-app.include_router(leitura.router, dependencies=protegido)
-app.include_router(decisao.router, dependencies=protegido)
-app.include_router(tomada_decisao.router, dependencies=protegido)
+# Todo o resto exige login. Qualquer pessoa logada consulta (GET);
+# quem pode criar, editar e apagar depende da função:
+#   - cadastros da estrutura (usuários, setores, máquinas, sensores, decisões): só o administrador
+#   - consumo, leituras e tomadas de decisão: administrador e operador
+#   - o visualizador só consulta
+so_administrador = [Depends(permissao_por_metodo("Administrador"))]
+administrador_e_operador = [Depends(permissao_por_metodo("Administrador", "Operador"))]
+
+app.include_router(usuario.router, dependencies=so_administrador)
+app.include_router(setor.router, dependencies=so_administrador)
+app.include_router(maquina.router, dependencies=so_administrador)
+app.include_router(sensor.router, dependencies=so_administrador)
+app.include_router(decisao.router, dependencies=so_administrador)
+app.include_router(consumo.router, dependencies=administrador_e_operador)
+app.include_router(leitura.router, dependencies=administrador_e_operador)
+app.include_router(tomada_decisao.router, dependencies=administrador_e_operador)

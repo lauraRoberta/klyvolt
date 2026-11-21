@@ -31,13 +31,14 @@
     const json = { 'Content-Type': 'application/json' };
 
     window.addEventListener('load', async () => {
-      await verificar('api.js é a versão nova (login-1)', () =>
-        (typeof KLYVOLT_VERSAO !== 'undefined' && KLYVOLT_VERSAO === 'login-1')
+      await verificar('api.js é a versão nova (perfis-1)', () =>
+        (typeof KLYVOLT_VERSAO !== 'undefined' && KLYVOLT_VERSAO === 'perfis-1')
           || 'o navegador está usando um api.js antigo: recarregue com Ctrl + Shift + R ou cole de novo o arquivo');
 
-      for (const arquivo of ['nav.js', 'login.js', 'cadastro.js']) {
+      const marcadores = { 'nav.js': 'perfis-1', 'crud.js': 'perfis-1', 'login.js': 'login-1', 'cadastro.js': 'login-1' };
+      for (const [arquivo, marca] of Object.entries(marcadores)) {
         await verificar(`js/${arquivo} é a versão nova`, async () =>
-          (await texto('../js/' + arquivo)).includes('login-1') || `o arquivo js/${arquivo} da pasta é antigo ou não existe`);
+          (await texto('../js/' + arquivo)).includes(marca) || `o arquivo js/${arquivo} da pasta é antigo ou não existe`);
       }
 
       await verificar('A API está no ar', async () => {
