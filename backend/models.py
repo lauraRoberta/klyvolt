@@ -95,12 +95,16 @@ class Leitura(Base):
 
     id_leitura = Column(Integer, primary_key=True)
     data_leitura = Column(DateTime, nullable=False, server_default=func.now())
-    valor_medido_kwh = Column(Numeric(12, 2), nullable=False)
+    valor_medido_kwh = Column(Numeric(12, 2))  # agora opcional
+    vibracoes = Column(Integer)
+    temperatura = Column(Numeric(5, 2))
+    umidade = Column(Numeric(5, 2))
+    estado_vibracao = Column(String(15))
+    media_normal = Column(Numeric(8, 2))
     observacao_leitura = Column(Text)
     id_sensor = Column(Integer, ForeignKey("sensor.id_sensor", ondelete="CASCADE"), nullable=False)
     id_usuario = Column(Integer, ForeignKey("usuario.id_usuario", ondelete="SET NULL"))
     id_consumo = Column(Integer, ForeignKey("consumo.id_consumo", ondelete="SET NULL"))
-
 
 class Decisao(Base):
     """Catálogo de tipos de decisão (ex.: desligar máquina, enviar alerta)."""
@@ -111,6 +115,12 @@ class Decisao(Base):
         Integer,
         primary_key=True,
         index=True
+    )
+
+    id_empresa = Column(
+        Integer,
+        ForeignKey("empresa.id_empresa", ondelete="CASCADE"),
+        nullable=False
     )
 
     nome_decisao = Column(String(100), nullable=False)
@@ -124,7 +134,6 @@ class Decisao(Base):
         "TomadaDecisao",
         back_populates="decisao"
     )
-
 
 class TomadaDecisao(Base):
     """Registro de uma decisão acionada pelo sistema."""

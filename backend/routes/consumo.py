@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 from deps import get_db
+from escopo import consulta_consumos, consumo_da_empresa, maquina_da_empresa
+from seguranca import Sessao, sessao_atual
 
 router = APIRouter(
     prefix="/consumos",
@@ -12,26 +14,14 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "",
-    response_model=schemas.ConsumoResponse
-)
+@router.post("", response_model=schemas.ConsumoResponse)
 def criar_consumo(
     consumo: schemas.ConsumoCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
 ):
-    # Antes de inserir, confere se a máquina informada existe
-    maquina = (
-        db.query(models.Maquina)
-        .filter(models.Maquina.id_maquina == consumo.id_maquina)
-        .first()
-    )
-
-    if maquina is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Máquina não encontrada"
-        )
+    # A máquina precisa existir e ser da empresa de quem está logado
+    maquina_da_empresa(db, consumo.id_maquina, sessao.id_empresa)
 
     novo_consumo = models.Consumo(
         data_inicio=consumo.data_inicio,
@@ -46,41 +36,38 @@ def criar_consumo(
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(
-            status_code=409,
-            detail="Já existe um consumo dessa máquina para esse período"
-        )
+        raise HTTPException(status_code=409, detail="Já existe um consumo dessa máquina para esse período")
 
     db.refresh(novo_consumo)
-
     return novo_consumo
 
 
-@router.get(
-    "",
-    response_model=list[schemas.ConsumoResponse]
-)
+@router.get("", response_model=list[schemas.ConsumoResponse])
 def listar_consumos(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
 ):
-    return db.query(models.Consumo).all()
+    return consulta_consumos(db, sessao.id_empresa).all()
 
 
-def buscar_consumo_ou_404(db: Session, id_consumo: int) -> models.Consumo:
-    obj = db.get(models.Consumo, id_consumo)
-    if obj is None:
-        raise HTTPException(status_code=404, detail="Consumo não encontrado(a)")
-    return obj
- 
- 
 @router.get("/{id_consumo}", response_model=schemas.ConsumoResponse)
-def obter_consumo(id_consumo: int, db: Session = Depends(get_db)):
-    return buscar_consumo_ou_404(db, id_consumo)
- 
- 
+def obter_consumo(
+    id_consumo: int,
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
+):
+    return consumo_da_empresa(db, id_consumo, sessao.id_empresa)
+
+
 @router.put("/{id_consumo}", response_model=schemas.ConsumoResponse)
-def atualizar_consumo(id_consumo: int, dados: schemas.ConsumoCreate, db: Session = Depends(get_db)):
-    obj = buscar_consumo_ou_404(db, id_consumo)
+def atualizar_consumo(
+    id_consumo: int,
+    dados: schemas.ConsumoCreate,
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
+):
+    obj = consumo_da_empresa(db, id_consumo, sessao.id_empresa)
+    maquina_da_empresa(db, dados.id_maquina, sessao.id_empresa)
     for campo, valor in dados.model_dump().items():
         setattr(obj, campo, valor)
     try:
@@ -90,4 +77,3 @@ def atualizar_consumo(id_consumo: int, dados: schemas.ConsumoCreate, db: Session
         raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
     db.refresh(obj)
     return obj
- 

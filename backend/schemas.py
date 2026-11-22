@@ -212,24 +212,53 @@ class ConsumoResponse(BaseModel):
 
 class LeituraCreate(BaseModel):
     data_leitura: Optional[datetime] = None  # se não vier, o banco usa o horário atual
-    valor_medido_kwh: float = Field(ge=0)
+    valor_medido_kwh: Optional[float] = Field(default=None, ge=0)
+    vibracoes: Optional[int] = Field(default=None, ge=0)
+    temperatura: Optional[float] = None
+    umidade: Optional[float] = Field(default=None, ge=0, le=100)
+    estado_vibracao: Optional[Literal["calibrando", "normal", "acima", "abaixo"]] = None
+    media_normal: Optional[float] = Field(default=None, ge=0)
     observacao_leitura: Optional[str] = None
     id_sensor: int
     id_usuario: Optional[int] = None
     id_consumo: Optional[int] = None
 
+    @model_validator(mode="after")
+    def exigir_algum_valor(self):
+        if (
+            self.valor_medido_kwh is None
+            and self.vibracoes is None
+            and self.temperatura is None
+        ):
+            raise ValueError("Informe ao menos kWh, vibrações ou temperatura")
+        return self
+
+
+class LeituraSensorCreate(BaseModel):
+    """O que o ESP32 envia em POST /leituras/sensor."""
+    id_sensor: int
+    vibracoes: int = Field(ge=0)
+    temperatura: Optional[float] = None
+    umidade: Optional[float] = Field(default=None, ge=0, le=100)
+    estado: Literal["calibrando", "normal", "acima", "abaixo"]
+    media_normal: Optional[float] = Field(default=None, ge=0)
+
 
 class LeituraResponse(BaseModel):
     id_leitura: int
     data_leitura: datetime
-    valor_medido_kwh: float
+    valor_medido_kwh: Optional[float] = None
+    vibracoes: Optional[int] = None
+    temperatura: Optional[float] = None
+    umidade: Optional[float] = None
+    estado_vibracao: Optional[str] = None
+    media_normal: Optional[float] = None
     observacao_leitura: Optional[str] = None
     id_sensor: int
     id_usuario: Optional[int] = None
     id_consumo: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
-
 
 # ---------- Decisao ----------
 

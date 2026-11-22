@@ -3,48 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Equipe | Klyvolt</title>
+  <title>Nossa equipe | Klyvolt</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../static/empresa.css">
   <link rel="stylesheet" href="../static/inicio.css">
   <style>
-    /* Campos vazios mostram um texto-guia em cinza; ao escrever no HTML, o guia some sozinho. */
-    .editavel:empty::before { content: attr(data-vazio); font-style: italic; opacity: 0.55; }
+    /* ===== Abertura ===== */
+    .topo-equipe { padding: 40px 0 8px; }
+    .topo-equipe h1 { margin: 0 0 8px; font-size: clamp(36px, 5.4vw, 60px); line-height: 1.05; }
+    .lema { margin: 0; font-family: var(--fonte-titulo); font-size: clamp(20px, 2.6vw, 28px); color: var(--rosa-bebe); }
 
-    .topo-equipe h1 { margin: 40px 0 12px; font-size: clamp(34px, 5vw, 52px); line-height: 1.1; }
-    .intro-equipe { max-width: 62ch; margin: 0 0 28px; font-size: 18px; color: #b9cadb; }
+    /* ===== História ===== */
+    .historia {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .historia .cartao { padding: 22px; }
+    .historia h2 { margin: 0 0 8px; font-size: 24px; line-height: 1.2; }
+    .historia p { margin: 0; font-size: 16px; color: var(--texto-suave); }
+    .historia .cartao::before {
+      content: "";
+      display: block;
+      width: 36px;
+      height: 4px;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      background: var(--azul-bebe);
+    }
+    .historia .cartao-rosado::before { background: var(--rosa-bebe); }
 
-    /* Foto da equipe: coloque o arquivo em static/equipe.jpg (ou troque o endereço abaixo) */
+    /* ===== Fecho (fundo escuro, sem cartão) ===== */
+    .fecho { padding: 48px 0 8px; text-align: center; }
+    .fecho h2 { max-width: 22ch; margin: 0 auto; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; }
+    .fecho h2 span { color: var(--rosa-bebe); }
+
+    /* ===== Equipe do projeto ===== */
+    .equipe-titulo { padding-top: 48px; }
+    .equipe-titulo h2 { margin: 0 0 20px; font-size: 36px; }
+
+    /* Foto da equipe: salve como frontend/static/equipe/equipe.jpg (ou .png) */
     .foto-equipe {
+      position: relative;
+      display: grid;
+      place-items: center;
       min-height: 360px;
-      background-color: #14283b;
-      background-image: url('../static/equipe.jpg');
-      background-size: cover;
-      background-position: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #14283b, #183a56);
+    }
+    .foto-aviso { color: #b9cadb; font-size: 15px; }
+    .foto-equipe img, .membro-foto img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .membros {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
       gap: 20px;
-      margin-top: 28px;
+      margin-top: 24px;
     }
-    .membro { display: flex; flex-direction: column; gap: 6px; padding: 18px; }
+    .membro { display: flex; flex-direction: column; gap: 4px; padding: 16px; }
     .membro-foto {
+      position: relative;
+      display: grid;
+      place-items: center;
       width: 100%;
       aspect-ratio: 1 / 1;
-      max-height: 260px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
       border-radius: 14px;
-      background-color: #e8f0f6;
-      background-size: cover;
-      background-position: center;
+      font-family: var(--fonte-titulo);
+      font-size: 46px;
+      font-weight: 700;
     }
-    .membro h2 { margin: 0; font-size: 22px; line-height: 1.2; }
+    .membro h3 { margin: 0; font-size: 20px; line-height: 1.2; }
     .membro-funcao { margin: 0; font-weight: 600; color: var(--azul-bebe-forte); }
-    .membro-texto { margin: 0; color: var(--texto-suave); }
+    .selo-lider {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 9px;
+      border-radius: 999px;
+      background: #fde4ee;
+      color: #8f2a55;
+      font-family: var(--fonte-texto);
+      font-size: 12px;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+    /* cores de quem ainda não tem foto (as iniciais) */
+    .membro:nth-child(5n+1) .membro-foto { background: #fde4ee; color: #8f2a55; }
+    .membro:nth-child(5n+2) .membro-foto { background: #e1f1fb; color: #1b5f8a; }
+    .membro:nth-child(5n+3) .membro-foto { background: #fff3c4; color: #7a5a00; }
+    .membro:nth-child(5n+4) .membro-foto { background: #ece0fb; color: #5b3a8c; }
+    .membro:nth-child(5n+5) .membro-foto { background: #e6f7ee; color: #1f7a52; }
+
   </style>
   <script src="../js/api.js" defer></script>
   <script src="../js/nav.js" defer></script>
@@ -61,39 +120,107 @@
   </header>
 
   <main class="container">
+
+    <!-- Abertura -->
     <div class="topo-equipe">
       <h1>Nossa equipe</h1>
-      <!-- ESCREVA AQUI a apresentação da equipe, entre <p ...> e </p>, sem espaços no meio -->
-      <p class="intro-equipe editavel" data-vazio="Escreva aqui uma apresentação da equipe."></p>
+      <p class="lema">Energia que vira decisão.</p>
     </div>
 
-    <!-- FOTO DA EQUIPE: salve a imagem como frontend/static/equipe.jpg -->
-    <div class="foto-equipe cartao" role="img" aria-label="Foto da equipe"></div>
-
-    <section class="membros" aria-label="Integrantes da equipe">
-      <!-- Para cada pessoa há um bloco <article>. Copie e cole um bloco para acrescentar mais gente.
-           A foto de cada pessoa é o arquivo indicado em url(...): static/membro-1.jpg, membro-2.jpg... -->
-
-      <article class="cartao membro">
-        <div class="membro-foto" role="img" aria-label="Foto do integrante" style="background-image: url('../static/membro-1.jpg')"></div>
-        <h2 class="editavel" data-vazio="Nome"></h2>
-        <p class="membro-funcao editavel" data-vazio="Função"></p>
-        <p class="membro-texto editavel" data-vazio="Escreva aqui o que esta pessoa faz no Klyvolt."></p>
+    <!-- História -->
+    <section class="historia" aria-label="A história do Klyvolt">
+      <article class="cartao">
+        <h2>O problema que ninguém vê</h2>
+        <p>Uma máquina gasta mais do que deveria e ninguém percebe. Só a conta alta mostra o problema.</p>
       </article>
-
-      <article class="cartao membro">
-        <div class="membro-foto" role="img" aria-label="Foto do integrante" style="background-image: url('../static/membro-2.jpg')"></div>
-        <h2 class="editavel" data-vazio="Nome"></h2>
-        <p class="membro-funcao editavel" data-vazio="Função"></p>
-        <p class="membro-texto editavel" data-vazio="Escreva aqui o que esta pessoa faz no Klyvolt."></p>
+      <article class="cartao cartao-rosado">
+        <h2>Por que criamos o Klyvolt</h2>
+        <p>Mães de integrantes do grupo trabalham em confecções e sofrem com o gasto de energia. Dali nasceu o projeto.</p>
       </article>
-
-      <article class="cartao membro">
-        <div class="membro-foto" role="img" aria-label="Foto do integrante" style="background-image: url('../static/membro-3.jpg')"></div>
-        <h2 class="editavel" data-vazio="Nome"></h2>
-        <p class="membro-funcao editavel" data-vazio="Função"></p>
-        <p class="membro-texto editavel" data-vazio="Escreva aqui o que esta pessoa faz no Klyvolt."></p>
+      <article class="cartao">
+        <h2>Nossa solução</h2>
+        <p>Transformar o consumo de cada máquina em informação, para decidir a tempo.</p>
       </article>
+    </section>
+
+    <!-- Fecho -->
+    <section class="fecho" aria-labelledby="titulo-fecho">
+      <h2 id="titulo-fecho">Enxergar o invisível é o <span>primeiro passo</span> para economizar</h2>
+    </section>
+
+    <!-- Equipe do projeto -->
+    <section class="equipe-titulo" aria-labelledby="titulo-integrantes">
+      <h2 id="titulo-integrantes">Equipe do projeto</h2>
+      <!-- FOTO DA EQUIPE: salve como frontend/static/equipe/equipe.jpg (se for png, o site tenta o .png sozinho) -->
+      <div class="foto-equipe cartao" role="img" aria-label="Foto da equipe">
+        <span class="foto-aviso">Foto da equipe em breve</span>
+        <img src="../static/equipe/equipe.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}">
+      </div>
+
+      <!-- FOTOS DAS PESSOAS: salve como frontend/static/equipe/<nome>.jpg  (brena, gabriel, gabrielle, gian,
+           kamila, laura, lucas, lunna, manuel, sarah). Enquanto não houver foto, aparecem as iniciais.
+           Para mudar nome ou função, edite o texto do bloco. -->
+      <div class="membros">
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">BS</span><img src="../static/equipe/brena.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Brena Sofia Melo da Silva</h3>
+          <p class="membro-funcao">Front-end Design do projeto</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">GS</span><img src="../static/equipe/gabriel.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Gabriel Francelino da Silva</h3>
+          <p class="membro-funcao">Sensor e maquete</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">GM</span><img src="../static/equipe/gabrielle.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Gabrielle Frazão Mazetto</h3>
+          <p class="membro-funcao">Mídia</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">GC</span><img src="../static/equipe/gian.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Gian Coelho</h3>
+          <p class="membro-funcao">Maquete</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">KL</span><img src="../static/equipe/kamila.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Kamila Candil Ferreira de Lima</h3>
+          <p class="membro-funcao">Back-end</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">LM</span><img src="../static/equipe/laura.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Laura Roberta Kuniyoshi de Moraes</h3>
+          <p class="membro-funcao">Banco de dados</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">LS</span><img src="../static/equipe/lucas.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Lucas Shimoe</h3>
+          <p class="membro-funcao">Maquete</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">LB</span><img src="../static/equipe/lunna.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Lunna Pelegrine Dambros Andrade Brito</h3>
+          <p class="membro-funcao">Cientista de dados</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">ML</span><img src="../static/equipe/manuel.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Manuel da Eira Lacerda <span class="selo-lider">Líder</span></h3>
+          <p class="membro-funcao">Front-end, líder e Design do projeto</p>
+        </article>
+
+        <article class="cartao membro">
+          <div class="membro-foto"><span aria-hidden="true">SC</span><img src="../static/equipe/sarah.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}"></div>
+          <h3>Sarah Gyovanna da Silva Cirilo</h3>
+          <p class="membro-funcao">Front-end Design do projeto</p>
+        </article>
+      </div>
     </section>
 
     <footer class="rodape">Klyvolt · Nossa equipe</footer>

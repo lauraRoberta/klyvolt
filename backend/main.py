@@ -9,6 +9,7 @@ from routes import (
     consumo,
     decisao,
     empresa,
+    ingestao,
     leitura,
     maquina,
     painel,
@@ -44,6 +45,10 @@ def inicio():
 
 # Públicas: login e cadastro de empresa (POST /auth/registrar).
 app.include_router(auth.router)
+
+# Envio automático do ESP32 (POST /leituras/sensor): sem login de usuário,
+# o sensor se identifica pelo id_sensor + token (cabeçalho X-Token-Sensor).
+app.include_router(ingestao.router)
 
 # empresa e painel conferem o login dentro do próprio arquivo.
 app.include_router(empresa.router)

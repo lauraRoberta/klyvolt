@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 from deps import get_db
+from escopo import consulta_maquinas, maquina_da_empresa, setor_da_empresa
+from seguranca import Sessao, sessao_atual
 
 router = APIRouter(
     prefix="/maquinas",
@@ -12,26 +14,14 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "",
-    response_model=schemas.MaquinaResponse
-)
+@router.post("", response_model=schemas.MaquinaResponse)
 def criar_maquina(
     maquina: schemas.MaquinaCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
 ):
-    # Antes de inserir, confere se o setor informado existe
-    setor = (
-        db.query(models.Setor)
-        .filter(models.Setor.id_setor == maquina.id_setor)
-        .first()
-    )
-
-    if setor is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Setor não encontrado"
-        )
+    # O setor precisa existir e ser da empresa de quem está logado
+    setor_da_empresa(db, maquina.id_setor, sessao.id_empresa)
 
     nova_maquina = models.Maquina(
         nome_maquina=maquina.nome_maquina,
@@ -47,41 +37,38 @@ def criar_maquina(
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(
-            status_code=409,
-            detail="Já existe uma máquina com esse número de série"
-        )
+        raise HTTPException(status_code=409, detail="Já existe uma máquina com esse número de série")
 
     db.refresh(nova_maquina)
-
     return nova_maquina
 
 
-@router.get(
-    "",
-    response_model=list[schemas.MaquinaResponse]
-)
+@router.get("", response_model=list[schemas.MaquinaResponse])
 def listar_maquinas(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
 ):
-    return db.query(models.Maquina).all()
+    return consulta_maquinas(db, sessao.id_empresa).all()
 
 
-def buscar_maquina_ou_404(db: Session, id_maquina: int) -> models.Maquina:
-    obj = db.get(models.Maquina, id_maquina)
-    if obj is None:
-        raise HTTPException(status_code=404, detail="Máquina não encontrado(a)")
-    return obj
- 
- 
 @router.get("/{id_maquina}", response_model=schemas.MaquinaResponse)
-def obter_maquina(id_maquina: int, db: Session = Depends(get_db)):
-    return buscar_maquina_ou_404(db, id_maquina)
- 
- 
+def obter_maquina(
+    id_maquina: int,
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
+):
+    return maquina_da_empresa(db, id_maquina, sessao.id_empresa)
+
+
 @router.put("/{id_maquina}", response_model=schemas.MaquinaResponse)
-def atualizar_maquina(id_maquina: int, dados: schemas.MaquinaCreate, db: Session = Depends(get_db)):
-    obj = buscar_maquina_ou_404(db, id_maquina)
+def atualizar_maquina(
+    id_maquina: int,
+    dados: schemas.MaquinaCreate,
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
+):
+    obj = maquina_da_empresa(db, id_maquina, sessao.id_empresa)
+    setor_da_empresa(db, dados.id_setor, sessao.id_empresa)
     for campo, valor in dados.model_dump().items():
         setattr(obj, campo, valor)
     try:
@@ -91,15 +78,18 @@ def atualizar_maquina(id_maquina: int, dados: schemas.MaquinaCreate, db: Session
         raise HTTPException(status_code=409, detail="Valor duplicado ou referência inexistente")
     db.refresh(obj)
     return obj
- 
- 
+
+
 @router.delete("/{id_maquina}", status_code=204)
-def remover_maquina(id_maquina: int, db: Session = Depends(get_db)):
-    obj = buscar_maquina_ou_404(db, id_maquina)
+def remover_maquina(
+    id_maquina: int,
+    db: Session = Depends(get_db),
+    sessao: Sessao = Depends(sessao_atual)
+):
+    obj = maquina_da_empresa(db, id_maquina, sessao.id_empresa)
     try:
         db.delete(obj)
         db.commit()
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=409, detail="Não pode ser removido: há registros que dependem dele")
- 

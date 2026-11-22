@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Decisão | Klyvolt</title>
+  <title>Leitura | Klyvolt</title>
   <link rel="stylesheet" href="../static/empresa.css">
   <link rel="stylesheet" href="../static/crud.css">
   <script src="../js/api.js" defer></script>
   <script src="../js/nav.js" defer></script>
+  <script src="../js/leitura.js" defer></script>
   <script src="../js/crud.js" defer></script>
 </head>
 <body>
@@ -21,58 +22,18 @@
     </div>
   </header>
 
-  <main class="container" data-rota="/decisoes" data-chave="id_decisao" data-nome="decisão" data-editar="sim" data-excluir="nao">
+  <main class="container" data-rota="/leituras" data-chave="id_leitura" data-nome="leitura" data-editar="nao" data-excluir="nao">
     <div class="titulo-pagina">
-      <p class="legenda">CADASTROS</p>
-      <h1>Decisão</h1>
-      <p>Cadastre as regras de decisão do sistema (critério, operador e limite).</p>
+      <p class="legenda">MONITORAMENTO</p>
+      <h1>Leitura</h1>
+      <p>Acompanhe o que os sensores enviam: vibração, temperatura e umidade chegam sozinhos, a cada 10 segundos.</p>
     </div>
 
     <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
 
-    <section class="painel" aria-labelledby="titulo-formulario">
-      <div class="painel-titulo">
-        <h2 id="titulo-formulario">Cadastrar decisão</h2>
-        <span class="legenda">DADOS</span>
-      </div>
-      <form id="form-registro" class="formulario" novalidate>
-        <div class="campos">
-          <div class="campo campo-largo">
-            <label for="f-nome_decisao">Nome da decisão</label>
-            <input type="text" id="f-nome_decisao" data-campo="nome_decisao" required maxlength="100" placeholder="Ex.: Enviar alerta de consumo alto">
-          </div>
-          <div class="campo campo-largo">
-            <label for="f-criterio_acionado">Critério acionado</label>
-            <input type="text" id="f-criterio_acionado" data-campo="criterio_acionado" required maxlength="150" placeholder="Ex.: Consumo diário da máquina">
-          </div>
-          <div class="campo">
-            <label for="f-operador">Operador</label>
-            <select id="f-operador" data-campo="operador" required><option value="" disabled selected>Selecione...</option><option value="&gt;">&gt;</option><option value="&gt;=">&gt;=</option><option value="&lt;">&lt;</option><option value="&lt;=">&lt;=</option><option value="=">=</option></select>
-          </div>
-          <div class="campo">
-            <label for="f-limite_referencia">Limite de referência</label>
-            <input type="number" id="f-limite_referencia" data-campo="limite_referencia" required step="0.01" placeholder="0.00">
-          </div>
-          <div class="campo">
-            <label for="f-unidade_limite">Unidade do limite</label>
-            <input type="text" id="f-unidade_limite" data-campo="unidade_limite" required maxlength="10" placeholder="Ex.: kWh">
-          </div>
-          <div class="campo campo-largo">
-            <label for="f-descricao_decisao">Descrição</label>
-            <textarea id="f-descricao_decisao" data-campo="descricao_decisao" placeholder="Opcional" rows="3"></textarea>
-          </div>
-        </div>
-        <div class="acoes">
-          <button id="botao-salvar" class="botao botao-principal" type="submit">Cadastrar</button>
-          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
-          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
-        </div>
-      </form>
-    </section>
-
     <section class="painel" aria-labelledby="titulo-lista">
       <div class="painel-titulo">
-        <h2 id="titulo-lista">Decisões cadastradas</h2>
+        <h2 id="titulo-lista">Leituras recentes</h2>
         <span id="total-registros" class="legenda">Carregando...</span>
       </div>
       <div class="barra-lista">
@@ -82,25 +43,55 @@
         <table>
           <thead>
             <tr>
-              <th scope="col" data-campo="id_decisao">ID</th>
-              <th scope="col" data-campo="nome_decisao">Nome</th>
-              <th scope="col" data-campo="criterio_acionado">Critério</th>
-              <th scope="col" data-campo="operador">Operador</th>
-              <th scope="col" data-campo="limite_referencia" data-formato="numero">Limite</th>
-              <th scope="col" data-campo="unidade_limite">Unidade</th>
-              <th scope="col">Ações</th>
+              <th scope="col" data-campo="id_leitura">ID</th>
+              <th scope="col" data-campo="data_leitura">Data</th>
+              <th scope="col" data-campo="id_sensor">Sensor</th>
+              <th scope="col" data-campo="vibracoes">Vibrações (10 s)</th>
+              <th scope="col" data-campo="estado_vibracao">Estado</th>
+              <th scope="col" data-campo="temperatura">Temp. (°C)</th>
+              <th scope="col" data-campo="umidade">Umidade (%)</th>
+              <th scope="col" data-campo="valor_medido_kwh">kWh</th>
             </tr>
           </thead>
           <tbody id="lista-registros">
             <tr>
-              <td colspan="7" class="vazio">Carregando...</td>
+              <td colspan="8" class="vazio">Carregando...</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <footer class="rodape">Klyvolt · Decisão</footer>
+    <section class="painel" aria-labelledby="titulo-formulario">
+      <div class="painel-titulo">
+        <h2 id="titulo-formulario">Registrar leitura manual</h2>
+        <span class="legenda">OPCIONAL</span>
+      </div>
+      <p>Use só quando não houver sensor enviando: informe o consumo em kWh de um sensor já cadastrado.</p>
+      <form id="form-registro" class="formulario" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="f-id_sensor">Sensor</label>
+            <select id="f-id_sensor" data-campo="id_sensor" required data-origem="/sensores" data-valor="id_sensor" data-texto="{numero_serie} (#{id_sensor})" data-numerico="sim"><option value="" disabled selected>Selecione...</option></select>
+          </div>
+          <div class="campo">
+            <label for="f-valor_medido_kwh">Valor medido (kWh)</label>
+            <input type="number" id="f-valor_medido_kwh" data-campo="valor_medido_kwh" data-numerico="sim" required min="0" step="0.01">
+          </div>
+          <div class="campo campo-largo">
+            <label for="f-observacao_leitura">Observação</label>
+            <input type="text" id="f-observacao_leitura" data-campo="observacao_leitura" maxlength="200" placeholder="Opcional">
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="botao-salvar" class="botao botao-principal" type="submit">Registrar</button>
+          <button id="botao-limpar" class="botao botao-secundario" type="button">Limpar</button>
+          <button id="botao-cancelar" class="botao botao-secundario" type="button" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <footer class="rodape">Klyvolt · Leitura</footer>
   </main>
 </body>
 </html>

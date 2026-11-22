@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 import models
 from deps import get_db
+from escopo import consulta_tomadas
 from seguranca import Sessao, sessao_atual
 
 router = APIRouter(
@@ -19,6 +19,11 @@ def _buscar(db: Session, modelo, coluna, ids):
     return db.query(modelo).filter(coluna.in_(ids)).all()
 
 
+def _numero(valor):
+    """Converte para número, aceitando vazio (leituras do sensor não têm kWh)."""
+    return float(valor) if valor is not None else None
+
+
 @router.get("/{id_empresa}")
 def painel_da_empresa(
     id_empresa: int,
@@ -27,7 +32,7 @@ def painel_da_empresa(
 ):
     """Junta tudo o que pertence a uma empresa, seguindo a cadeia do banco:
     empresa -> usuários -> setores -> máquinas -> sensores -> leituras
-    (e máquinas -> consumos; decisões ligadas a leituras ou consumos)."""
+    (e máquinas -> consumos; decisões da empresa e suas tomadas)."""
     # cada empresa só vê o próprio painel
     if id_empresa != sessao.id_empresa:
         raise HTTPException(status_code=404, detail="Empresa não encontrada")
@@ -51,23 +56,13 @@ def painel_da_empresa(
     ids_sensores = [s.id_sensor for s in sensores]
 
     leituras = _buscar(db, models.Leitura, models.Leitura.id_sensor, ids_sensores)
-    ids_leituras = [l.id_leitura for l in leituras]
-    ids_consumos = [c.id_consumo for c in consumos]
 
-    # decisões tomadas ligadas a uma leitura ou a um consumo desta empresa
-    filtros = []
-    if ids_leituras:
-        filtros.append(models.TomadaDecisao.id_leitura.in_(ids_leituras))
-    if ids_consumos:
-        filtros.append(models.TomadaDecisao.id_consumo.in_(ids_consumos))
-    tomadas = []
-    if filtros:
-        tomadas = (
-            db.query(models.TomadaDecisao)
-            .filter(or_(*filtros))
-            .order_by(models.TomadaDecisao.data_tomada_decisao.desc())
-            .all()
-        )
+    # tomadas de decisão das decisões desta empresa
+    tomadas = (
+        consulta_tomadas(db, id_empresa)
+        .order_by(models.TomadaDecisao.data_tomada_decisao.desc())
+        .all()
+    )
 
     # dicionários para trocar ids por nomes
     nome_setor = {s.id_setor: s.nome_setor for s in setores}
@@ -130,7 +125,10 @@ def painel_da_empresa(
             "status_conexao": s.status_conexao,
             "maquina": nome_maquina[s.id_maquina],
             "ultima_leitura": ultima.data_leitura if ultima else None,
-            "ultimo_valor_kwh": float(ultima.valor_medido_kwh) if ultima else None,
+            "ultimo_valor_kwh": _numero(ultima.valor_medido_kwh) if ultima else None,
+            "ultima_vibracao": ultima.vibracoes if ultima else None,
+            "ultima_temperatura": _numero(ultima.temperatura) if ultima else None,
+            "ultimo_estado": ultima.estado_vibracao if ultima else None,
         })
 
     # estrutura da empresa: setores com suas máquinas (tela Minha empresa)
@@ -198,7 +196,11 @@ def painel_da_empresa(
             {
                 "id_leitura": l.id_leitura,
                 "data_leitura": l.data_leitura,
-                "valor_medido_kwh": float(l.valor_medido_kwh),
+                "valor_medido_kwh": _numero(l.valor_medido_kwh),
+                "vibracoes": l.vibracoes,
+                "temperatura": _numero(l.temperatura),
+                "umidade": _numero(l.umidade),
+                "estado_vibracao": l.estado_vibracao,
                 "sensor": sensor_por_id[l.id_sensor].numero_serie,
                 "maquina": nome_maquina[sensor_por_id[l.id_sensor].id_maquina],
             }
