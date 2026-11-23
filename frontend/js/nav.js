@@ -1,7 +1,7 @@
 // js/nav.js - menu e perfil da pessoa logada (perfis-1).
 // Telas públicas: Início, Como funciona, Nossa equipe, Entrar, Cadastrar empresa.
 // Telas com login: as telas do sistema (o item Usuário só aparece para o administrador).
-// Quem está logado tem uma bolinha de perfil no canto esquerdo do cabeçalho, com os dados e o Sair.
+// Quem está logado tem uma bolinha de perfil no canto direito do cabeçalho, na mesma linha da logo, com os dados e o Sair.
 // Os nomes abaixo precisam ser IGUAIS aos arquivos da pasta pages/.
 (function () {
   const destino = document.querySelector('.cabecalho .container');
@@ -74,7 +74,7 @@
   const estilo = document.createElement('style');
   estilo.id = 'estilo-perfil';
   estilo.textContent = `
-    .perfil { position: relative; flex: none; }
+    .perfil { position: relative; flex: none; margin-left: auto; }
     .perfil-botao { display: grid; place-items: center; width: 46px; height: 46px; padding: 0;
       border: 2px solid rgba(255, 255, 255, 0.55); border-radius: 50%; font: inherit; font-size: 16px;
       font-weight: 700; cursor: pointer;
@@ -84,7 +84,7 @@
     .perfil-administrador { background: #fde4ee; color: #8f2a55; }
     .perfil-operador { background: #e1f1fb; color: #1b5f8a; }
     .perfil-visualizador, .perfil-outra { background: #eef2f6; color: #4a5866; }
-    .perfil-cartao { position: absolute; left: 0; top: calc(100% + 12px); z-index: 100; width: 290px;
+    .perfil-cartao { position: absolute; right: 0; top: calc(100% + 12px); z-index: 100; width: min(290px, calc(100vw - 32px));
       padding: 18px; background: #ffffff; color: #1b2733; border: 1px solid #dbe8f1; border-radius: 16px;
       box-shadow: 0 14px 40px rgba(16, 32, 46, 0.28); }
     .perfil-cartao[hidden] { display: none; }
@@ -151,7 +151,8 @@
 
   cartao.append(topo, dados, sair_);
   caixa.append(botao, cartao);
-  destino.prepend(caixa); // canto esquerdo do cabeçalho; para o canto direito: destino.insertBefore(caixa, destino.querySelector('.menu'))
+  // Canto direito do cabeçalho, na mesma linha da logo (o menu vai para a linha de baixo)
+  destino.insertBefore(caixa, menu);
 
   function abrir(aberto) {
     cartao.hidden = !aberto;
