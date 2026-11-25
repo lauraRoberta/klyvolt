@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Klyvolt | Descubra de onde vem o gasto de energia da sua confecção</title>
+  <title>Klyvolt | Gestão de consumo elétrico</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../static/empresa.css">
+  <link rel="stylesheet" href="../static/painel.css">
   <link rel="stylesheet" href="../static/inicio.css">
+  <link rel="stylesheet" href="../static/inicio-extra.css">
   <script src="../js/api.js" defer></script>
   <script src="../js/nav.js" defer></script>
+  <script src="../js/inicio.js" defer></script>
 </head>
 <body class="inicio escuro" data-publica>
   <header class="cabecalho">
@@ -25,20 +28,18 @@
 
   <main class="container">
 
-    <!-- Abertura: texto de um lado, foto em cartão do outro -->
-    <section class="heroi" aria-labelledby="titulo-heroi">
+    <!-- Quem NÃO está logado: abertura curta + exemplo -->
+    <section class="heroi" aria-labelledby="titulo-heroi" data-so-deslogado>
       <div>
-        <h1 id="titulo-heroi">Descubra de onde vem o <span class="destaque">gasto de energia</span> da sua fábrica de costura.</h1>
-        <p>O Klyvolt acompanha o consumo de cada máquina e mostra onde a conta de luz pesa no fim do mês.</p>
+        <h1 id="titulo-heroi">Descubra de onde vem o gasto de energia da sua fábrica de costura.</h1>
+        <p>Consumo por máquina e por setor, em um só lugar.</p>
         <div class="acoes">
-          <a class="botao botao-principal" href="login.html" data-so-deslogado>Entrar</a>
-          <a class="botao botao-secundario" href="cadastro.html" data-so-deslogado>Cadastrar empresa</a>
-          <a class="botao botao-principal" href="painel.html" data-so-logado hidden>Ir para o painel</a>
+          <a class="botao botao-principal" href="login.html">Entrar</a>
+          <a class="botao botao-secundario" href="cadastro.html">Cadastrar empresa</a>
           <a class="botao botao-secundario" href="como-funciona.html">Ver como funciona</a>
         </div>
       </div>
 
-      <!-- Para usar uma foto: salve como static/fundo.jpg (ou troque o endereço no inicio.css) -->
       <div class="foto cartao">
         <aside class="conta" aria-labelledby="titulo-conta">
           <h2 id="titulo-conta">Consumo por máquina no mês</h2>
@@ -65,63 +66,46 @@
               <span class="barra" aria-hidden="true"><i style="--p: 22%"></i></span>
             </li>
           </ul>
-          <p class="total">Total do mês: <strong>1.100 kWh</strong>. Só o ferro a vapor responde por cerca de 37%.</p>
+          <p class="total">Total: <strong>1.100 kWh</strong>. O ferro a vapor responde por cerca de 37%.</p>
         </aside>
       </div>
     </section>
 
-    <!-- O problema -->
-    <section class="faixa" aria-labelledby="titulo-problema">
-      <div class="cartao cartao-rosado cartao-grande">
-        <h2 id="titulo-problema">A conta de luz chega como um número só</h2>
-        <p class="intro">No fim do mês o valor vem fechado: não diz qual máquina gastou mais, qual setor pesou nem quando o consumo subiu. O Klyvolt separa esse número por máquina e por setor, para você enxergar onde agir.</p>
-      </div>
-    </section>
+    <ul class="recursos" aria-label="O que você acompanha" data-so-deslogado>
+      <li>Consumo por máquina</li>
+      <li>Consumo por setor</li>
+      <li>Limites e decisões</li>
+      <li>Equipe e funções</li>
+    </ul>
 
-    <!-- O que você acompanha -->
-    <section class="faixa" aria-labelledby="titulo-recursos">
-      <h2 id="titulo-recursos">O que você acompanha</h2>
-      <div class="grade">
-        <div class="cartao">
-          <h3>Consumo por máquina</h3>
-          <p>Veja quais equipamentos gastam mais e compare uns com os outros.</p>
-        </div>
-        <div class="cartao">
-          <h3>Consumo por setor</h3>
-          <p>Descubra qual parte da fábrica pesa mais na conta.</p>
-        </div>
-        <div class="cartao">
-          <h3>Limites e decisões</h3>
-          <p>Registre o que foi feito quando o consumo passou do esperado.</p>
-        </div>
-        <div class="cartao">
-          <h3>Equipe e funções</h3>
-          <p>Cada pessoa entra como administrador, operador ou visualizador.</p>
-        </div>
+    <!-- Quem ESTÁ logado: resumo real da empresa (dados vêm de /painel/{id}) -->
+    <section class="resumo" aria-labelledby="titulo-resumo" data-so-logado hidden>
+      <div class="resumo-topo">
+        <h1 id="titulo-resumo">Início</h1>
+        <a class="botao botao-secundario" href="painel.html">Ver painel completo</a>
       </div>
-    </section>
 
-    <!-- Para quem é -->
-    <section class="faixa para-quem" aria-labelledby="titulo-publico">
-      <div>
-        <h2 id="titulo-publico">Para quem é</h2>
-        <p class="intro">Para fábricas e facções de costura em que a conta de energia pesa no fim do mês e ninguém sabe ao certo de onde vem o gasto das máquinas.</p>
-      </div>
-      <ul class="perguntas" aria-label="Perguntas que o Klyvolt ajuda a responder">
-        <li class="cartao">Qual máquina gasta mais?</li>
-        <li class="cartao">Qual setor pesou mais neste mês?</li>
-        <li class="cartao">Algum equipamento passou do limite?</li>
-      </ul>
-    </section>
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
 
-    <!-- Chamada final -->
-    <section class="faixa" aria-labelledby="titulo-chamada" data-so-deslogado>
-      <div class="cartao cartao-rosado chamada">
-        <h2 id="titulo-chamada">Comece pela sua empresa</h2>
-        <p>O cadastro leva poucos minutos. Depois é só ir adicionando setores, máquinas e sensores.</p>
-        <div class="acoes acoes-centro">
-          <a class="botao botao-principal" href="cadastro.html">Cadastrar empresa</a>
-          <a class="botao botao-secundario" href="como-funciona.html">Ver como funciona</a>
+      <div id="conteudo" hidden>
+        <div id="kpis" class="kpis"></div>
+
+        <div class="duas-colunas">
+          <section class="painel" aria-labelledby="titulo-maquinas">
+            <div class="painel-titulo">
+              <h2 id="titulo-maquinas">Máquinas que mais gastam</h2>
+              <span class="legenda">kWh</span>
+            </div>
+            <ul id="por-maquina" class="barras"></ul>
+          </section>
+
+          <section class="painel" aria-labelledby="titulo-setores">
+            <div class="painel-titulo">
+              <h2 id="titulo-setores">Setores que mais pesam</h2>
+              <span class="legenda">kWh</span>
+            </div>
+            <ul id="por-setor" class="barras"></ul>
+          </section>
         </div>
       </div>
     </section>

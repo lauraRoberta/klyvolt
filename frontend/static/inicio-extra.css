@@ -1,0 +1,32 @@
+/* static/inicio-extra.css - complemento do Início. Não substitui o inicio.css. */
+
+/* garante que "hidden" vença qualquer display definido em outro CSS */
+.inicio [hidden] { display: none !important; }
+
+/* faixa curta com o que o sistema acompanha (visitante) */
+.recursos {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+.recursos li {
+  padding: 0.45rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* resumo da empresa (logado) */
+.resumo { padding: 1.5rem 0 0; }
+.resumo-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.resumo-topo h1 { margin: 0; }
