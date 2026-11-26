@@ -45,24 +45,30 @@
     .equipe-titulo { padding-top: 48px; }
     .equipe-titulo h2 { margin: 0 0 20px; font-size: 36px; }
 
-    /* Foto da equipe: salve como frontend/static/equipe/equipe.jpg (ou .png) */
+    /* Foto da equipe: fica na pasta pages, ao lado deste arquivo (klyvolt-equipe.jpg) */
+    /* Cartão do tamanho da foto (mude o max-width para aumentar ou diminuir) */
     .foto-equipe {
-      position: relative;
-      display: grid;
-      place-items: center;
-      min-height: 360px;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0;
       overflow: hidden;
-      background: linear-gradient(135deg, #14283b, #183a56);
+      border-radius: 18px;
     }
-    .foto-aviso { color: #b9cadb; font-size: 15px; }
-    .foto-equipe img, .membro-foto img {
+    /* Foto inteira, ocupando o cartão todo */
+    .foto-equipe img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Fotos individuais dos integrantes (para usar depois) */
+    .membro-foto img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .membros {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -150,11 +156,12 @@
 
     <!-- Equipe do projeto -->
     <section class="equipe-titulo" aria-labelledby="titulo-integrantes">
-      <h2 id="titulo-integrantes">Equipe do projeto</h2>
-      <!-- FOTO DA EQUIPE: salve como frontend/static/equipe/equipe.jpg (se for png, o site tenta o .png sozinho) -->
-      <div class="foto-equipe cartao" role="img" aria-label="Foto da equipe">
-        <span class="foto-aviso">Foto da equipe em breve</span>
-        <img src="../static/equipe/equipe.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png')}else{this.remove()}">
+        <!-- FOTO DA EQUIPE: arquivo klyvolt-equipe.jpg na pasta pages (ao lado deste arquivo) -->
+      <div class="foto-equipe cartao">
+        <img src="klyvolt-equipe.jpg" alt="Foto da equipe do projeto Klyvolt">
       </div>
-  
+    </section>
+
+  </main>
 </body>
+</html>

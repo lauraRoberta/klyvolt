@@ -11,6 +11,7 @@ from routes import (
     empresa,
     ingestao,
     leitura,
+    leitura_sensor,
     maquina,
     painel,
     sensor,
@@ -47,8 +48,12 @@ def inicio():
 app.include_router(auth.router)
 
 # Envio automático do ESP32 (POST /leituras/sensor): sem login de usuário,
-# o sensor se identifica pelo id_sensor + token (cabeçalho X-Token-Sensor).
-app.include_router(ingestao.router)
+# o ESP32 se identifica pelo token (cabeçalho X-Token-Sensor), salvo em sensor.token_autenticacao.
+# Precisa vir ANTES do leitura.router, para não ser confundida com /leituras/{id_leitura}.
+app.include_router(leitura_sensor.router)
+
+# Rota antiga do ESP32 (formato vibracoes + estado), substituída pelo leitura_sensor.
+# app.include_router(ingestao.router)
 
 # empresa e painel conferem o login dentro do próprio arquivo.
 app.include_router(empresa.router)
